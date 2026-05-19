@@ -1,0 +1,44 @@
+{
+    "title": "Thông tin cá nhân",
+    "fields": {
+        "name": "Tên",
+        "email": "Email"
+    },
+    "error": {
+        "loadFailed": "Không thể tải thông tin người dùng"
+    },
+    "settings": {
+        "account": {
+            "title": "Tài khoản",
+            "profile": "Thông tin cá nhân",
+            "changePassword": "Đổi mật khẩu"
+        },
+        "preferences": {
+            "title": "Tùy chọn",
+            "notifications": "Thông báo",
+            "darkMode": "Chế độ tối",
+            "language": "Ngôn ngữ",
+            "themeColor": "Màu chủ đề"
+        },
+        "themeColor": {
+            "dialogTitle": "Chọn màu chủ đề",
+            "dialogDescription": "Chọn màu chủ đề cho hệ thống",
+            "colors": {
+                "blue": "Xanh dương",
+                "red": "Đỏ",
+                "green": "Xanh lá",
+                "orange": "Cam"
+            }
+        },
+        "language": {
+            "en": "Tiếng Anh",
+            "vi": "Tiếng Việt"
+        }
+    },
+    "logout": {
+        "label": "Đăng xuất",
+        "success": "Đăng xuất thành công",
+        "confirmTitle": "Xác nhận đăng xuất",
+        "confirmMessage": "Bạn có chắc chắn muốn đăng xuất không?"
+    }
+}

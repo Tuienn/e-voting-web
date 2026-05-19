@@ -1,0 +1,44 @@
+{
+    "title": "Personal information",
+    "fields": {
+        "name": "Name",
+        "email": "Email"
+    },
+    "error": {
+        "loadFailed": "Unable to load user information"
+    },
+    "settings": {
+        "account": {
+            "title": "Account",
+            "profile": "Profile information",
+            "changePassword": "Change password"
+        },
+        "preferences": {
+            "title": "Preferences",
+            "notifications": "Notifications",
+            "darkMode": "Dark mode",
+            "language": "Language",
+            "themeColor": "Theme color"
+        },
+        "themeColor": {
+            "dialogTitle": "Select theme color",
+            "dialogDescription": "Choose a theme color for the system",
+            "colors": {
+                "blue": "Blue",
+                "red": "Red",
+                "green": "Green",
+                "orange": "Orange"
+            }
+        },
+        "language": {
+            "en": "English",
+            "vi": "Vietnamese"
+        }
+    },
+    "logout": {
+        "label": "Logout",
+        "success": "Logout successful",
+        "confirmTitle": "Confirm Logout",
+        "confirmMessage": "Are you sure you want to logout?"
+    }
+}

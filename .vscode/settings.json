@@ -1,0 +1,13 @@
+{
+    "typescript.preferences.autoImportSpecifierExcludeRegexes": ["^@mui/[^/]+$"],
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.suggest.autoImports": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "chat.mcp.discovery.enabled": {
+        "claude-desktop": true,
+        "windsurf": true,
+        "cursor-global": true,
+        "cursor-workspace": true
+    },
+    "chat.mcp.access": "all"
+}
