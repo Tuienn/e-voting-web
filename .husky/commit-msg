@@ -1,4 +1,4 @@
-./node_modules/.bin/commitlint --edit "$1"
+pnpm exec commitlint --edit "$1"
 # build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
 # feat: A new feature
 # fix: A bug fix
