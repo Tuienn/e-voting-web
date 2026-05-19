@@ -31,7 +31,7 @@ const PageHeader: React.FC<Props> = (props) => {
                                 <ArrowBackIcon />
                             </IconButton>
                         )}
-                        <Typography variant='h6' component='div' fontWeight='bold' color='text.primary'>
+                        <Typography variant='h6' component='div' fontWeight='bold' color='text.secondary'>
                             {props.title}
                         </Typography>
                     </Stack>

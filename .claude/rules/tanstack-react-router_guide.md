@@ -14,14 +14,14 @@ The `route.beforeLoad` option allows you to specify a function that will be call
 The `beforeLoad` function runs in relative order to these other route loading functions:
 
 - Route Matching (Top-Down)
-  - `route.params.parse`
-  - `route.validateSearch`
+    - `route.params.parse`
+    - `route.validateSearch`
 - Route Loading (including Preloading)
-  - **`route.beforeLoad`**
-  - `route.onError`
+    - **`route.beforeLoad`**
+    - `route.onError`
 - Route Loading (Parallel)
-  - `route.component.preload?`
-  - `route.load`
+    - `route.component.preload?`
+    - `route.load`
 
 **It's important to know that the `beforeLoad` function for a route is called _before any of its child routes' `beforeLoad` functions_.** It is essentially a middleware function for the route and all of its children.
 
@@ -34,19 +34,19 @@ While not required, some authentication flows require redirecting to a login pag
 ```tsx
 // src/routes/_authenticated.tsx
 export const Route = createFileRoute('/_authenticated')({
-  beforeLoad: async ({ location }) => {
-    if (!isAuthenticated()) {
-      throw redirect({
-        to: '/login',
-        search: {
-          // Use the current location to power a redirect after login
-          // (Do not use `router.state.resolvedLocation` as it can
-          // potentially lag behind the actual current location)
-          redirect: location.href,
-        },
-      })
+    beforeLoad: async ({ location }) => {
+        if (!isAuthenticated()) {
+            throw redirect({
+                to: '/login',
+                search: {
+                    // Use the current location to power a redirect after login
+                    // (Do not use `router.state.resolvedLocation` as it can
+                    // potentially lag behind the actual current location)
+                    redirect: location.href
+                }
+            })
+        }
     }
-  },
 })
 ```
 
@@ -62,27 +62,27 @@ import { createFileRoute, redirect, isRedirect } from '@tanstack/react-router'
 
 // src/routes/_authenticated.tsx
 export const Route = createFileRoute('/_authenticated')({
-  beforeLoad: async ({ location }) => {
-    try {
-      const user = await verifySession() // might throw on network error
-      if (!user) {
-        throw redirect({
-          to: '/login',
-          search: { redirect: location.href },
-        })
-      }
-      return { user }
-    } catch (error) {
-      // Re-throw redirects (they're intentional, not errors)
-      if (isRedirect(error)) throw error
+    beforeLoad: async ({ location }) => {
+        try {
+            const user = await verifySession() // might throw on network error
+            if (!user) {
+                throw redirect({
+                    to: '/login',
+                    search: { redirect: location.href }
+                })
+            }
+            return { user }
+        } catch (error) {
+            // Re-throw redirects (they're intentional, not errors)
+            if (isRedirect(error)) throw error
 
-      // Auth check failed (network error, etc.) - redirect to login
-      throw redirect({
-        to: '/login',
-        search: { redirect: location.href },
-      })
+            // Auth check failed (network error, etc.) - redirect to login
+            throw redirect({
+                to: '/login',
+                search: { redirect: location.href }
+            })
+        }
     }
-  },
 })
 ```
 
@@ -101,13 +101,13 @@ Some applications choose to not redirect users to a login page, and instead keep
 ```tsx
 // src/routes/_authenticated.tsx
 export const Route = createFileRoute('/_authenticated')({
-  component: () => {
-    if (!isAuthenticated()) {
-      return <Login />
-    }
+    component: () => {
+        if (!isAuthenticated()) {
+            return <Login />
+        }
 
-    return <Outlet />
-  },
+        return <Outlet />
+    }
 })
 ```
 
@@ -130,12 +130,12 @@ Here's an example that uses React context and hooks for protecting authenticated
 import { createRootRouteWithContext } from '@tanstack/react-router'
 
 interface MyRouterContext {
-  // The ReturnType of your useAuth hook or the value of your AuthContext
-  auth: AuthState
+    // The ReturnType of your useAuth hook or the value of your AuthContext
+    auth: AuthState
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: () => <Outlet />,
+    component: () => <Outlet />
 })
 ```
 
@@ -147,12 +147,12 @@ import { createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 
 export const router = createRouter({
-  routeTree,
-  context: {
-    // auth will initially be undefined
-    // We'll be passing down the auth state from within a React component
-    auth: undefined!,
-  },
+    routeTree,
+    context: {
+        // auth will initially be undefined
+        // We'll be passing down the auth state from within a React component
+        auth: undefined!
+    }
 })
 ```
 
@@ -166,16 +166,16 @@ import { AuthProvider, useAuth } from './auth'
 import { router } from './router'
 
 function InnerApp() {
-  const auth = useAuth()
-  return <RouterProvider router={router} context={{ auth }} />
+    const auth = useAuth()
+    return <RouterProvider router={router} context={{ auth }} />
 }
 
 function App() {
-  return (
-    <AuthProvider>
-      <InnerApp />
-    </AuthProvider>
-  )
+    return (
+        <AuthProvider>
+            <InnerApp />
+        </AuthProvider>
+    )
 }
 ```
 
@@ -187,16 +187,16 @@ Then in the authenticated route, you can check the auth state using the `beforeL
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/dashboard')({
-  beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
-      throw redirect({
-        to: '/login',
-        search: {
-          redirect: location.href,
-        },
-      })
+    beforeLoad: ({ context, location }) => {
+        if (!context.auth.isAuthenticated) {
+            throw redirect({
+                to: '/login',
+                search: {
+                    redirect: location.href
+                }
+            })
+        }
     }
-  },
 })
 ```
 
@@ -232,11 +232,11 @@ import { defineConfig } from 'vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
-  plugins: [
-    tanstackRouter({
-      autoCodeSplitting: true, // Enable automatic code splitting
-    }),
-  ],
+    plugins: [
+        tanstackRouter({
+            autoCodeSplitting: true // Enable automatic code splitting
+        })
+    ]
 })
 ```
 
@@ -306,21 +306,21 @@ Route properties like `component`, `loader`, etc., should not be exported from t
 import { createRoute } from '@tanstack/react-router'
 
 export const Route = createRoute('/posts')({
-  // ...
-  notFoundComponent: PostsNotFoundComponent,
+    // ...
+    notFoundComponent: PostsNotFoundComponent
 })
 
 // ❌ Do NOT do this!
 // Exporting the notFoundComponent will prevent it from being code-split
 // and will be included in the main bundle.
 export function PostsNotFoundComponent() {
-  // ❌
-  // ...
+    // ❌
+    // ...
 }
 
 function PostsNotFoundComponent() {
-  // ✅
-  // ...
+    // ✅
+    // ...
 }
 ```
 
@@ -342,21 +342,16 @@ import { defineConfig } from 'vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
-  plugins: [
-    tanstackRouter({
-      autoCodeSplitting: true,
-      codeSplittingOptions: {
-        defaultBehavior: [
-          [
-            'component',
-            'pendingComponent',
-            'errorComponent',
-            'notFoundComponent',
-          ], // Bundle all UI components together
-        ],
-      },
-    }),
-  ],
+    plugins: [
+        tanstackRouter({
+            autoCodeSplitting: true,
+            codeSplittingOptions: {
+                defaultBehavior: [
+                    ['component', 'pendingComponent', 'errorComponent', 'notFoundComponent'] // Bundle all UI components together
+                ]
+            }
+        })
+    ]
 })
 ```
 
@@ -370,20 +365,20 @@ import { defineConfig } from 'vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
-  plugins: [
-    tanstackRouter({
-      autoCodeSplitting: true,
-      codeSplittingOptions: {
-        splitBehavior: ({ routeId }) => {
-          // For all routes under /posts, bundle the loader and component together
-          if (routeId.startsWith('/posts')) {
-            return [['loader', 'component']]
-          }
-          // All other routes will use the `defaultBehavior`
-        },
-      },
-    }),
-  ],
+    plugins: [
+        tanstackRouter({
+            autoCodeSplitting: true,
+            codeSplittingOptions: {
+                splitBehavior: ({ routeId }) => {
+                    // For all routes under /posts, bundle the loader and component together
+                    if (routeId.startsWith('/posts')) {
+                        return [['loader', 'component']]
+                    }
+                    // All other routes will use the `defaultBehavior`
+                }
+            }
+        })
+    ]
 })
 ```
 
@@ -397,14 +392,14 @@ import { createFileRoute } from '@tanstack/react-router'
 import { loadPostsData } from './-heavy-posts-utils'
 
 export const Route = createFileRoute('/posts')({
-  // For this specific route, bundle the loader and component together.
-  codeSplitGroupings: [['loader', 'component']],
-  loader: () => loadPostsData(),
-  component: PostsComponent,
+    // For this specific route, bundle the loader and component together.
+    codeSplitGroupings: [['loader', 'component']],
+    loader: () => loadPostsData(),
+    component: PostsComponent
 })
 
 function PostsComponent() {
-  // ...
+    // ...
 }
 ```
 
@@ -434,18 +429,18 @@ import { defineConfig } from 'vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
-  plugins: [
-    tanstackRouter({
-      autoCodeSplitting: true,
-      codeSplittingOptions: {
-        defaultBehavior: [
-          ['loader'], // The loader will be in its own chunk
-          ['component'],
-          // ... other component groupings
-        ],
-      },
-    }),
-  ],
+    plugins: [
+        tanstackRouter({
+            autoCodeSplitting: true,
+            codeSplittingOptions: {
+                defaultBehavior: [
+                    ['loader'], // The loader will be in its own chunk
+                    ['component']
+                    // ... other component groupings
+                ]
+            }
+        })
+    ]
 })
 ```
 
@@ -464,21 +459,21 @@ Code splitting and lazy loading is a powerful technique for improving the bundle
 TanStack Router separates code into two categories:
 
 - **Critical Route Configuration** - The code that is required to render the current route and kick off the data loading process as early as possible.
-  - Path Parsing/Serialization
-  - Search Param Validation
-  - Loaders, Before Load
-  - Route Context
-  - Static Data
-  - Links
-  - Scripts
-  - Styles
-  - All other route configuration not listed below
+    - Path Parsing/Serialization
+    - Search Param Validation
+    - Loaders, Before Load
+    - Route Context
+    - Static Data
+    - Links
+    - Scripts
+    - Styles
+    - All other route configuration not listed below
 
 - **Non-Critical/Lazy Route Configuration** - The code that is not required to match the route, and can be loaded on-demand.
-  - Route Component
-  - Error Component
-  - Pending Component
-  - Not-found Component
+    - Route Component
+    - Error Component
+    - Pending Component
+    - Not-found Component
 
 > 🧠 **Why is the loader not split?**
 >
@@ -486,7 +481,7 @@ TanStack Router separates code into two categories:
 > - Categorically, it is less likely to contribute to a large bundle size than a component.
 > - The loader is one of the most important preloadable assets for a route, especially if you're using a default preload intent, like hovering over a link, so it's important for the loader to be available without any additional async overhead.
 >
->   Knowing the disadvantages of splitting the loader, if you still want to go ahead with it, head over to the [Data Loader Splitting](#data-loader-splitting) section.
+>     Knowing the disadvantages of splitting the loader, if you still want to go ahead with it, head over to the [Data Loader Splitting](#data-loader-splitting) section.
 
 ## Encapsulating a route's files into a directory
 
@@ -503,7 +498,7 @@ For example, if you have a route file named `posts.tsx`, you would create a new 
 **After**
 
 - `posts`
-  - `route.tsx`
+    - `route.tsx`
 
 ## Approaches to code splitting
 
@@ -534,13 +529,13 @@ import react from '@vitejs/plugin-react'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
 export default defineConfig({
-  plugins: [
-    tanstackRouter({
-      // ...
-      autoCodeSplitting: true,
-    }),
-    react(), // Make sure to add this plugin after the TanStack Router Bundler plugin
-  ],
+    plugins: [
+        tanstackRouter({
+            // ...
+            autoCodeSplitting: true
+        }),
+        react() // Make sure to add this plugin after the TanStack Router Bundler plugin
+    ]
 })
 ```
 
@@ -576,12 +571,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { fetchPosts } from './api'
 
 export const Route = createFileRoute('/posts')({
-  loader: fetchPosts,
-  component: Posts,
+    loader: fetchPosts,
+    component: Posts
 })
 
 function Posts() {
-  // ...
+    // ...
 }
 ```
 
@@ -596,7 +591,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { fetchPosts } from './api'
 
 export const Route = createFileRoute('/posts')({
-  loader: fetchPosts,
+    loader: fetchPosts
 })
 ```
 
@@ -607,11 +602,11 @@ With the non-critical route configuration going into the file with the `.lazy.ts
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/posts')({
-  component: Posts,
+    component: Posts
 })
 
 function Posts() {
-  // ...
+    // ...
 }
 ```
 
@@ -626,7 +621,7 @@ You might run into a situation where you end up splitting out everything from a 
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts')({
-  // Hello?
+    // Hello?
 })
 ```
 
@@ -635,11 +630,11 @@ export const Route = createFileRoute('/posts')({
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/posts')({
-  component: Posts,
+    component: Posts
 })
 
 function Posts() {
-  // ...
+    // ...
 }
 ```
 
@@ -650,11 +645,11 @@ function Posts() {
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/posts')({
-  component: Posts,
+    component: Posts
 })
 
 function Posts() {
-  // ...
+    // ...
 }
 ```
 
@@ -669,11 +664,11 @@ Create a lazy route using the `createLazyRoute` function.
 ```tsx
 // src/posts.lazy.tsx
 export const Route = createLazyRoute('/posts')({
-  component: MyComponent,
+    component: MyComponent
 })
 
 function MyComponent() {
-  return <div>My Component</div>
+    return <div>My Component</div>
 }
 ```
 
@@ -682,8 +677,8 @@ Then, call the `.lazy` method on the route definition in your `app.tsx` to impor
 ```tsx
 // src/app.tsx
 const postsRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/posts',
+    getParentRoute: () => rootRoute,
+    path: '/posts'
 }).lazy(() => import('./posts.lazy').then((d) => d.Route))
 ```
 
@@ -699,14 +694,14 @@ You can code split your data loading logic using the Route's `loader` option. Wh
 import { lazyFn } from '@tanstack/react-router'
 
 const route = createRoute({
-  path: '/my-route',
-  component: MyComponent,
-  loader: lazyFn(() => import('./loader'), 'loader'),
+    path: '/my-route',
+    component: MyComponent,
+    loader: lazyFn(() => import('./loader'), 'loader')
 })
 
 // In another file...a
 export const loader = async (context: LoaderContext) => {
-  /// ...
+    /// ...
 }
 ```
 
@@ -723,11 +718,11 @@ import { createRoute } from '@tanstack/react-router'
 import { MyComponent } from './MyComponent'
 
 const route = createRoute({
-  path: '/my-route',
-  loader: () => ({
-    foo: 'bar',
-  }),
-  component: MyComponent,
+    path: '/my-route',
+    loader: () => ({
+        foo: 'bar'
+    }),
+    component: MyComponent
 })
 ```
 
@@ -739,10 +734,10 @@ import { getRouteApi } from '@tanstack/react-router'
 const route = getRouteApi('/my-route')
 
 export function MyComponent() {
-  const loaderData = route.useLoaderData()
-  //    ^? { foo: string }
+    const loaderData = route.useLoaderData()
+    //    ^? { foo: string }
 
-  return <div>...</div>
+    return <div>...</div>
 }
 ```
 
@@ -765,7 +760,7 @@ When you're ready to start using your router, you'll need to create a new `Route
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  // ...
+    // ...
 })
 ```
 
@@ -789,7 +784,7 @@ If you used code-based routing, then you likely created your route tree manually
 
 ```tsx
 const routeTree = rootRoute.addChildren([
-  // ...
+    // ...
 ])
 ```
 
@@ -802,10 +797,10 @@ TanStack Router provides amazing support for TypeScript, even for things you wou
 
 ```tsx
 declare module '@tanstack/react-router' {
-  interface Register {
-    // This infers the type of our router and registers it across your entire project
-    router: typeof router
-  }
+    interface Register {
+        // This infers the type of our router and registers it across your entire project
+        router: typeof router
+    }
 }
 ```
 
@@ -849,21 +844,17 @@ import * as React from 'react'
 import { createLink, LinkComponent } from '@tanstack/react-router'
 
 interface BasicLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  // Add any additional props you want to pass to the anchor element
+    // Add any additional props you want to pass to the anchor element
 }
 
-const BasicLinkComponent = React.forwardRef<HTMLAnchorElement, BasicLinkProps>(
-  (props, ref) => {
-    return (
-      <a ref={ref} {...props} className={'block px-3 py-2 text-blue-700'} />
-    )
-  },
-)
+const BasicLinkComponent = React.forwardRef<HTMLAnchorElement, BasicLinkProps>((props, ref) => {
+    return <a ref={ref} {...props} className={'block px-3 py-2 text-blue-700'} />
+})
 
 const CreatedLinkComponent = createLink(BasicLinkComponent)
 
 export const CustomLink: LinkComponent<typeof BasicLinkComponent> = (props) => {
-  return <CreatedLinkComponent preload={'intent'} {...props} />
+    return <CreatedLinkComponent preload={'intent'} {...props} />
 }
 ```
 
@@ -900,18 +891,18 @@ import { createLink } from '@tanstack/react-router'
 import { Link as RACLink, type LinkProps } from 'react-aria-components'
 
 interface MyLinkProps extends LinkProps {
-  // your props
+    // your props
 }
 
 function MyLink(props: MyLinkProps) {
-  return (
-    <RACLink
-      {...props}
-      style={({ isHovered }) => ({
-        color: isHovered ? 'red' : 'blue',
-      })}
-    />
-  )
+    return (
+        <RACLink
+            {...props}
+            style={({ isHovered }) => ({
+                color: isHovered ? 'red' : 'blue'
+            })}
+        />
+    )
 }
 
 export const Link = createLink(MyLink)
@@ -924,34 +915,26 @@ import * as React from 'react'
 import { createLink, LinkComponent } from '@tanstack/react-router'
 import { Link } from '@chakra-ui/react'
 
-interface ChakraLinkProps extends Omit<
-  React.ComponentPropsWithoutRef<typeof Link>,
-  'href'
-> {
-  // Add any additional props you want to pass to the link
+interface ChakraLinkProps extends Omit<React.ComponentPropsWithoutRef<typeof Link>, 'href'> {
+    // Add any additional props you want to pass to the link
 }
 
-const ChakraLinkComponent = React.forwardRef<
-  HTMLAnchorElement,
-  ChakraLinkProps
->((props, ref) => {
-  return <Link ref={ref} {...props} />
+const ChakraLinkComponent = React.forwardRef<HTMLAnchorElement, ChakraLinkProps>((props, ref) => {
+    return <Link ref={ref} {...props} />
 })
 
 const CreatedLinkComponent = createLink(ChakraLinkComponent)
 
-export const CustomLink: LinkComponent<typeof ChakraLinkComponent> = (
-  props,
-) => {
-  return (
-    <CreatedLinkComponent
-      textDecoration={'underline'}
-      _hover={{ textDecoration: 'none' }}
-      _focus={{ textDecoration: 'none' }}
-      preload={'intent'}
-      {...props}
-    />
-  )
+export const CustomLink: LinkComponent<typeof ChakraLinkComponent> = (props) => {
+    return (
+        <CreatedLinkComponent
+            textDecoration={'underline'}
+            _hover={{ textDecoration: 'none' }}
+            _focus={{ textDecoration: 'none' }}
+            preload={'intent'}
+            {...props}
+        />
+    )
 }
 ```
 
@@ -980,17 +963,17 @@ import type { LinkProps } from '@mui/material'
 import type { LinkComponent } from '@tanstack/react-router'
 
 interface MUILinkProps extends LinkProps {
-  // Add any additional props you want to pass to the Link
+    // Add any additional props you want to pass to the Link
 }
 
-const MUILinkComponent = React.forwardRef<HTMLAnchorElement, MUILinkProps>(
-  (props, ref) => <Link ref={ref} {...props} />,
-)
+const MUILinkComponent = React.forwardRef<HTMLAnchorElement, MUILinkProps>((props, ref) => (
+    <Link ref={ref} {...props} />
+))
 
 const CreatedLinkComponent = createLink(MUILinkComponent)
 
 export const CustomLink: LinkComponent<typeof MUILinkComponent> = (props) => {
-  return <CreatedLinkComponent preload={'intent'} {...props} />
+    return <CreatedLinkComponent preload={'intent'} {...props} />
 }
 
 // Can also be styled
@@ -1008,20 +991,17 @@ import type { ButtonProps } from '@mui/material'
 import type { LinkComponent } from '@tanstack/react-router'
 
 interface MUIButtonLinkProps extends ButtonProps<'a'> {
-  // Add any additional props you want to pass to the Button
+    // Add any additional props you want to pass to the Button
 }
 
-const MUIButtonLinkComponent = React.forwardRef<
-  HTMLAnchorElement,
-  MUIButtonLinkProps
->((props, ref) => <Button ref={ref} component="a" {...props} />)
+const MUIButtonLinkComponent = React.forwardRef<HTMLAnchorElement, MUIButtonLinkProps>((props, ref) => (
+    <Button ref={ref} component='a' {...props} />
+))
 
 const CreatedButtonLinkComponent = createLink(MUIButtonLinkComponent)
 
-export const CustomButtonLink: LinkComponent<typeof MUIButtonLinkComponent> = (
-  props,
-) => {
-  return <CreatedButtonLinkComponent preload={'intent'} {...props} />
+export const CustomButtonLink: LinkComponent<typeof MUIButtonLinkComponent> = (props) => {
+    return <CreatedButtonLinkComponent preload={'intent'} {...props} />
 }
 ```
 
@@ -1034,9 +1014,9 @@ import { css, styled } from '@mui/material'
 import { CustomLink } from './CustomLink'
 
 const StyledCustomLink = styled(CustomLink)(
-  ({ theme }) => css`
-    color: ${theme.palette.common.white};
-  `,
+    ({ theme }) => css`
+        color: ${theme.palette.common.white};
+    `
 )
 ```
 
@@ -1048,22 +1028,17 @@ import { createLink, LinkComponent } from '@tanstack/react-router'
 import { Anchor, AnchorProps } from '@mantine/core'
 
 interface MantineAnchorProps extends Omit<AnchorProps, 'href'> {
-  // Add any additional props you want to pass to the anchor
+    // Add any additional props you want to pass to the anchor
 }
 
-const MantineLinkComponent = React.forwardRef<
-  HTMLAnchorElement,
-  MantineAnchorProps
->((props, ref) => {
-  return <Anchor ref={ref} {...props} />
+const MantineLinkComponent = React.forwardRef<HTMLAnchorElement, MantineAnchorProps>((props, ref) => {
+    return <Anchor ref={ref} {...props} />
 })
 
 const CreatedLinkComponent = createLink(MantineLinkComponent)
 
-export const CustomLink: LinkComponent<typeof MantineLinkComponent> = (
-  props,
-) => {
-  return <CreatedLinkComponent preload="intent" {...props} />
+export const CustomLink: LinkComponent<typeof MantineLinkComponent> = (props) => {
+    return <CreatedLinkComponent preload='intent' {...props} />
 }
 ```
 
@@ -1077,9 +1052,9 @@ For instance, using the default configuration, if you have the following search 
 
 ```tsx
 const search = {
-  page: 1,
-  sort: 'asc',
-  filters: { author: 'tanner', min_words: 800 },
+    page: 1,
+    sort: 'asc',
+    filters: { author: 'tanner', min_words: 800 }
 }
 ```
 
@@ -1092,16 +1067,12 @@ It would be serialized and escaped into the following search string:
 We can implement the default behavior with the following code:
 
 ```tsx
-import {
-  createRouter,
-  parseSearchWith,
-  stringifySearchWith,
-} from '@tanstack/react-router'
+import { createRouter, parseSearchWith, stringifySearchWith } from '@tanstack/react-router'
 
 const router = createRouter({
-  // ...
-  parseSearch: parseSearchWith(JSON.parse),
-  stringifySearch: stringifySearchWith(JSON.stringify),
+    // ...
+    parseSearch: parseSearchWith(JSON.parse),
+    stringifySearch: stringifySearchWith(JSON.stringify)
 })
 ```
 
@@ -1121,35 +1092,29 @@ Here are some examples of how you can customize the search param serialization i
 It's common to base64 encode your search params to achieve maximum compatibility across browsers and URL unfurlers, etc. This can be done with the following code:
 
 ```tsx
-import {
-  Router,
-  parseSearchWith,
-  stringifySearchWith,
-} from '@tanstack/react-router'
+import { Router, parseSearchWith, stringifySearchWith } from '@tanstack/react-router'
 
 const router = createRouter({
-  parseSearch: parseSearchWith((value) => JSON.parse(decodeFromBinary(value))),
-  stringifySearch: stringifySearchWith((value) =>
-    encodeToBinary(JSON.stringify(value)),
-  ),
+    parseSearch: parseSearchWith((value) => JSON.parse(decodeFromBinary(value))),
+    stringifySearch: stringifySearchWith((value) => encodeToBinary(JSON.stringify(value)))
 })
 
 function decodeFromBinary(str: string): string {
-  return decodeURIComponent(
-    Array.prototype.map
-      .call(atob(str), function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-      })
-      .join(''),
-  )
+    return decodeURIComponent(
+        Array.prototype.map
+            .call(atob(str), function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            })
+            .join('')
+    )
 }
 
 function encodeToBinary(str: string): string {
-  return btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-      return String.fromCharCode(parseInt(p1, 16))
-    }),
-  )
+    return btoa(
+        encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+            return String.fromCharCode(parseInt(p1, 16))
+        })
+    )
 }
 ```
 
@@ -1173,17 +1138,17 @@ import { createRouter } from '@tanstack/react-router'
 import qs from 'query-string'
 
 const router = createRouter({
-  // ...
-  stringifySearch: stringifySearchWith((value) =>
-    qs.stringify(value, {
-      // ...options
-    }),
-  ),
-  parseSearch: parseSearchWith((value) =>
-    qs.parse(value, {
-      // ...options
-    }),
-  ),
+    // ...
+    stringifySearch: stringifySearchWith((value) =>
+        qs.stringify(value, {
+            // ...options
+        })
+    ),
+    parseSearch: parseSearchWith((value) =>
+        qs.parse(value, {
+            // ...options
+        })
+    )
 })
 ```
 
@@ -1198,17 +1163,13 @@ So, if we were to turn the previous object into a search string using this confi
 [JSURL2](https://github.com/wmertens/jsurl2) is a non-standard library that can compress URLs while still maintaining readability. This can be done with the following code:
 
 ```tsx
-import {
-  Router,
-  parseSearchWith,
-  stringifySearchWith,
-} from '@tanstack/react-router'
+import { Router, parseSearchWith, stringifySearchWith } from '@tanstack/react-router'
 import { parse, stringify } from 'jsurl2'
 
 const router = createRouter({
-  // ...
-  parseSearch: parseSearchWith(parse),
-  stringifySearch: stringifySearchWith(stringify),
+    // ...
+    parseSearch: parseSearchWith(parse),
+    stringifySearch: stringifySearchWith(stringify)
 })
 ```
 
@@ -1223,36 +1184,30 @@ So, if we were to turn the previous object into a search string using this confi
 [Zipson](https://jgranstrom.github.io/zipson/) is a very user-friendly and performant JSON compression library (both in runtime performance and the resulting compression performance). To compress your search params with it (which requires escaping/unescaping and base64 encoding/decoding them as well), you can use the following code:
 
 ```tsx
-import {
-  Router,
-  parseSearchWith,
-  stringifySearchWith,
-} from '@tanstack/react-router'
+import { Router, parseSearchWith, stringifySearchWith } from '@tanstack/react-router'
 import { stringify, parse } from 'zipson'
 
 const router = createRouter({
-  parseSearch: parseSearchWith((value) => parse(decodeFromBinary(value))),
-  stringifySearch: stringifySearchWith((value) =>
-    encodeToBinary(stringify(value)),
-  ),
+    parseSearch: parseSearchWith((value) => parse(decodeFromBinary(value))),
+    stringifySearch: stringifySearchWith((value) => encodeToBinary(stringify(value)))
 })
 
 function decodeFromBinary(str: string): string {
-  return decodeURIComponent(
-    Array.prototype.map
-      .call(atob(str), function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-      })
-      .join(''),
-  )
+    return decodeURIComponent(
+        Array.prototype.map
+            .call(atob(str), function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            })
+            .join('')
+    )
 }
 
 function encodeToBinary(str: string): string {
-  return btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-      return String.fromCharCode(parseInt(p1, 16))
-    }),
-  )
+    return btoa(
+        encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+            return String.fromCharCode(parseInt(p1, 16))
+        })
+    )
 }
 ```
 
@@ -1274,11 +1229,11 @@ To encode from a string to a binary string:
 
 ```typescript
 export function encodeToBinary(str: string): string {
-  return btoa(
-    encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-      return String.fromCharCode(parseInt(p1, 16))
-    }),
-  )
+    return btoa(
+        encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+            return String.fromCharCode(parseInt(p1, 16))
+        })
+    )
 }
 ```
 
@@ -1286,13 +1241,13 @@ To decode from a binary string to a string:
 
 ```typescript
 export function decodeFromBinary(str: string): string {
-  return decodeURIComponent(
-    Array.prototype.map
-      .call(atob(str), function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-      })
-      .join(''),
-  )
+    return decodeURIComponent(
+        Array.prototype.map
+            .call(atob(str), function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            })
+            .join('')
+    )
 }
 ```
 
@@ -1309,19 +1264,19 @@ Beyond these normal expectations of a router, TanStack Router goes above and bey
 Every time a URL/history update is detected, the router executes the following sequence:
 
 - Route Matching (Top-Down)
-  - `route.params.parse`
-  - `route.validateSearch`
+    - `route.params.parse`
+    - `route.validateSearch`
 - Route Pre-Loading (Serial)
-  - `route.beforeLoad`
-  - `route.onError`
-    - `route.errorComponent` / `parentRoute.errorComponent` / `router.defaultErrorComponent`
+    - `route.beforeLoad`
+    - `route.onError`
+        - `route.errorComponent` / `parentRoute.errorComponent` / `router.defaultErrorComponent`
 - Route Loading (Parallel)
-  - `route.component.preload?`
-  - `route.loader`
-    - `route.pendingComponent` (Optional)
-    - `route.component`
-  - `route.onError`
-    - `route.errorComponent` / `parentRoute.errorComponent` / `router.defaultErrorComponent`
+    - `route.component.preload?`
+    - `route.loader`
+        - `route.pendingComponent` (Optional)
+        - `route.component`
+    - `route.onError`
+        - `route.errorComponent` / `parentRoute.errorComponent` / `router.defaultErrorComponent`
 
 ## To Router Cache or not to Router Cache?
 
@@ -1357,7 +1312,7 @@ Route `loader` functions are called when a route match is loaded. They are calle
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
+    loader: () => fetchPosts()
 })
 ```
 
@@ -1367,12 +1322,12 @@ The `loader` function receives a single object with the following properties:
 
 - `abortController` - The route's abortController. Its signal is cancelled when the route is unloaded or when the Route is no longer relevant and the current invocation of the `loader` function becomes outdated.
 - `cause` - The cause of the current route match. Can be either one of the following:
-  - `enter` - When the route is matched and loaded after not being matched in the previous location.
-  - `preload` - When the route is being preloaded.
-  - `stay` - When the route is matched and loaded after being matched in the previous location.
+    - `enter` - When the route is matched and loaded after not being matched in the previous location.
+    - `preload` - When the route is being preloaded.
+    - `stay` - When the route is matched and loaded after being matched in the previous location.
 - `context` - The route's context object, which is a merged union of:
-  - Parent route context
-  - This route's context as provided by the `beforeLoad` option
+    - Parent route context
+    - This route's context as provided by the `beforeLoad` option
 - `deps` - The object value returned from the `Route.loaderDeps` function. If `Route.loaderDeps` is not defined, an empty object will be provided instead.
 - `location` - The current location
 - `params` - The route's path params
@@ -1406,9 +1361,9 @@ const data = routeApi.useLoaderData()
 TanStack Router provides a built-in Stale-While-Revalidate caching layer for route loaders that is keyed on the dependencies of a route:
 
 - The route's fully parsed pathname
-  - e.g. `/posts/1` vs `/posts/2`
+    - e.g. `/posts/1` vs `/posts/2`
 - Any additional dependencies provided by the `loaderDeps` option
-  - e.g. `loaderDeps: ({ search: { pageIndex, pageSize } }) => ({ pageIndex, pageSize })`
+    - e.g. `loaderDeps: ({ search: { pageIndex, pageSize } }) => ({ pageIndex, pageSize })`
 
 Using these dependencies as keys, TanStack Router will cache the data returned from a route's `loader` function and use it to fulfill subsequent requests for the same route match. This means that if a route's data is already in the cache, it will be returned immediately, then **potentially** be refetched in the background depending on the "freshness" of the data.
 
@@ -1417,18 +1372,18 @@ Using these dependencies as keys, TanStack Router will cache the data returned f
 To control router dependencies and "freshness", TanStack Router provides a plethora of options to control the keying and caching behavior of your route loaders. Let's take a look at them in the order that you are most likely to use them:
 
 - `routeOptions.loaderDeps`
-  - A function that supplies you the search params for a router and returns an object of dependencies for use in your `loader` function. When these deps changed from navigation to navigation, it will cause the route to reload regardless of `staleTime`s. The deps are compared using a deep equality check.
+    - A function that supplies you the search params for a router and returns an object of dependencies for use in your `loader` function. When these deps changed from navigation to navigation, it will cause the route to reload regardless of `staleTime`s. The deps are compared using a deep equality check.
 - `routeOptions.staleTime`
 - `routerOptions.defaultStaleTime`
-  - The number of milliseconds that a route's data should be considered fresh when attempting to load.
+    - The number of milliseconds that a route's data should be considered fresh when attempting to load.
 - `routeOptions.preloadStaleTime`
 - `routerOptions.defaultPreloadStaleTime`
-  - The number of milliseconds that a route's data should be considered fresh attempting to preload.
+    - The number of milliseconds that a route's data should be considered fresh attempting to preload.
 - `routeOptions.gcTime`
 - `routerOptions.defaultGcTime`
-  - The number of milliseconds that a route's data should be kept in the cache before being garbage collected.
+    - The number of milliseconds that a route's data should be kept in the cache before being garbage collected.
 - `routeOptions.shouldReload`
-  - A function that receives the same `beforeLoad` and `loaderContext` parameters and returns a boolean indicating if the route should reload. This offers one more level of control over when a route should reload beyond `staleTime` and `loaderDeps` and can be used to implement patterns similar to Remix's `shouldLoad` option.
+    - A function that receives the same `beforeLoad` and `loaderContext` parameters and returns a boolean indicating if the route should reload. This offers one more level of control over when a route should reload beyond `staleTime` and `loaderDeps` and can be used to implement patterns similar to Remix's `shouldLoad` option.
 
 ### ⚠️ Some Important Defaults
 
@@ -1446,12 +1401,12 @@ Once we have these deps in place, the route will always reload when the deps cha
 ```tsx
 // /routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit }),
-  loader: ({ deps: { offset, limit } }) =>
-    fetchPosts({
-      offset,
-      limit,
-    }),
+    loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit }),
+    loader: ({ deps: { offset, limit } }) =>
+        fetchPosts({
+            offset,
+            limit
+        })
 })
 ```
 
@@ -1486,9 +1441,9 @@ By default, `staleTime` for navigations is set to `0`ms (and 30 seconds for prel
 ```tsx
 // /routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
-  // Consider the route's data fresh for 10 seconds
-  staleTime: 10_000,
+    loader: () => fetchPosts(),
+    // Consider the route's data fresh for 10 seconds
+    staleTime: 10_000
 })
 ```
 
@@ -1501,8 +1456,8 @@ To disable stale-while-revalidate caching for a route, set the `staleTime` optio
 ```tsx
 // /routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
-  staleTime: Infinity,
+    loader: () => fetchPosts(),
+    staleTime: Infinity
 })
 ```
 
@@ -1510,8 +1465,8 @@ You can even turn this off for all routes by setting the `defaultStaleTime` opti
 
 ```tsx
 const router = createRouter({
-  routeTree,
-  defaultStaleTime: Infinity,
+    routeTree,
+    defaultStaleTime: Infinity
 })
 ```
 
@@ -1522,12 +1477,12 @@ Similar to Remix's default functionality, you may want to configure a route to o
 ```tsx
 // /routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit }),
-  loader: ({ deps }) => fetchPosts(deps),
-  // Do not cache this route's data after it's unloaded
-  gcTime: 0,
-  // Only reload the route when the user navigates to it or when deps change
-  shouldReload: false,
+    loaderDeps: ({ search: { offset, limit } }) => ({ offset, limit }),
+    loader: ({ deps }) => fetchPosts(deps),
+    // Do not cache this route's data after it's unloaded
+    gcTime: 0,
+    // Only reload the route when the user navigates to it or when deps change
+    shouldReload: false
 })
 ```
 
@@ -1543,8 +1498,8 @@ We break down this use case in the [External Data Loading](./external-data-loadi
 
 ```tsx
 const router = createRouter({
-  routeTree,
-  defaultPreloadStaleTime: 0,
+    routeTree,
+    defaultPreloadStaleTime: 0
 })
 ```
 
@@ -1567,9 +1522,9 @@ In this example, we'll create a function in our route context to fetch posts, th
 
 ```tsx
 export const fetchPosts = async () => {
-  const res = await fetch(`/api/posts?page=${pageIndex}`)
-  if (!res.ok) throw new Error('Failed to fetch posts')
-  return res.json()
+    const res = await fetch(`/api/posts?page=${pageIndex}`)
+    if (!res.ok) throw new Error('Failed to fetch posts')
+    return res.json()
 }
 ```
 
@@ -1580,7 +1535,7 @@ import { createRootRouteWithContext } from '@tanstack/react-router'
 
 // Create a root route using the createRootRouteWithContext<{...}>() function and pass it whatever types you would like to be available in your router context.
 export const Route = createRootRouteWithContext<{
-  fetchPosts: typeof fetchPosts
+    fetchPosts: typeof fetchPosts
 }>()() // NOTE: the double call is on purpose, since createRootRouteWithContext is a factory ;)
 ```
 
@@ -1593,7 +1548,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // This can be a powerful tool for dependency injection across your router
 // and routes.
 export const Route = createFileRoute('/posts')({
-  loader: ({ context: { fetchPosts } }) => fetchPosts(),
+    loader: ({ context: { fetchPosts } }) => fetchPosts()
 })
 ```
 
@@ -1605,11 +1560,11 @@ import { routeTree } from './routeTree.gen'
 // Use your routerContext to create a new router
 // This will require that you fullfil the type requirements of the routerContext
 const router = createRouter({
-  routeTree,
-  context: {
-    // Supply the fetchPosts function to the router context
-    fetchPosts,
-  },
+    routeTree,
+    context: {
+        // Supply the fetchPosts function to the router context
+        fetchPosts
+    }
 })
 ```
 
@@ -1620,7 +1575,7 @@ To use path params in your `loader` function, access them via the `params` prope
 ```tsx
 // routes/posts.$postId.tsx
 export const Route = createFileRoute('/posts/$postId')({
-  loader: ({ params: { postId } }) => fetchPostById(postId),
+    loader: ({ params: { postId } }) => fetchPostById(postId)
 })
 ```
 
@@ -1633,15 +1588,15 @@ Passing down global context to your router is great, but what if you want to pro
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts')({
-  // Pass the fetchPosts function to the route context
-  beforeLoad: () => ({
-    fetchPosts: () => console.info('foo'),
-  }),
-  loader: ({ context: { fetchPosts } }) => {
-    fetchPosts() // 'foo'
+    // Pass the fetchPosts function to the route context
+    beforeLoad: () => ({
+        fetchPosts: () => console.info('foo')
+    }),
+    loader: ({ context: { fetchPosts } }) => {
+        fetchPosts() // 'foo'
 
-    // ...
-  },
+        // ...
+    }
 })
 ```
 
@@ -1658,14 +1613,14 @@ You might be here wondering why `search` isn't directly available in the `loader
 ```tsx
 // /routes/users.user.tsx
 export const Route = createFileRoute('/users/user')({
-  validateSearch: (search) =>
-    search as {
-      userId: string
-    },
-  loaderDeps: ({ search: { userId } }) => ({
-    userId,
-  }),
-  loader: async ({ deps: { userId } }) => getUser(userId),
+    validateSearch: (search) =>
+        search as {
+            userId: string
+        },
+    loaderDeps: ({ search: { userId } }) => ({
+        userId
+    }),
+    loader: async ({ deps: { userId } }) => getUser(userId)
 })
 ```
 
@@ -1674,17 +1629,17 @@ export const Route = createFileRoute('/users/user')({
 ```tsx
 // /routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  // Use zod to validate and parse the search params
-  validateSearch: z.object({
-    offset: z.number().int().nonnegative().catch(0),
-  }),
-  // Pass the offset to your loader deps via the loaderDeps function
-  loaderDeps: ({ search: { offset } }) => ({ offset }),
-  // Use the offset from context in the loader function
-  loader: async ({ deps: { offset } }) =>
-    fetchPosts({
-      offset,
+    // Use zod to validate and parse the search params
+    validateSearch: z.object({
+        offset: z.number().int().nonnegative().catch(0)
     }),
+    // Pass the offset to your loader deps via the loaderDeps function
+    loaderDeps: ({ search: { offset } }) => ({ offset }),
+    // Use the offset from context in the loader function
+    loader: async ({ deps: { offset } }) =>
+        fetchPosts({
+            offset
+        })
 })
 ```
 
@@ -1695,11 +1650,11 @@ The `abortController` property of the `loader` function is an [AbortController](
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: ({ abortController }) =>
-    fetchPosts({
-      // Pass this to an underlying fetch call or anything that supports signals
-      signal: abortController.signal,
-    }),
+    loader: ({ abortController }) =>
+        fetchPosts({
+            // Pass this to an underlying fetch call or anything that supports signals
+            signal: abortController.signal
+        })
 })
 ```
 
@@ -1710,10 +1665,10 @@ The `preload` property of the `loader` function is a boolean which is `true` whe
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: async ({ preload }) =>
-    fetchPosts({
-      maxAge: preload ? 10_000 : 0, // Preloads should hang around a bit longer
-    }),
+    loader: async ({ preload }) =>
+        fetchPosts({
+            maxAge: preload ? 10_000 : 0 // Preloads should hang around a bit longer
+        })
 })
 ```
 
@@ -1751,11 +1706,11 @@ The `routeOptions.onError` option is a function that is called when an error occ
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
-  onError: ({ error }) => {
-    // Log the error
-    console.error(error)
-  },
+    loader: () => fetchPosts(),
+    onError: ({ error }) => {
+        // Log the error
+        console.error(error)
+    }
 })
 ```
 
@@ -1766,10 +1721,10 @@ The `routeOptions.onCatch` option is a function that is called whenever an error
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  onCatch: ({ error, errorInfo }) => {
-    // Log the error
-    console.error(error)
-  },
+    onCatch: ({ error, errorInfo }) => {
+        // Log the error
+        console.error(error)
+    }
 })
 ```
 
@@ -1783,11 +1738,11 @@ The `routeOptions.errorComponent` option is a component that is rendered when an
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
-  errorComponent: ({ error }) => {
-    // Render an error message
-    return <div>{error.message}</div>
-  },
+    loader: () => fetchPosts(),
+    errorComponent: ({ error }) => {
+        // Render an error message
+        return <div>{error.message}</div>
+    }
 })
 ```
 
@@ -1796,22 +1751,22 @@ The `reset` function can be used to allow the user to retry rendering the error 
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
-  errorComponent: ({ error, reset }) => {
-    return (
-      <div>
-        {error.message}
-        <button
-          onClick={() => {
-            // Reset the router error boundary
-            reset()
-          }}
-        >
-          retry
-        </button>
-      </div>
-    )
-  },
+    loader: () => fetchPosts(),
+    errorComponent: ({ error, reset }) => {
+        return (
+            <div>
+                {error.message}
+                <button
+                    onClick={() => {
+                        // Reset the router error boundary
+                        reset()
+                    }}
+                >
+                    retry
+                </button>
+            </div>
+        )
+    }
 })
 ```
 
@@ -1820,24 +1775,24 @@ If the error was the result of a route load, you should instead call `router.inv
 ```tsx
 // routes/posts.tsx
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
-  errorComponent: ({ error, reset }) => {
-    const router = useRouter()
+    loader: () => fetchPosts(),
+    errorComponent: ({ error, reset }) => {
+        const router = useRouter()
 
-    return (
-      <div>
-        {error.message}
-        <button
-          onClick={() => {
-            // Invalidate the route to reload the loader, which will also reset the error boundary
-            router.invalidate()
-          }}
-        >
-          retry
-        </button>
-      </div>
-    )
-  },
+        return (
+            <div>
+                {error.message}
+                <button
+                    onClick={() => {
+                        // Invalidate the route to reload the loader, which will also reset the error boundary
+                        router.invalidate()
+                    }}
+                >
+                    retry
+                </button>
+            </div>
+        )
+    }
 })
 ```
 
@@ -1850,16 +1805,16 @@ TanStack Router provides a default `ErrorComponent` that is rendered when an err
 import { createFileRoute, ErrorComponent } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts')({
-  loader: () => fetchPosts(),
-  errorComponent: ({ error }) => {
-    if (error instanceof MyCustomError) {
-      // Render a custom error message
-      return <div>{error.message}</div>
-    }
+    loader: () => fetchPosts(),
+    errorComponent: ({ error }) => {
+        if (error instanceof MyCustomError) {
+            // Render a custom error message
+            return <div>{error.message}</div>
+        }
 
-    // Fallback to the default ErrorComponent
-    return <ErrorComponent error={error} />
-  },
+        // Fallback to the default ErrorComponent
+        return <ErrorComponent error={error} />
+    }
 })
 ```
 
@@ -1906,12 +1861,12 @@ When mutations related to loader data are made, we can use `router.invalidate` t
 const router = useRouter()
 
 const addTodo = async (todo: Todo) => {
-  try {
-    await api.addTodo()
-    router.invalidate()
-  } catch {
-    //
-  }
+    try {
+        await api.addTodo()
+        router.invalidate()
+    } catch {
+        //
+    }
 }
 ```
 
@@ -1923,12 +1878,12 @@ If you want to await the invalidation until all loaders have finished, pass `{sy
 const router = useRouter()
 
 const addTodo = async (todo: Todo) => {
-  try {
-    await api.addTodo()
-    await router.invalidate({ sync: true })
-  } catch {
-    //
-  }
+    try {
+        await api.addTodo()
+        await router.invalidate({ sync: true })
+    } catch {
+        //
+    }
 }
 ```
 
@@ -1953,34 +1908,34 @@ Hopefully and hypothetically, the easiest way is for your mutation library to su
 const routeApi = getRouteApi('/room/$roomId/chat')
 
 function ChatRoom() {
-  const { roomId } = routeApi.useParams()
+    const { roomId } = routeApi.useParams()
 
-  const sendMessageMutation = useCoolMutation({
-    fn: sendMessage,
-    // Clear the mutation state when the roomId changes
-    // including any submission state
-    key: ['sendMessage', roomId],
-  })
+    const sendMessageMutation = useCoolMutation({
+        fn: sendMessage,
+        // Clear the mutation state when the roomId changes
+        // including any submission state
+        key: ['sendMessage', roomId]
+    })
 
-  // Fire off a bunch of messages
-  const test = () => {
-    sendMessageMutation.mutate({ roomId, message: 'Hello!' })
-    sendMessageMutation.mutate({ roomId, message: 'How are you?' })
-    sendMessageMutation.mutate({ roomId, message: 'Goodbye!' })
-  }
+    // Fire off a bunch of messages
+    const test = () => {
+        sendMessageMutation.mutate({ roomId, message: 'Hello!' })
+        sendMessageMutation.mutate({ roomId, message: 'How are you?' })
+        sendMessageMutation.mutate({ roomId, message: 'Goodbye!' })
+    }
 
-  return (
-    <>
-      {sendMessageMutation.submissions.map((submission) => {
-        return (
-          <div>
-            <div>{submission.status}</div>
-            <div>{submission.message}</div>
-          </div>
-        )
-      })}
-    </>
-  )
+    return (
+        <>
+            {sendMessageMutation.submissions.map((submission) => {
+                return (
+                    <div>
+                        <div>{submission.status}</div>
+                        <div>{submission.message}</div>
+                    </div>
+                )
+            })}
+        </>
+    )
 }
 ```
 
@@ -1997,8 +1952,8 @@ const router = createRouter()
 const coolMutationCache = createCoolMutationCache()
 
 const unsubscribeFn = router.subscribe('onResolved', () => {
-  // Reset mutation states when the route changes
-  coolMutationCache.clear()
+    // Reset mutation states when the route changes
+    coolMutationCache.clear()
 })
 ```
 
@@ -2019,18 +1974,18 @@ To defer slow or non-critical data, return an **unawaited/unresolved** promise a
 import { createFileRoute, defer } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async () => {
-    // Fetch some slower data, but do not await it
-    const slowDataPromise = fetchSlowData()
+    loader: async () => {
+        // Fetch some slower data, but do not await it
+        const slowDataPromise = fetchSlowData()
 
-    // Fetch and await some data that resolves quickly
-    const fastData = await fetchFastData()
+        // Fetch and await some data that resolves quickly
+        const fastData = await fetchFastData()
 
-    return {
-      fastData,
-      deferredSlowData: slowDataPromise,
+        return {
+            fastData,
+            deferredSlowData: slowDataPromise
+        }
     }
-  },
 })
 ```
 
@@ -2043,22 +1998,22 @@ In the component, deferred promises can be resolved and utilized using the `Awai
 import { createFileRoute, Await } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
-  // ...
-  component: PostIdComponent,
+    // ...
+    component: PostIdComponent
 })
 
 function PostIdComponent() {
-  const { deferredSlowData, fastData } = Route.useLoaderData()
+    const { deferredSlowData, fastData } = Route.useLoaderData()
 
-  // do something with fastData
+    // do something with fastData
 
-  return (
-    <Await promise={deferredSlowData} fallback={<div>Loading...</div>}>
-      {(data) => {
-        return <div>{data}</div>
-      }}
-    </Await>
-  )
+    return (
+        <Await promise={deferredSlowData} fallback={<div>Loading...</div>}>
+            {(data) => {
+                return <div>{data}</div>
+            }}
+        </Await>
+    )
 }
 ```
 
@@ -2088,13 +2043,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import { slowDataOptions, fastDataOptions } from '~/api/query-options'
 
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ context: { queryClient } }) => {
-    // Kick off the fetching of some slower data, but do not await it
-    queryClient.prefetchQuery(slowDataOptions())
+    loader: async ({ context: { queryClient } }) => {
+        // Kick off the fetching of some slower data, but do not await it
+        queryClient.prefetchQuery(slowDataOptions())
 
-    // Fetch and await some data that resolves quickly
-    await queryClient.ensureQueryData(fastDataOptions())
-  },
+        // Fetch and await some data that resolves quickly
+        await queryClient.ensureQueryData(fastDataOptions())
+    }
 })
 ```
 
@@ -2107,26 +2062,26 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { slowDataOptions, fastDataOptions } from '~/api/query-options'
 
 export const Route = createFileRoute('/posts/$postId')({
-  // ...
-  component: PostIdComponent,
+    // ...
+    component: PostIdComponent
 })
 
 function PostIdComponent() {
-  const fastData = useSuspenseQuery(fastDataOptions())
+    const fastData = useSuspenseQuery(fastDataOptions())
 
-  // do something with fastData
+    // do something with fastData
 
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <SlowDataComponent />
-    </Suspense>
-  )
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SlowDataComponent />
+        </Suspense>
+    )
 }
 
 function SlowDataComponent() {
-  const data = useSuspenseQuery(slowDataOptions())
+    const data = useSuspenseQuery(slowDataOptions())
 
-  return <div>{data}</div>
+    return <div>{data}</div>
 }
 ```
 
@@ -2147,18 +2102,18 @@ Please read the entire [Streaming SSR Guide](./ssr.md#streaming-ssr) for step by
 The following is a high-level overview of how deferred data streaming works with TanStack Router:
 
 - Server
-  - Promises are marked and tracked as they are returned from route loaders
-  - All loaders resolve and any deferred promises are serialized and embedded into the html
-  - The route begins to render
-  - Deferred promises rendered with the `<Await>` component trigger suspense boundaries, allowing the server to stream html up to that point
+    - Promises are marked and tracked as they are returned from route loaders
+    - All loaders resolve and any deferred promises are serialized and embedded into the html
+    - The route begins to render
+    - Deferred promises rendered with the `<Await>` component trigger suspense boundaries, allowing the server to stream html up to that point
 - Client
-  - The client receives the initial html from the server
-  - `<Await>` components suspend with placeholder promises while they wait for their data to resolve on the server
+    - The client receives the initial html from the server
+    - `<Await>` components suspend with placeholder promises while they wait for their data to resolve on the server
 - Server
-  - As deferred promises resolve, their results (or errors) are serialized and streamed to the client via an inline script tag
-  - The resolved `<Await>` components and their suspense boundaries are resolved and their resulting HTML is streamed to the client along with their dehydrated data
+    - As deferred promises resolve, their results (or errors) are serialized and streamed to the client via an inline script tag
+    - The resolved `<Await>` components and their suspense boundaries are resolved and their resulting HTML is streamed to the client along with their dehydrated data
 - Client
-  - The suspended placeholder promises within `<Await>` are resolved with the streamed data/error responses and either render the result or throw the error to the nearest error boundary
+    - The suspended placeholder promises within `<Await>` are resolved with the streamed data/error responses and either render the result or throw the error to the nearest error boundary
 
 [//]: # 'SSRContent'
 
@@ -2183,37 +2138,37 @@ To manage the document head, it's required that you render both the `<HeadConten
 
 ```tsx
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      {
-        name: 'description',
-        content: 'My App is a web application',
-      },
-      {
-        title: 'My App',
-      },
-    ],
-    links: [
-      {
-        rel: 'icon',
-        href: '/favicon.ico',
-      },
-    ],
-    styles: [
-      {
-        media: 'all and (max-width: 500px)',
-        children: `p {
+    head: () => ({
+        meta: [
+            {
+                name: 'description',
+                content: 'My App is a web application'
+            },
+            {
+                title: 'My App'
+            }
+        ],
+        links: [
+            {
+                rel: 'icon',
+                href: '/favicon.ico'
+            }
+        ],
+        styles: [
+            {
+                media: 'all and (max-width: 500px)',
+                children: `p {
                   color: blue;
                   background-color: yellow;
-                }`,
-      },
-    ],
-    scripts: [
-      {
-        src: 'https://www.google-analytics.com/analytics.js',
-      },
-    ],
-  }),
+                }`
+            }
+        ],
+        scripts: [
+            {
+                src: 'https://www.google-analytics.com/analytics.js'
+            }
+        ]
+    })
 })
 ```
 
@@ -2236,16 +2191,16 @@ It should be **rendered either in the `<head>` tag of your root layout or as hig
 import { HeadContent } from '@tanstack/react-router'
 
 export const Route = createRootRoute({
-  component: () => (
-    <html>
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <Outlet />
-      </body>
-    </html>
-  ),
+    component: () => (
+        <html>
+            <head>
+                <HeadContent />
+            </head>
+            <body>
+                <Outlet />
+            </body>
+        </html>
+    )
 })
 ```
 
@@ -2257,12 +2212,12 @@ First, remove the `<title>` tag from the the index.html if you have set any.
 import { HeadContent } from '@tanstack/react-router'
 
 const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <HeadContent />
-      <Outlet />
-    </>
-  ),
+    component: () => (
+        <>
+            <HeadContent />
+            <Outlet />
+        </>
+    )
 })
 ```
 
@@ -2277,11 +2232,11 @@ To do this, you must:
 
 ```tsx
 export const Route = createRootRoute({
-  scripts: () => [
-    {
-      children: 'console.log("Hello, world!")',
-    },
-  ],
+    scripts: () => [
+        {
+            children: 'console.log("Hello, world!")'
+        }
+    ]
 })
 ```
 
@@ -2294,15 +2249,15 @@ The `<Scripts />` component is **required** to render the body scripts of a docu
 ```tsx
 import { createFileRoute, Scripts } from '@tanstack/react-router'
 export const Router = createFileRoute('/')({
-  component: () => (
-    <html>
-      <head />
-      <body>
-        <Outlet />
-        <Scripts />
-      </body>
-    </html>
-  ),
+    component: () => (
+        <html>
+            <head />
+            <body>
+                <Outlet />
+                <Scripts />
+            </body>
+        </html>
+    )
 })
 ```
 
@@ -2310,12 +2265,12 @@ export const Router = createFileRoute('/')({
 import { Scripts, createRootRoute } from '@tanstack/react-router'
 
 export const Route = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <Scripts />
-    </>
-  ),
+    component: () => (
+        <>
+            <Outlet />
+            <Scripts />
+        </>
+    )
 })
 ```
 
@@ -2337,12 +2292,12 @@ const themeScript = `(function() {
 })();`
 
 function ThemeProvider({ children }) {
-  return (
-    <>
-      <ScriptOnce children={themeScript} />
-      {children}
-    </>
-  )
+    return (
+        <>
+            <ScriptOnce children={themeScript} />
+            {children}
+        </>
+    )
 }
 ```
 
@@ -2359,19 +2314,19 @@ If your script modifies the DOM before hydration (like adding a class to `<html>
 
 ```tsx
 export const Route = createRootRoute({
-  component: () => (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <ThemeProvider>
-          <Outlet />
-        </ThemeProvider>
-        <Scripts />
-      </body>
-    </html>
-  ),
+    component: () => (
+        <html lang='en' suppressHydrationWarning>
+            <head>
+                <HeadContent />
+            </head>
+            <body>
+                <ThemeProvider>
+                    <Outlet />
+                </ThemeProvider>
+                <Scripts />
+            </body>
+        </html>
+    )
 })
 ```
 
@@ -2430,18 +2385,18 @@ Here is a naive illustration (don't do this) of using a Route's `loader` option 
 let postsCache = []
 
 export const Route = createFileRoute('/posts')({
-  loader: async () => {
-    postsCache = await fetchPosts()
-  },
-  component: () => {
-    return (
-      <div>
-        {postsCache.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
-      </div>
-    )
-  },
+    loader: async () => {
+        postsCache = await fetchPosts()
+    },
+    component: () => {
+        return (
+            <div>
+                {postsCache.map((post) => (
+                    <Post key={post.id} post={post} />
+                ))}
+            </div>
+        )
+    }
 })
 ```
 
@@ -2457,27 +2412,27 @@ Let's take a look at a more realistic example using TanStack Query.
 ```tsx
 // src/routes/posts.tsx
 const postsQueryOptions = queryOptions({
-  queryKey: ['posts'],
-  queryFn: () => fetchPosts(),
+    queryKey: ['posts'],
+    queryFn: () => fetchPosts()
 })
 
 export const Route = createFileRoute('/posts')({
-  // Use the `loader` option to ensure that the data is loaded
-  loader: () => queryClient.ensureQueryData(postsQueryOptions),
-  component: () => {
-    // Read the data from the cache and subscribe to updates
-    const {
-      data: { posts },
-    } = useSuspenseQuery(postsQueryOptions)
+    // Use the `loader` option to ensure that the data is loaded
+    loader: () => queryClient.ensureQueryData(postsQueryOptions),
+    component: () => {
+        // Read the data from the cache and subscribe to updates
+        const {
+            data: { posts }
+        } = useSuspenseQuery(postsQueryOptions)
 
-    return (
-      <div>
-        {posts.map((post) => (
-          <Post key={post.id} post={post} />
-        ))}
-      </div>
-    )
-  },
+        return (
+            <div>
+                {posts.map((post) => (
+                    <Post key={post.id} post={post} />
+                ))}
+            </div>
+        )
+    }
 })
 ```
 
@@ -2487,30 +2442,30 @@ When an error occurs while using `suspense` with `TanStack Query`, you need to l
 
 ```tsx
 export const Route = createFileRoute('/')({
-  loader: () => queryClient.ensureQueryData(postsQueryOptions),
-  errorComponent: ({ error, reset }) => {
-    const router = useRouter()
-    const queryErrorResetBoundary = useQueryErrorResetBoundary()
+    loader: () => queryClient.ensureQueryData(postsQueryOptions),
+    errorComponent: ({ error, reset }) => {
+        const router = useRouter()
+        const queryErrorResetBoundary = useQueryErrorResetBoundary()
 
-    useEffect(() => {
-      // Reset the query error boundary
-      queryErrorResetBoundary.reset()
-    }, [queryErrorResetBoundary])
+        useEffect(() => {
+            // Reset the query error boundary
+            queryErrorResetBoundary.reset()
+        }, [queryErrorResetBoundary])
 
-    return (
-      <div>
-        {error.message}
-        <button
-          onClick={() => {
-            // Invalidate the route to reload the loader, and reset any router error boundaries
-            router.invalidate()
-          }}
-        >
-          retry
-        </button>
-      </div>
-    )
-  },
+        return (
+            <div>
+                {error.message}
+                <button
+                    onClick={() => {
+                        // Invalidate the route to reload the loader, and reset any router error boundaries
+                        router.invalidate()
+                    }}
+                >
+                    retry
+                </button>
+            </div>
+        )
+    }
 })
 ```
 
@@ -2530,41 +2485,37 @@ For example, let's dehydrate and hydrate a TanStack Query `QueryClient` so that 
 // src/router.tsx
 
 export function createRouter() {
-  // Make sure you create your loader client or similar data
-  // stores inside of your `createRouter` function. This ensures
-  // that your data stores are unique to each request and
-  // always present on both server and client.
-  const queryClient = new QueryClient()
+    // Make sure you create your loader client or similar data
+    // stores inside of your `createRouter` function. This ensures
+    // that your data stores are unique to each request and
+    // always present on both server and client.
+    const queryClient = new QueryClient()
 
-  return createRouter({
-    routeTree,
-    // Optionally provide your loaderClient to the router context for
-    // convenience (you can provide anything you want to the router
-    // context!)
-    context: {
-      queryClient,
-    },
-    // On the server, dehydrate the loader client so the router
-    // can serialize it and send it to the client for us
-    dehydrate: () => {
-      return {
-        queryClientState: dehydrate(queryClient),
-      }
-    },
-    // On the client, hydrate the loader client with the data
-    // we dehydrated on the server
-    hydrate: (dehydrated) => {
-      hydrate(queryClient, dehydrated.queryClientState)
-    },
-    // Optionally, we can use `Wrap` to wrap our router in the loader client provider
-    Wrap: ({ children }) => {
-      return (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      )
-    },
-  })
+    return createRouter({
+        routeTree,
+        // Optionally provide your loaderClient to the router context for
+        // convenience (you can provide anything you want to the router
+        // context!)
+        context: {
+            queryClient
+        },
+        // On the server, dehydrate the loader client so the router
+        // can serialize it and send it to the client for us
+        dehydrate: () => {
+            return {
+                queryClientState: dehydrate(queryClient)
+            }
+        },
+        // On the client, hydrate the loader client with the data
+        // we dehydrated on the server
+        hydrate: (dehydrated) => {
+            hydrate(queryClient, dehydrated.queryClientState)
+        },
+        // Optionally, we can use `Wrap` to wrap our router in the loader client provider
+        Wrap: ({ children }) => {
+            return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        }
+    })
 }
 ```
 
@@ -2584,7 +2535,7 @@ Once you have a history instance, you can pass it to the `Router` constructor:
 import { createMemoryHistory, createRouter } from '@tanstack/react-router'
 
 const memoryHistory = createMemoryHistory({
-  initialEntries: ['/'], // Pass your initial url
+    initialEntries: ['/'] // Pass your initial url
 })
 
 const router = createRouter({ routeTree, history: memoryHistory })
@@ -2614,7 +2565,7 @@ Memory routing is useful in environments that are not a browser or when you do n
 import { createMemoryHistory, createRouter } from '@tanstack/react-router'
 
 const memoryHistory = createMemoryHistory({
-  initialEntries: ['/'], // Pass your initial url
+    initialEntries: ['/'] // Pass your initial url
 })
 
 const router = createRouter({ routeTree, history: memoryHistory })
@@ -2663,20 +2614,20 @@ This single route matches:
 ```tsx
 // Route: /{-$locale}/about
 export const Route = createFileRoute('/{-$locale}/about')({
-  component: AboutComponent,
+    component: AboutComponent
 })
 
 function AboutComponent() {
-  const { locale } = Route.useParams()
-  const currentLocale = locale || 'en'
+    const { locale } = Route.useParams()
+    const currentLocale = locale || 'en'
 
-  const content = {
-    en: { title: 'About Us' },
-    fr: { title: 'À Propos' },
-    es: { title: 'Acerca de' },
-  }
+    const content = {
+        en: { title: 'About Us' },
+        fr: { title: 'À Propos' },
+        es: { title: 'Acerca de' }
+    }
 
-  return <h1>{content[currentLocale].title}</h1>
+    return <h1>{content[currentLocale].title}</h1>
 }
 ```
 
@@ -2685,16 +2636,16 @@ function AboutComponent() {
 ```tsx
 // Route: /{-$locale}/blog/{-$category}/$slug
 export const Route = createFileRoute('/{-$locale}/blog/{-$category}/$slug')({
-  beforeLoad: ({ params }) => {
-    const locale = params.locale || 'en'
-    const validLocales = ['en', 'fr', 'es', 'de']
+    beforeLoad: ({ params }) => {
+        const locale = params.locale || 'en'
+        const validLocales = ['en', 'fr', 'es', 'de']
 
-    if (params.locale && !validLocales.includes(params.locale)) {
-      throw new Error('Invalid locale')
+        if (params.locale && !validLocales.includes(params.locale)) {
+            throw new Error('Invalid locale')
+        }
+
+        return { locale }
     }
-
-    return { locale }
-  },
 })
 ```
 
@@ -2702,13 +2653,13 @@ export const Route = createFileRoute('/{-$locale}/blog/{-$category}/$slug')({
 
 ```tsx
 <Link
-  to="/{-$locale}/blog/{-$category}/$slug"
-  params={(prev) => ({
-    ...prev,
-    locale: prev.locale === 'en' ? undefined : 'fr',
-  })}
+    to='/{-$locale}/blog/{-$category}/$slug'
+    params={(prev) => ({
+        ...prev,
+        locale: prev.locale === 'en' ? undefined : 'fr'
+    })}
 >
-  Français
+    Français
 </Link>
 ```
 
@@ -2718,7 +2669,7 @@ export const Route = createFileRoute('/{-$locale}/blog/{-$category}/$slug')({
 type Locale = 'en' | 'fr' | 'es' | 'de'
 
 function isLocale(value?: string): value is Locale {
-  return ['en', 'fr', 'es', 'de'].includes(value as Locale)
+    return ['en', 'fr', 'es', 'de'].includes(value as Locale)
 }
 ```
 
@@ -2757,8 +2708,8 @@ npx @inlang/paraglide-js@latest init
 import { paraglideVitePlugin } from '@inlang/paraglide-js'
 
 paraglideVitePlugin({
-  project: './project.inlang',
-  outdir: './app/paraglide',
+    project: './project.inlang',
+    outdir: './app/paraglide'
 })
 ```
 
@@ -2768,11 +2719,11 @@ paraglideVitePlugin({
 import { deLocalizeUrl, localizeUrl } from './paraglide/runtime'
 
 const router = createRouter({
-  routeTree,
-  rewrite: {
-    input: ({ url }) => deLocalizeUrl(url),
-    output: ({ url }) => localizeUrl(url),
-  },
+    routeTree,
+    rewrite: {
+        input: ({ url }) => deLocalizeUrl(url),
+        output: ({ url }) => localizeUrl(url)
+    }
 })
 ```
 
@@ -2797,9 +2748,9 @@ This pattern integrates i18n at the routing and server layers. It is suitable wh
 import { paraglideMiddleware } from './paraglide/server'
 
 export default {
-  fetch(req: Request) {
-    return paraglideMiddleware(req, () => handler.fetch(req))
-  },
+    fetch(req: Request) {
+        return paraglideMiddleware(req, () => handler.fetch(req))
+    }
 }
 ```
 
@@ -2820,10 +2771,10 @@ For offline or client-only environments:
 import { shouldRedirect } from '../paraglide/runtime'
 
 beforeLoad: async () => {
-  const decision = await shouldRedirect({ url: window.location.href })
-  if (decision.redirectUrl) {
-    throw redirect({ href: decision.redirectUrl.href })
-  }
+    const decision = await shouldRedirect({ url: window.location.href })
+    if (decision.redirectUrl) {
+        throw redirect({ href: decision.redirectUrl.href })
+    }
 }
 ```
 
@@ -2852,8 +2803,8 @@ This guarantees:
 import { localizeHref } from './paraglide/runtime'
 
 export const prerenderRoutes = ['/', '/about'].map((path) => ({
-  path: localizeHref(path),
-  prerender: { enabled: true },
+    path: localizeHref(path),
+    prerender: { enabled: true }
 }))
 ```
 
@@ -2875,12 +2826,12 @@ You may want to reuse options that are intended to be passed to `Link`, `redirec
 
 ```tsx
 const dashboardLinkOptions = {
-  to: '/dashboard',
-  search: { search: '' },
+    to: '/dashboard',
+    search: { search: '' }
 }
 
 function DashboardComponent() {
-  return <Link {...dashboardLinkOptions} />
+    return <Link {...dashboardLinkOptions} />
 }
 ```
 
@@ -2892,12 +2843,12 @@ There are a few problems here. `dashboardLinkOptions.to` is inferred as `string`
 
 ```tsx
 const dashboardLinkOptions = linkOptions({
-  to: '/dashboard',
-  search: { search: '' },
+    to: '/dashboard',
+    search: { search: '' }
 })
 
 function DashboardComponent() {
-  return <Link {...dashboardLinkOptions} />
+    return <Link {...dashboardLinkOptions} />
 }
 ```
 
@@ -2905,31 +2856,31 @@ This allows eager type checking of `dashboardLinkOptions` which can then be re-u
 
 ```tsx
 const dashboardLinkOptions = linkOptions({
-  to: '/dashboard',
-  search: { search: '' },
+    to: '/dashboard',
+    search: { search: '' }
 })
 
 export const Route = createFileRoute('/dashboard')({
-  component: DashboardComponent,
-  validateSearch: (input) => ({ search: input.search }),
-  beforeLoad: () => {
-    // can used in redirect
-    throw redirect(dashboardLinkOptions)
-  },
+    component: DashboardComponent,
+    validateSearch: (input) => ({ search: input.search }),
+    beforeLoad: () => {
+        // can used in redirect
+        throw redirect(dashboardLinkOptions)
+    }
 })
 
 function DashboardComponent() {
-  const navigate = useNavigate()
+    const navigate = useNavigate()
 
-  return (
-    <div>
-      {/** can be used in navigate */}
-      <button onClick={() => navigate(dashboardLinkOptions)} />
+    return (
+        <div>
+            {/** can be used in navigate */}
+            <button onClick={() => navigate(dashboardLinkOptions)} />
 
-      {/** can be used in Link */}
-      <Link {...dashboardLinkOptions} />
-    </div>
-  )
+            {/** can be used in Link */}
+            <Link {...dashboardLinkOptions} />
+        </div>
+    )
 }
 ```
 
@@ -2939,47 +2890,42 @@ When creating navigation you might loop over an array to construct a navigation 
 
 ```tsx
 const options = linkOptions([
-  {
-    to: '/dashboard',
-    label: 'Summary',
-    activeOptions: { exact: true },
-  },
-  {
-    to: '/dashboard/invoices',
-    label: 'Invoices',
-  },
-  {
-    to: '/dashboard/users',
-    label: 'Users',
-  },
+    {
+        to: '/dashboard',
+        label: 'Summary',
+        activeOptions: { exact: true }
+    },
+    {
+        to: '/dashboard/invoices',
+        label: 'Invoices'
+    },
+    {
+        to: '/dashboard/users',
+        label: 'Users'
+    }
 ])
 
 function DashboardComponent() {
-  return (
-    <>
-      <div className="flex items-center border-b">
-        <h2 className="text-xl p-2">Dashboard</h2>
-      </div>
+    return (
+        <>
+            <div className='flex items-center border-b'>
+                <h2 className='text-xl p-2'>Dashboard</h2>
+            </div>
 
-      <div className="flex flex-wrap divide-x">
-        {options.map((option) => {
-          return (
-            <Link
-              {...option}
-              key={option.to}
-              activeProps={{ className: `font-bold` }}
-              className="p-2"
-            >
-              {option.label}
-            </Link>
-          )
-        })}
-      </div>
-      <hr />
+            <div className='flex flex-wrap divide-x'>
+                {options.map((option) => {
+                    return (
+                        <Link {...option} key={option.to} activeProps={{ className: `font-bold` }} className='p-2'>
+                            {option.label}
+                        </Link>
+                    )
+                })}
+            </div>
+            <hr />
 
-      <Outlet />
-    </>
-  )
+            <Outlet />
+        </>
+    )
 }
 ```
 
@@ -3003,9 +2949,9 @@ In these situations, a prompt or custom UI should be shown to the user to confir
 Navigation blocking adds one or more layers of "blockers" to the entire underlying history API. If any blockers are present, navigation will be paused via one of the following ways:
 
 - Custom UI
-  - If the navigation is triggered by something we control at the router level, we can allow you to perform any task or show any UI you'd like to the user to confirm the action. Each blocker's `blocker` function will be asynchronously and sequentially executed. If any blocker function resolves or returns `true`, the navigation will be allowed and all other blockers will continue to do the same until all blockers have been allowed to proceed. If any single blocker resolves or returns `false`, the navigation will be canceled and the rest of the `blocker` functions will be ignored.
+    - If the navigation is triggered by something we control at the router level, we can allow you to perform any task or show any UI you'd like to the user to confirm the action. Each blocker's `blocker` function will be asynchronously and sequentially executed. If any blocker function resolves or returns `true`, the navigation will be allowed and all other blockers will continue to do the same until all blockers have been allowed to proceed. If any single blocker resolves or returns `false`, the navigation will be canceled and the rest of the `blocker` functions will be ignored.
 - The `onbeforeunload` event
-  - For page events that we cannot control directly, we rely on the browser's `onbeforeunload` event. If the user attempts to close the tab or window, refresh, or "unload" the page assets in any way, the browser's generic "Are you sure you want to leave?" dialog will be shown. If the user confirms, all blockers will be bypassed and the page will unload. If the user cancels, the unload will be cancelled, and the page will remain as is.
+    - For page events that we cannot control directly, we rely on the browser's `onbeforeunload` event. If the user attempts to close the tab or window, refresh, or "unload" the page assets in any way, the browser's generic "Are you sure you want to leave?" dialog will be shown. If the user confirms, all blockers will be bypassed and the page will unload. If the user cancels, the unload will be cancelled, and the page will remain as is.
 
 ## How do I use navigation blocking?
 
@@ -3024,18 +2970,18 @@ Let's imagine we want to prevent navigation if a form is dirty. We can do this b
 import { useBlocker } from '@tanstack/react-router'
 
 function MyComponent() {
-  const [formIsDirty, setFormIsDirty] = useState(false)
+    const [formIsDirty, setFormIsDirty] = useState(false)
 
-  useBlocker({
-    shouldBlockFn: () => {
-      if (!formIsDirty) return false
+    useBlocker({
+        shouldBlockFn: () => {
+            if (!formIsDirty) return false
 
-      const shouldLeave = confirm('Are you sure you want to leave?')
-      return !shouldLeave
-    },
-  })
+            const shouldLeave = confirm('Are you sure you want to leave?')
+            return !shouldLeave
+        }
+    })
 
-  // ...
+    // ...
 }
 ```
 
@@ -3047,20 +2993,20 @@ function MyComponent() {
 import { useBlocker } from '@tanstack/react-router'
 
 function MyComponent() {
-  // always block going from /foo to /bar/123?hello=world
-  const { proceed, reset, status } = useBlocker({
-    shouldBlockFn: ({ current, next }) => {
-      return (
-        current.routeId === '/foo' &&
-        next.fullPath === '/bar/$id' &&
-        next.params.id === 123 &&
-        next.search.hello === 'world'
-      )
-    },
-    withResolver: true,
-  })
+    // always block going from /foo to /bar/123?hello=world
+    const { proceed, reset, status } = useBlocker({
+        shouldBlockFn: ({ current, next }) => {
+            return (
+                current.routeId === '/foo' &&
+                next.fullPath === '/bar/$id' &&
+                next.params.id === 123 &&
+                next.search.hello === 'world'
+            )
+        },
+        withResolver: true
+    })
 
-  // ...
+    // ...
 }
 ```
 
@@ -3095,31 +3041,27 @@ In addition to logical/hook based blocking, you can use the `Block` component to
 import { Block } from '@tanstack/react-router'
 
 function MyComponent() {
-  const [formIsDirty, setFormIsDirty] = useState(false)
+    const [formIsDirty, setFormIsDirty] = useState(false)
 
-  return (
-    <Block
-      shouldBlockFn={() => {
-        if (!formIsDirty) return false
+    return (
+        <Block
+            shouldBlockFn={() => {
+                if (!formIsDirty) return false
 
-        const shouldLeave = confirm('Are you sure you want to leave?')
-        return !shouldLeave
-      }}
-      enableBeforeUnload={formIsDirty}
-    />
-  )
+                const shouldLeave = confirm('Are you sure you want to leave?')
+                return !shouldLeave
+            }}
+            enableBeforeUnload={formIsDirty}
+        />
+    )
 
-  // OR
+    // OR
 
-  return (
-    <Block
-      shouldBlockFn={() => formIsDirty}
-      enableBeforeUnload={formIsDirty}
-      withResolver
-    >
-      {({ status, proceed, reset }) => <>{/* ... */}</>}
-    </Block>
-  )
+    return (
+        <Block shouldBlockFn={() => formIsDirty} enableBeforeUnload={formIsDirty} withResolver>
+            {({ status, proceed, reset }) => <>{/* ... */}</>}
+        </Block>
+    )
 }
 ```
 
@@ -3174,38 +3116,38 @@ function MyComponent() {
 import { useBlocker } from '@tanstack/react-router'
 
 function MyComponent() {
-  const [formIsDirty, setFormIsDirty] = useState(false)
+    const [formIsDirty, setFormIsDirty] = useState(false)
 
-  useBlocker({
-    shouldBlockFn: () => {
-      if (!formIsDirty) {
-        return false
-      }
+    useBlocker({
+        shouldBlockFn: () => {
+            if (!formIsDirty) {
+                return false
+            }
 
-      const shouldBlock = new Promise<boolean>((resolve) => {
-        // Using a modal manager of your choice
-        modals.open({
-          title: 'Are you sure you want to leave?',
-          children: (
-            <SaveBlocker
-              confirm={() => {
-                modals.closeAll()
-                resolve(false)
-              }}
-              reject={() => {
-                modals.closeAll()
-                resolve(true)
-              }}
-            />
-          ),
-          onClose: () => resolve(true),
-        })
-      })
-      return shouldBlock
-    },
-  })
+            const shouldBlock = new Promise<boolean>((resolve) => {
+                // Using a modal manager of your choice
+                modals.open({
+                    title: 'Are you sure you want to leave?',
+                    children: (
+                        <SaveBlocker
+                            confirm={() => {
+                                modals.closeAll()
+                                resolve(false)
+                            }}
+                            reject={() => {
+                                modals.closeAll()
+                                resolve(true)
+                            }}
+                        />
+                    ),
+                    onClose: () => resolve(true)
+                })
+            })
+            return shouldBlock
+        }
+    })
 
-  // ...
+    // ...
 }
 ```
 
@@ -3221,24 +3163,24 @@ Similarly to the hook, the `Block` component returns the same state and function
 import { Block } from '@tanstack/react-router'
 
 function MyComponent() {
-  const [formIsDirty, setFormIsDirty] = useState(false)
+    const [formIsDirty, setFormIsDirty] = useState(false)
 
-  return (
-    <Block shouldBlockFn={() => formIsDirty} withResolver>
-      {({ status, proceed, reset }) => (
-        <>
-          {/* ... */}
-          {status === 'blocked' && (
-            <div>
-              <p>Are you sure you want to leave?</p>
-              <button onClick={proceed}>Yes</button>
-              <button onClick={reset}>No</button>
-            </div>
-          )}
-        </>
-      )}
-    </Block>
-  )
+    return (
+        <Block shouldBlockFn={() => formIsDirty} withResolver>
+            {({ status, proceed, reset }) => (
+                <>
+                    {/* ... */}
+                    {status === 'blocked' && (
+                        <div>
+                            <p>Are you sure you want to leave?</p>
+                            <button onClick={proceed}>Yes</button>
+                            <button onClick={reset}>No</button>
+                        </div>
+                    )}
+                </>
+            )}
+        </Block>
+    )
 }
 ```
 
@@ -3267,28 +3209,22 @@ This is the core `ToOptions` interface that is used in every navigation and rout
 
 ```ts
 type ToOptions<
-  TRouteTree extends AnyRoute = AnyRoute,
-  TFrom extends RoutePaths<TRouteTree> | string = string,
-  TTo extends string = '',
+    TRouteTree extends AnyRoute = AnyRoute,
+    TFrom extends RoutePaths<TRouteTree> | string = string,
+    TTo extends string = ''
 > = {
-  // `from` is an optional route ID or path. If it is not supplied, only absolute paths will be auto-completed and type-safe. It's common to supply the route.fullPath of the origin route you are rendering from for convenience. If you don't know the origin route, leave this empty and work with absolute paths or unsafe relative paths.
-  from?: string
-  // `to` can be an absolute route path or a relative path from the `from` option to a valid route path. ⚠️ Do not interpolate path params, hash or search params into the `to` options. Use the `params`, `search`, and `hash` options instead.
-  to: string
-  // `params` is either an object of path params to interpolate into the `to` option or a function that supplies the previous params and allows you to return new ones. This is the only way to interpolate dynamic parameters into the final URL. Depending on the `from` and `to` route, you may need to supply none, some or all of the path params. TypeScript will notify you of the required params if there are any.
-  params:
-    | Record<string, unknown>
-    | ((prevParams: Record<string, unknown>) => Record<string, unknown>)
-  // `search` is either an object of query params or a function that supplies the previous search and allows you to return new ones. Depending on the `from` and `to` route, you may need to supply none, some or all of the query params. TypeScript will notify you of the required search params if there are any.
-  search:
-    | Record<string, unknown>
-    | ((prevSearch: Record<string, unknown>) => Record<string, unknown>)
-  // `hash` is either a string or a function that supplies the previous hash and allows you to return a new one.
-  hash?: string | ((prevHash: string) => string)
-  // `state` is either an object of state or a function that supplies the previous state and allows you to return a new one. State is stored in the history API and can be useful for passing data between routes that you do not want to permanently store in URL search params.
-  state?:
-    | Record<string, any>
-    | ((prevState: Record<string, unknown>) => Record<string, unknown>)
+    // `from` is an optional route ID or path. If it is not supplied, only absolute paths will be auto-completed and type-safe. It's common to supply the route.fullPath of the origin route you are rendering from for convenience. If you don't know the origin route, leave this empty and work with absolute paths or unsafe relative paths.
+    from?: string
+    // `to` can be an absolute route path or a relative path from the `from` option to a valid route path. ⚠️ Do not interpolate path params, hash or search params into the `to` options. Use the `params`, `search`, and `hash` options instead.
+    to: string
+    // `params` is either an object of path params to interpolate into the `to` option or a function that supplies the previous params and allows you to return new ones. This is the only way to interpolate dynamic parameters into the final URL. Depending on the `from` and `to` route, you may need to supply none, some or all of the path params. TypeScript will notify you of the required params if there are any.
+    params: Record<string, unknown> | ((prevParams: Record<string, unknown>) => Record<string, unknown>)
+    // `search` is either an object of query params or a function that supplies the previous search and allows you to return new ones. Depending on the `from` and `to` route, you may need to supply none, some or all of the query params. TypeScript will notify you of the required search params if there are any.
+    search: Record<string, unknown> | ((prevSearch: Record<string, unknown>) => Record<string, unknown>)
+    // `hash` is either a string or a function that supplies the previous hash and allows you to return a new one.
+    hash?: string | ((prevHash: string) => string)
+    // `state` is either an object of state or a function that supplies the previous state and allows you to return a new one. State is stored in the history API and can be useful for passing data between routes that you do not want to permanently store in URL search params.
+    state?: Record<string, any> | ((prevState: Record<string, unknown>) => Record<string, unknown>)
 }
 ```
 
@@ -3298,7 +3234,7 @@ type ToOptions<
 import { Route as aboutRoute } from './routes/about.tsx'
 
 function Comp() {
-  return <Link to={aboutRoute.to}>About</Link>
+    return <Link to={aboutRoute.to}>About</Link>
 }
 ```
 
@@ -3308,24 +3244,24 @@ This is the core `NavigateOptions` interface that extends `ToOptions`. Any API t
 
 ```ts
 export type NavigateOptions<
-  TRouteTree extends AnyRoute = AnyRoute,
-  TFrom extends RoutePaths<TRouteTree> | string = string,
-  TTo extends string = '',
+    TRouteTree extends AnyRoute = AnyRoute,
+    TFrom extends RoutePaths<TRouteTree> | string = string,
+    TTo extends string = ''
 > = ToOptions<TRouteTree, TFrom, TTo> & {
-  // `replace` is a boolean that determines whether the navigation should replace the current history entry or push a new one.
-  replace?: boolean
-  // `resetScroll` is a boolean that determines whether scroll position will be reset to 0,0 after the location is committed to browser history.
-  resetScroll?: boolean
-  // `hashScrollIntoView` is a boolean or object that determines whether an id matching the hash will be scrolled into view after the location is committed to history.
-  hashScrollIntoView?: boolean | ScrollIntoViewOptions
-  // `viewTransition` is either a boolean or function that determines if and how the browser will call document.startViewTransition() when navigating.
-  viewTransition?: boolean | ViewTransitionOptions
-  // `ignoreBlocker` is a boolean that determines if navigation should ignore any blockers that might prevent it.
-  ignoreBlocker?: boolean
-  // `reloadDocument` is a boolean that determines if navigation to a route inside of router will trigger a full page load instead of the traditional SPA navigation.
-  reloadDocument?: boolean
-  // `href` is a string that can be used in place of `to` to navigate to a full built href, e.g. pointing to an external target.
-  href?: string
+    // `replace` is a boolean that determines whether the navigation should replace the current history entry or push a new one.
+    replace?: boolean
+    // `resetScroll` is a boolean that determines whether scroll position will be reset to 0,0 after the location is committed to browser history.
+    resetScroll?: boolean
+    // `hashScrollIntoView` is a boolean or object that determines whether an id matching the hash will be scrolled into view after the location is committed to history.
+    hashScrollIntoView?: boolean | ScrollIntoViewOptions
+    // `viewTransition` is either a boolean or function that determines if and how the browser will call document.startViewTransition() when navigating.
+    viewTransition?: boolean | ViewTransitionOptions
+    // `ignoreBlocker` is a boolean that determines if navigation should ignore any blockers that might prevent it.
+    ignoreBlocker?: boolean
+    // `reloadDocument` is a boolean that determines if navigation to a route inside of router will trigger a full page load instead of the traditional SPA navigation.
+    reloadDocument?: boolean
+    // `href` is a string that can be used in place of `to` to navigate to a full built href, e.g. pointing to an external target.
+    href?: string
 }
 ```
 
@@ -3335,25 +3271,25 @@ Anywhere an actual `<a>` tag the `LinkOptions` interface which extends `Navigate
 
 ```tsx
 export type LinkOptions<
-  TRouteTree extends AnyRoute = AnyRoute,
-  TFrom extends RoutePaths<TRouteTree> | string = string,
-  TTo extends string = '',
+    TRouteTree extends AnyRoute = AnyRoute,
+    TFrom extends RoutePaths<TRouteTree> | string = string,
+    TTo extends string = ''
 > = NavigateOptions<TRouteTree, TFrom, TTo> & {
-  // The standard anchor tag target attribute
-  target?: HTMLAnchorElement['target']
-  // Defaults to `{ exact: false, includeHash: false }`
-  activeOptions?: {
-    exact?: boolean
-    includeHash?: boolean
-    includeSearch?: boolean
-    explicitUndefined?: boolean
-  }
-  // If set, will preload the linked route on hover and cache it for this many milliseconds in hopes that the user will eventually navigate there.
-  preload?: false | 'intent'
-  // Delay intent preloading by this many milliseconds. If the intent exits before this delay, the preload will be cancelled.
-  preloadDelay?: number
-  // If true, will render the link without the href attribute
-  disabled?: boolean
+    // The standard anchor tag target attribute
+    target?: HTMLAnchorElement['target']
+    // Defaults to `{ exact: false, includeHash: false }`
+    activeOptions?: {
+        exact?: boolean
+        includeHash?: boolean
+        includeSearch?: boolean
+        explicitUndefined?: boolean
+    }
+    // If set, will preload the linked route on hover and cache it for this many milliseconds in hopes that the user will eventually navigate there.
+    preload?: false | 'intent'
+    // Delay intent preloading by this many milliseconds. If the intent exits before this delay, the preload will be cancelled.
+    preloadDelay?: number
+    // If true, will render the link without the href attribute
+    disabled?: boolean
 }
 ```
 
@@ -3362,13 +3298,13 @@ export type LinkOptions<
 With relative navigation and all of the interfaces in mind now, let's talk about the different flavors of navigation API at your disposal:
 
 - The `<Link>` component
-  - Generates an actual `<a>` tag with a valid `href` which can be click or even cmd/ctrl + clicked to open in a new tab
+    - Generates an actual `<a>` tag with a valid `href` which can be click or even cmd/ctrl + clicked to open in a new tab
 - The `useNavigate()` hook
-  - When possible, `Link` component should be used for navigation, but sometimes you need to navigate imperatively as a result of a side-effect. `useNavigate` returns a function that can be called to perform an immediate client-side navigation.
+    - When possible, `Link` component should be used for navigation, but sometimes you need to navigate imperatively as a result of a side-effect. `useNavigate` returns a function that can be called to perform an immediate client-side navigation.
 - The `<Navigate>` component
-  - Renders nothing and performs an immediate client-side navigation.
+    - Renders nothing and performs an immediate client-side navigation.
 - The `Router.navigate()` method
-  - This is the most powerful navigation API in TanStack Router. Similar to `useNavigate`, it imperatively navigates, but is available everywhere you have access to your router.
+    - This is the most powerful navigation API in TanStack Router. Similar to `useNavigate`, it imperatively navigates, but is available everywhere you have access to your router.
 
 ⚠️ None of these APIs are a replacement for server-side redirects. If you need to redirect a user immediately from one route to another before mounting your application, use a server-side redirect instead of a client-side navigation.
 
@@ -3380,17 +3316,13 @@ In addition to the [`LinkOptions`](#linkoptions-interface) interface, the `Link`
 
 ```tsx
 export type LinkProps<
-  TFrom extends RoutePaths<RegisteredRouter['routeTree']> | string = string,
-  TTo extends string = '',
+    TFrom extends RoutePaths<RegisteredRouter['routeTree']> | string = string,
+    TTo extends string = ''
 > = LinkOptions<RegisteredRouter['routeTree'], TFrom, TTo> & {
-  // A function that returns additional props for the `active` state of this link. These props override other props passed to the link (`style`'s are merged, `className`'s are concatenated)
-  activeProps?:
-    | FrameworkHTMLAnchorTagAttributes
-    | (() => FrameworkHTMLAnchorAttributes)
-  // A function that returns additional props for the `inactive` state of this link. These props override other props passed to the link (`style`'s are merged, `className`'s are concatenated)
-  inactiveProps?:
-    | FrameworkHTMLAnchorAttributes
-    | (() => FrameworkHTMLAnchorAttributes)
+    // A function that returns additional props for the `active` state of this link. These props override other props passed to the link (`style`'s are merged, `className`'s are concatenated)
+    activeProps?: FrameworkHTMLAnchorTagAttributes | (() => FrameworkHTMLAnchorAttributes)
+    // A function that returns additional props for the `inactive` state of this link. These props override other props passed to the link (`style`'s are merged, `className`'s are concatenated)
+    inactiveProps?: FrameworkHTMLAnchorAttributes | (() => FrameworkHTMLAnchorAttributes)
 }
 ```
 
@@ -3401,7 +3333,7 @@ Let's make a simple static link!
 ```tsx
 import { Link } from '@tanstack/react-router'
 
-const link = <Link to="/about">About</Link>
+const link = <Link to='/about'>About</Link>
 ```
 
 ### Dynamic Links
@@ -3410,14 +3342,14 @@ Dynamic links are links that have dynamic segments in them. For example, a link 
 
 ```tsx
 const link = (
-  <Link
-    to="/blog/post/$postId"
-    params={{
-      postId: 'my-first-blog-post',
-    }}
-  >
-    Blog Post
-  </Link>
+    <Link
+        to='/blog/post/$postId'
+        params={{
+            postId: 'my-first-blog-post'
+        }}
+    >
+        Blog Post
+    </Link>
 )
 ```
 
@@ -3436,13 +3368,13 @@ Relative links can be combined with a `from` route path. If a from route path is
 
 ```tsx
 const postIdRoute = createRoute({
-  path: '/blog/post/$postId',
+    path: '/blog/post/$postId'
 })
 
 const link = (
-  <Link from={postIdRoute.fullPath} to="../categories">
-    Categories
-  </Link>
+    <Link from={postIdRoute.fullPath} to='../categories'>
+        Categories
+    </Link>
 )
 ```
 
@@ -3456,26 +3388,26 @@ Another common need is to navigate one route back relative to the current locati
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
-  component: PostComponent,
+    component: PostComponent
 })
 
 function PostComponent() {
-  return (
-    <div>
-      <Link to=".">Reload the current route of /posts/$postId</Link>
-      <Link to="..">Navigate back to /posts</Link>
-      // the below are all equivalent
-      <Link to="/posts">Navigate back to /posts</Link>
-      <Link from="/posts" to=".">
-        Navigate back to /posts
-      </Link>
-      // the below are all equivalent
-      <Link to="/">Navigate to root</Link>
-      <Link from="/posts" to="..">
-        Navigate to root
-      </Link>
-    </div>
-  )
+    return (
+        <div>
+            <Link to='.'>Reload the current route of /posts/$postId</Link>
+            <Link to='..'>Navigate back to /posts</Link>
+            // the below are all equivalent
+            <Link to='/posts'>Navigate back to /posts</Link>
+            <Link from='/posts' to='.'>
+                Navigate back to /posts
+            </Link>
+            // the below are all equivalent
+            <Link to='/'>Navigate to root</Link>
+            <Link from='/posts' to='..'>
+                Navigate to root
+            </Link>
+        </div>
+    )
 }
 ```
 
@@ -3485,14 +3417,14 @@ Search params are a great way to provide additional context to a route. For exam
 
 ```tsx
 const link = (
-  <Link
-    to="/search"
-    search={{
-      query: 'tanstack',
-    }}
-  >
-    Search
-  </Link>
+    <Link
+        to='/search'
+        search={{
+            query: 'tanstack'
+        }}
+    >
+        Search
+    </Link>
 )
 ```
 
@@ -3500,15 +3432,15 @@ It's also common to want to update a single search param without supplying any o
 
 ```tsx
 const link = (
-  <Link
-    to="."
-    search={(prev) => ({
-      ...prev,
-      page: prev.page + 1,
-    })}
-  >
-    Next Page
-  </Link>
+    <Link
+        to='.'
+        search={(prev) => ({
+            ...prev,
+            page: prev.page + 1
+        })}
+    >
+        Next Page
+    </Link>
 )
 ```
 
@@ -3522,15 +3454,15 @@ Hash links are a great way to link to a specific section of a page. For example,
 
 ```tsx
 const link = (
-  <Link
-    to="/blog/post/$postId"
-    params={{
-      postId: 'my-first-blog-post',
-    }}
-    hash="section-1"
-  >
-    Section 1
-  </Link>
+    <Link
+        to='/blog/post/$postId'
+        params={{
+            postId: 'my-first-blog-post'
+        }}
+        hash='section-1'
+    >
+        Section 1
+    </Link>
 )
 ```
 
@@ -3557,8 +3489,8 @@ Use `params: {}` to inherit all current route parameters:
 
 ```tsx
 // Inherits current route parameters
-<Link to="/posts/{-$category}" params={{}}>
-  All Posts
+<Link to='/posts/{-$category}' params={{}}>
+    All Posts
 </Link>
 ```
 
@@ -3567,8 +3499,8 @@ Set parameters to `undefined` to explicitly remove them:
 
 ```tsx
 // Removes the category parameter
-<Link to="/posts/{-$category}" params={{ category: undefined }}>
-  All Posts
+<Link to='/posts/{-$category}' params={{ category: undefined }}>
+    All Posts
 </Link>
 ```
 
@@ -3775,28 +3707,28 @@ All the same patterns work with imperative navigation:
 
 ```tsx
 function Component() {
-  const navigate = useNavigate()
+    const navigate = useNavigate()
 
-  const clearFilters = () => {
-    navigate({
-      to: '/posts/{-$category}/{-$tag}',
-      params: { category: undefined, tag: undefined },
-    })
-  }
+    const clearFilters = () => {
+        navigate({
+            to: '/posts/{-$category}/{-$tag}',
+            params: { category: undefined, tag: undefined }
+        })
+    }
 
-  const setCategory = (category: string) => {
-    navigate({
-      to: '/posts/{-$category}/{-$tag}',
-      params: (prev) => ({ ...prev, category }),
-    })
-  }
+    const setCategory = (category: string) => {
+        navigate({
+            to: '/posts/{-$category}/{-$tag}',
+            params: (prev) => ({ ...prev, category })
+        })
+    }
 
-  const applyFilters = (category?: string, tag?: string) => {
-    navigate({
-      to: '/posts/{-$category}/{-$tag}',
-      params: { category, tag },
-    })
-  }
+    const applyFilters = (category?: string, tag?: string) => {
+        navigate({
+            to: '/posts/{-$category}/{-$tag}',
+            params: { category, tag }
+        })
+    }
 }
 ```
 
@@ -3808,19 +3740,19 @@ Here's an example:
 
 ```tsx
 const link = (
-  <Link
-    to="/blog/post/$postId"
-    params={{
-      postId: 'my-first-blog-post',
-    }}
-    activeProps={{
-      style: {
-        fontWeight: 'bold',
-      },
-    }}
-  >
-    Section 1
-  </Link>
+    <Link
+        to='/blog/post/$postId'
+        params={{
+            postId: 'my-first-blog-post'
+        }}
+        activeProps={{
+            style: {
+                fontWeight: 'bold'
+            }
+        }}
+    >
+        Section 1
+    </Link>
 )
 ```
 
@@ -3834,19 +3766,19 @@ The `Link` component comes with an `activeOptions` property that offers a few op
 
 ```tsx
 export interface ActiveOptions {
-  // If true, the link will be active if the current route matches the `to` route path exactly (no children routes)
-  // Defaults to `false`
-  exact?: boolean
-  // If true, the link will only be active if the current URL hash matches the `hash` prop
-  // Defaults to `false`
-  includeHash?: boolean // Defaults to false
-  // If true, the link will only be active if the current URL search params inclusively match the `search` prop
-  // Defaults to `true`
-  includeSearch?: boolean
-  // This modifies the `includeSearch` behavior.
-  // If true,  properties in `search` that are explicitly `undefined` must NOT be present in the current URL search params for the link to be active.
-  // defaults to `false`
-  explicitUndefined?: boolean
+    // If true, the link will be active if the current route matches the `to` route path exactly (no children routes)
+    // Defaults to `false`
+    exact?: boolean
+    // If true, the link will only be active if the current URL hash matches the `hash` prop
+    // Defaults to `false`
+    includeHash?: boolean // Defaults to false
+    // If true, the link will only be active if the current URL search params inclusively match the `search` prop
+    // Defaults to `true`
+    includeSearch?: boolean
+    // This modifies the `includeSearch` behavior.
+    // If true,  properties in `search` that are explicitly `undefined` must NOT be present in the current URL search params for the link to be active.
+    // defaults to `false`
+    explicitUndefined?: boolean
 }
 ```
 
@@ -3856,21 +3788,21 @@ For example, if you are on the `/blog/post/my-first-blog-post` route, the follow
 
 ```tsx
 const link1 = (
-  <Link to="/blog/post/$postId" params={{ postId: 'my-first-blog-post' }}>
-    Blog Post
-  </Link>
+    <Link to='/blog/post/$postId' params={{ postId: 'my-first-blog-post' }}>
+        Blog Post
+    </Link>
 )
-const link2 = <Link to="/blog/post">Blog Post</Link>
-const link3 = <Link to="/blog">Blog Post</Link>
+const link2 = <Link to='/blog/post'>Blog Post</Link>
+const link3 = <Link to='/blog'>Blog Post</Link>
 ```
 
 However, the following links will not be active:
 
 ```tsx
 const link4 = (
-  <Link to="/blog/post/$postId" params={{ postId: 'my-second-blog-post' }}>
-    Blog Post
-  </Link>
+    <Link to='/blog/post/$postId' params={{ postId: 'my-second-blog-post' }}>
+        Blog Post
+    </Link>
 )
 ```
 
@@ -3878,9 +3810,9 @@ It's common for some links to only be active if they are an exact match. A good 
 
 ```tsx
 const link = (
-  <Link to="/" activeOptions={{ exact: true }}>
-    Home
-  </Link>
+    <Link to='/' activeOptions={{ exact: true }}>
+        Home
+    </Link>
 )
 ```
 
@@ -3897,16 +3829,16 @@ The `Link` component accepts a function for its children, allowing you to propag
 
 ```tsx
 const link = (
-  <Link to="/blog/post">
-    {({ isActive }) => {
-      return (
-        <>
-          <span>My Blog Post</span>
-          <icon className={isActive ? 'active' : 'inactive'} />
-        </>
-      )
-    }}
-  </Link>
+    <Link to='/blog/post'>
+        {({ isActive }) => {
+            return (
+                <>
+                    <span>My Blog Post</span>
+                    <icon className={isActive ? 'active' : 'inactive'} />
+                </>
+            )
+        }}
+    </Link>
 )
 ```
 
@@ -3916,9 +3848,9 @@ The `Link` component supports automatically preloading routes on intent (hoverin
 
 ```tsx
 const link = (
-  <Link to="/blog/post/$postId" preload="intent">
-    Blog Post
-  </Link>
+    <Link to='/blog/post/$postId' preload='intent'>
+        Blog Post
+    </Link>
 )
 ```
 
@@ -3932,9 +3864,9 @@ Along with preloading is a configurable delay which determines how long a user m
 
 ```tsx
 const link = (
-  <Link to="/blog/post/$postId" preload="intent" preloadDelay={100}>
-    Blog Post
-  </Link>
+    <Link to='/blog/post/$postId' preload='intent' preloadDelay={100}>
+        Blog Post
+    </Link>
 )
 ```
 
@@ -3946,22 +3878,22 @@ The `useNavigate` hook returns a `navigate` function that can be called to imper
 
 ```tsx
 function Component() {
-  const navigate = useNavigate({ from: '/posts/$postId' })
+    const navigate = useNavigate({ from: '/posts/$postId' })
 
-  const handleSubmit = async (e: FrameworkFormEvent) => {
-    e.preventDefault()
+    const handleSubmit = async (e: FrameworkFormEvent) => {
+        e.preventDefault()
 
-    const response = await fetch('/posts', {
-      method: 'POST',
-      body: JSON.stringify({ title: 'My First Post' }),
-    })
+        const response = await fetch('/posts', {
+            method: 'POST',
+            body: JSON.stringify({ title: 'My First Post' })
+        })
 
-    const { id: postId } = await response.json()
+        const { id: postId } = await response.json()
 
-    if (response.ok) {
-      navigate({ to: '/posts/$postId', params: { postId } })
+        if (response.ok) {
+            navigate({ to: '/posts/$postId', params: { postId } })
+        }
     }
-  }
 }
 ```
 
@@ -3977,7 +3909,7 @@ Occasionally, you may find yourself needing to navigate immediately when a compo
 
 ```tsx
 function Component() {
-  return <Navigate to="/posts/$postId" params={{ postId: 'my-first-post' }} />
+    return <Navigate to='/posts/$postId' params={{ postId: 'my-first-post' }} />
 }
 ```
 
@@ -3993,16 +3925,16 @@ The `useMatchRoute` hook and `<MatchRoute>` component are the same thing, but th
 
 ```tsx
 function Component() {
-  return (
-    <div>
-      <Link to="/users">
-        Users
-        <MatchRoute to="/users" pending>
-          <Spinner />
-        </MatchRoute>
-      </Link>
-    </div>
-  )
+    return (
+        <div>
+            <Link to='/users'>
+                Users
+                <MatchRoute to='/users' pending>
+                    <Spinner />
+                </MatchRoute>
+            </Link>
+        </div>
+    )
 }
 ```
 
@@ -4010,18 +3942,18 @@ The component version `<MatchRoute>` can also be used with a function as childre
 
 ```tsx
 function Component() {
-  return (
-    <div>
-      <Link to="/users">
-        Users
-        <MatchRoute to="/users" pending>
-          {(match) => {
-            return <Spinner show={match} />
-          }}
-        </MatchRoute>
-      </Link>
-    </div>
-  )
+    return (
+        <div>
+            <Link to='/users'>
+                Users
+                <MatchRoute to='/users' pending>
+                    {(match) => {
+                        return <Spinner show={match} />
+                    }}
+                </MatchRoute>
+            </Link>
+        </div>
+    )
 }
 ```
 
@@ -4029,19 +3961,19 @@ The hook version `useMatchRoute` returns a function that can be called programma
 
 ```tsx
 function Component() {
-  const matchRoute = useMatchRoute()
+    const matchRoute = useMatchRoute()
 
-  useEffect(() => {
-    if (matchRoute({ to: '/users', pending: true })) {
-      console.info('The /users route is matched and pending')
-    }
-  })
+    useEffect(() => {
+        if (matchRoute({ to: '/users', pending: true })) {
+            console.info('The /users route is matched and pending')
+        }
+    })
 
-  return (
-    <div>
-      <Link to="/users">Users</Link>
-    </div>
-  )
+    return (
+        <div>
+            <Link to='/users'>Users</Link>
+        </div>
+    )
 }
 ```
 
@@ -4058,17 +3990,17 @@ Phew! That's a lot of navigating! That said, hopefully you're feeling pretty goo
 There are 2 uses for not-found errors in TanStack Router:
 
 - **Non-matching route paths**: When a path does not match any known route matching pattern **OR** when it partially matches a route, but with extra path segments
-  - The **router** will automatically throw a not-found error when a path does not match any known route matching pattern
-  - If the router's `notFoundMode` is set to `fuzzy`, the nearest parent route with a `notFoundComponent` will handle the error. If the router's `notFoundMode` is set to `root`, the root route will handle the error.
-  - Examples:
-    - Attempting to access `/users` when there is no `/users` route
-    - Attempting to access `/posts/1/edit` when the route tree only handles `/posts/$postId`
+    - The **router** will automatically throw a not-found error when a path does not match any known route matching pattern
+    - If the router's `notFoundMode` is set to `fuzzy`, the nearest parent route with a `notFoundComponent` will handle the error. If the router's `notFoundMode` is set to `root`, the root route will handle the error.
+    - Examples:
+        - Attempting to access `/users` when there is no `/users` route
+        - Attempting to access `/posts/1/edit` when the route tree only handles `/posts/$postId`
 - **Missing resources**: When a resource cannot be found, such as a post with a given ID or any asynchronous data that is not available or does not exist
-  - **You, the developer** must throw a not-found error when a resource cannot be found. This can be done in the `beforeLoad` or `loader` functions using the `notFound` utility.
-  - Will be handled by the nearest parent route with a `notFoundComponent` (when `notFound` is called within `loader`) or the root route.
-  - Examples:
-    - Attempting to access `/posts/1` when the post with ID 1 does not exist
-    - Attempting to access `/docs/path/to/document` when the document does not exist
+    - **You, the developer** must throw a not-found error when a resource cannot be found. This can be done in the `beforeLoad` or `loader` functions using the `notFound` utility.
+    - Will be handled by the nearest parent route with a `notFoundComponent` (when `notFound` is called within `loader`) or the root route.
+    - Examples:
+        - Attempting to access `/posts/1` when the post with ID 1 does not exist
+        - Attempting to access `/docs/path/to/document` when the document does not exist
 
 Under the hood, both of these cases are implemented using the same `notFound` function and `notFoundComponent` API.
 
@@ -4095,14 +4027,14 @@ The nearest suitable route is found using the following criteria:
 For example, consider the following route tree:
 
 - `__root__` (has a `notFoundComponent` configured)
-  - `posts` (has a `notFoundComponent` configured)
-    - `$postId` (has a `notFoundComponent` configured)
+    - `posts` (has a `notFoundComponent` configured)
+        - `$postId` (has a `notFoundComponent` configured)
 
 If provided the path of `/posts/1/edit`, the following component structure will be rendered:
 
 - `<Root>`
-  - `<Posts>`
-    - `<Posts.notFoundComponent>`
+    - `<Posts>`
+        - `<Posts.notFoundComponent>`
 
 The `notFoundComponent` of the `posts` route will be rendered because it is the **nearest suitable parent route with children (and therefore an outlet) and a `notFoundComponent` configured**.
 
@@ -4113,13 +4045,13 @@ When `notFoundMode` is set to `root`, all not-found errors will be handled by th
 For example, consider the following route tree:
 
 - `__root__` (has a `notFoundComponent` configured)
-  - `posts` (has a `notFoundComponent` configured)
-    - `$postId` (has a `notFoundComponent` configured)
+    - `posts` (has a `notFoundComponent` configured)
+        - `$postId` (has a `notFoundComponent` configured)
 
 If provided the path of `/posts/1/edit`, the following component structure will be rendered:
 
 - `<Root>`
-  - `<Root.notFoundComponent>`
+    - `<Root.notFoundComponent>`
 
 The `notFoundComponent` of the `__root__` route will be rendered because the `notFoundMode` is set to `root`.
 
@@ -4131,17 +4063,17 @@ For example, configuring a `notFoundComponent` for a `/settings` route to handle
 
 ```tsx
 export const Route = createFileRoute('/settings')({
-  component: () => {
-    return (
-      <div>
-        <p>Settings page</p>
-        <Outlet />
-      </div>
-    )
-  },
-  notFoundComponent: () => {
-    return <p>This setting page doesn't exist!</p>
-  },
+    component: () => {
+        return (
+            <div>
+                <p>Settings page</p>
+                <Outlet />
+            </div>
+        )
+    },
+    notFoundComponent: () => {
+        return <p>This setting page doesn't exist!</p>
+    }
 })
 ```
 
@@ -4149,22 +4081,22 @@ Or configuring a `notFoundComponent` for a `/posts/$postId` route to handle post
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params: { postId } }) => {
-    const post = await getPost(postId)
-    if (!post) throw notFound()
-    return { post }
-  },
-  component: ({ post }) => {
-    return (
-      <div>
-        <h1>{post.title}</h1>
-        <p>{post.body}</p>
-      </div>
-    )
-  },
-  notFoundComponent: () => {
-    return <p>Post not found!</p>
-  },
+    loader: async ({ params: { postId } }) => {
+        const post = await getPost(postId)
+        if (!post) throw notFound()
+        return { post }
+    },
+    component: ({ post }) => {
+        return (
+            <div>
+                <h1>{post.title}</h1>
+                <p>{post.body}</p>
+            </div>
+        )
+    },
+    notFoundComponent: () => {
+        return <p>Post not found!</p>
+    }
 })
 ```
 
@@ -4178,14 +4110,14 @@ To do this, pass a `defaultNotFoundComponent` to the `createRouter` function:
 
 ```tsx
 const router = createRouter({
-  defaultNotFoundComponent: () => {
-    return (
-      <div>
-        <p>Not found!</p>
-        <Link to="/">Go home</Link>
-      </div>
-    )
-  },
+    defaultNotFoundComponent: () => {
+        return (
+            <div>
+                <p>Not found!</p>
+                <Link to='/'>Go home</Link>
+            </div>
+        )
+    }
 })
 ```
 
@@ -4197,17 +4129,17 @@ The `notFound` function works in a similar fashion to the `redirect` function. T
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params: { postId } }) => {
-    // Returns `null` if the post doesn't exist
-    const post = await getPost(postId)
-    if (!post) {
-      throw notFound()
-      // Alternatively, you can make the notFound function throw:
-      // notFound({ throw: true })
+    loader: async ({ params: { postId } }) => {
+        // Returns `null` if the post doesn't exist
+        const post = await getPost(postId)
+        if (!post) {
+            throw notFound()
+            // Alternatively, you can make the notFound function throw:
+            // notFound({ throw: true })
+        }
+        // Post is guaranteed to be defined here because we threw an error
+        return { post }
     }
-    // Post is guaranteed to be defined here because we threw an error
-    return { post }
-  },
 })
 ```
 
@@ -4215,7 +4147,7 @@ The not-found error above will be handled by the same route or nearest parent ro
 
 If neither the route nor any suitable parent route is found to handle the error, the root route will handle it using TanStack Router's **extremely basic (and purposefully undesirable)** default not-found component that simply renders `<p>Not Found</p>`. It's highly recommended to either attach at least one `notFoundComponent` to the root route or configure a router-wide `defaultNotFoundComponent` to handle not-found errors.
 
-> ⚠️ Throwing a notFound error in a beforeLoad method will always trigger the __root notFoundComponent. Since beforeLoad methods are run prior to the route loader methods, there is no guarantee that any required data for layouts have successfully loaded before the error is thrown.
+> ⚠️ Throwing a notFound error in a beforeLoad method will always trigger the \_\_root notFoundComponent. Since beforeLoad methods are run prior to the route loader methods, there is no guarantee that any required data for layouts have successfully loaded before the error is thrown.
 
 ## Specifying Which Routes Handle Not Found Errors
 
@@ -4224,31 +4156,31 @@ Sometimes you may want to trigger a not-found on a specific parent route and byp
 ```tsx
 // _pathlessLayout.tsx
 export const Route = createFileRoute('/_pathlessLayout')({
-  // This will render
-  notFoundComponent: () => {
-    return <p>Not found (in _pathlessLayout)</p>
-  },
-  component: () => {
-    return (
-      <div>
-        <p>This is a pathless layout route!</p>
-        <Outlet />
-      </div>
-    )
-  },
+    // This will render
+    notFoundComponent: () => {
+        return <p>Not found (in _pathlessLayout)</p>
+    },
+    component: () => {
+        return (
+            <div>
+                <p>This is a pathless layout route!</p>
+                <Outlet />
+            </div>
+        )
+    }
 })
 
 // _pathlessLayout/route-a.tsx
 export const Route = createFileRoute('/_pathless/route-a')({
-  loader: async () => {
-    // This will make LayoutRoute handle the not-found error
-    throw notFound({ routeId: '/_pathlessLayout' })
-    //                      ^^^^^^^^^ This will autocomplete from the registered router
-  },
-  // This WILL NOT render
-  notFoundComponent: () => {
-    return <p>Not found (in _pathlessLayout/route-a)</p>
-  },
+    loader: async () => {
+        // This will make LayoutRoute handle the not-found error
+        throw notFound({ routeId: '/_pathlessLayout' })
+        //                      ^^^^^^^^^ This will autocomplete from the registered router
+    },
+    // This WILL NOT render
+    notFoundComponent: () => {
+        return <p>Not found (in _pathlessLayout/route-a)</p>
+    }
 })
 ```
 
@@ -4260,11 +4192,11 @@ You can also target the root route by passing the exported `rootRouteId` variabl
 import { rootRouteId } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params: { postId } }) => {
-    const post = await getPost(postId)
-    if (!post) throw notFound({ routeId: rootRouteId })
-    return { post }
-  },
+    loader: async ({ params: { postId } }) => {
+        const post = await getPost(postId)
+        if (!post) throw notFound({ routeId: rootRouteId })
+        return { post }
+    }
 })
 ```
 
@@ -4282,26 +4214,26 @@ TanStack Router exposes a `CatchNotFound` component similar to `CatchBoundary` t
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params: { postId } }) => {
-    const post = await getPost(postId)
-    if (!post)
-      throw notFound({
-        // Forward some data to the notFoundComponent
-        // data: someIncompleteLoaderData
-      })
-    return { post }
-  },
-  // `data: unknown` is passed to the component via the `data` option when calling `notFound`
-  notFoundComponent: ({ data }) => {
-    // ❌ useLoaderData is not valid here: const { post } = Route.useLoaderData()
+    loader: async ({ params: { postId } }) => {
+        const post = await getPost(postId)
+        if (!post)
+            throw notFound({
+                // Forward some data to the notFoundComponent
+                // data: someIncompleteLoaderData
+            })
+        return { post }
+    },
+    // `data: unknown` is passed to the component via the `data` option when calling `notFound`
+    notFoundComponent: ({ data }) => {
+        // ❌ useLoaderData is not valid here: const { post } = Route.useLoaderData()
 
-    // ✅:
-    const { postId } = Route.useParams()
-    const search = Route.useSearch()
-    const context = Route.useRouteContext()
+        // ✅:
+        const { postId } = Route.useParams()
+        const search = Route.useSearch()
+        const context = Route.useRouteContext()
 
-    return <p>Post with id {postId} not found!</p>
-  },
+        return <p>Post with id {postId} not found!</p>
+    }
 })
 ```
 
@@ -4348,7 +4280,7 @@ export const Route = createRootRoute({
 Important changes:
 
 - A `notFoundComponent` is added to the root route for global not-found handling.
-  - You can also add a `notFoundComponent` to any other route in your route tree to handle not-found errors for that specific route.
+    - You can also add a `notFoundComponent` to any other route in your route tree to handle not-found errors for that specific route.
 - The `notFoundComponent` does not support rendering an `<Outlet>`.
 
 # Outlets
@@ -4368,16 +4300,16 @@ A great example is configuring the root route of your application. Let's give ou
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createRootRoute({
-  component: RootComponent,
+    component: RootComponent
 })
 
 function RootComponent() {
-  return (
-    <div>
-      <h1>My App</h1>
-      <Outlet /> {/* This is where child routes will render */}
-    </div>
-  )
+    return (
+        <div>
+            <h1>My App</h1>
+            <Outlet /> {/* This is where child routes will render */}
+        </div>
+    )
 }
 ```
 
@@ -4406,9 +4338,9 @@ Let's create a post route file that uses a path param to match the post ID:
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params }) => {
-    return fetchPost(params.postId)
-  },
+    loader: async ({ params }) => {
+        return fetchPost(params.postId)
+    }
 })
 ```
 
@@ -4422,9 +4354,9 @@ Path params are passed to the loader as a `params` object. The keys of this obje
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params }) => {
-    return fetchPost(params.postId)
-  },
+    loader: async ({ params }) => {
+        return fetchPost(params.postId)
+    }
 })
 ```
 
@@ -4432,9 +4364,9 @@ The `params` object is also passed to the `beforeLoad` option:
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
-  beforeLoad: async ({ params }) => {
-    // do something with params.postId
-  },
+    beforeLoad: async ({ params }) => {
+        // do something with params.postId
+    }
 })
 ```
 
@@ -4444,12 +4376,12 @@ If we add a component to our `postRoute`, we can access the `postId` variable fr
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
-  component: PostComponent,
+    component: PostComponent
 })
 
 function PostComponent() {
-  const { postId } = Route.useParams()
-  return <div>Post {postId}</div>
+    const { postId } = Route.useParams()
+    return <div>Post {postId}</div>
 }
 ```
 
@@ -4461,8 +4393,8 @@ You can also use the globally exported `useParams` hook to access any parsed pat
 
 ```tsx
 function PostComponent() {
-  const { postId } = useParams({ strict: false })
-  return <div>Post {postId}</div>
+    const { postId } = useParams({ strict: false })
+    return <div>Post {postId}</div>
 }
 ```
 
@@ -4474,11 +4406,11 @@ Let's see what an object style looks like:
 
 ```tsx
 function Component() {
-  return (
-    <Link to="/blog/$postId" params={{ postId: '123' }}>
-      Post 123
-    </Link>
-  )
+    return (
+        <Link to='/blog/$postId' params={{ postId: '123' }}>
+            Post 123
+        </Link>
+    )
 }
 ```
 
@@ -4486,11 +4418,11 @@ And here's what a function style looks like:
 
 ```tsx
 function Component() {
-  return (
-    <Link to="/blog/$postId" params={(prev) => ({ ...prev, postId: '123' })}>
-      Post 123
-    </Link>
-  )
+    return (
+        <Link to='/blog/$postId' params={(prev) => ({ ...prev, postId: '123' })}>
+            Post 123
+        </Link>
+    )
 }
 ```
 
@@ -4509,13 +4441,13 @@ Prefixes are defined by placing the prefix text outside the curly braces before 
 ```tsx
 // src/routes/posts/post-{$postId}.tsx
 export const Route = createFileRoute('/posts/post-{$postId}')({
-  component: PostComponent,
+    component: PostComponent
 })
 
 function PostComponent() {
-  const { postId } = Route.useParams()
-  // postId will be the value after 'post-'
-  return <div>Post ID: {postId}</div>
+    const { postId } = Route.useParams()
+    // postId will be the value after 'post-'
+    return <div>Post ID: {postId}</div>
 }
 ```
 
@@ -4524,14 +4456,14 @@ You can even combines prefixes with wildcard routes to create more complex patte
 ```tsx
 // src/routes/on-disk/storage-{$}
 export const Route = createFileRoute('/on-disk/storage-{$postId}/$')({
-  component: StorageComponent,
+    component: StorageComponent
 })
 
 function StorageComponent() {
-  const { _splat } = Route.useParams()
-  // _splat, will be value after 'storage-'
-  // i.e. my-drive/documents/foo.txt
-  return <div>Storage Location: /{_splat}</div>
+    const { _splat } = Route.useParams()
+    // _splat, will be value after 'storage-'
+    // i.e. my-drive/documents/foo.txt
+    return <div>Storage Location: /{_splat}</div>
 }
 ```
 
@@ -4542,13 +4474,13 @@ Suffixes are defined by placing the suffix text outside the curly braces after t
 ```tsx
 // src/routes/files/{$fileName}txt
 export const Route = createFileRoute('/files/{$fileName}.txt')({
-  component: FileComponent,
+    component: FileComponent
 })
 
 function FileComponent() {
-  const { fileName } = Route.useParams()
-  // fileName will be the value before 'txt'
-  return <div>File Name: {fileName}</div>
+    const { fileName } = Route.useParams()
+    // fileName will be the value before 'txt'
+    return <div>File Name: {fileName}</div>
 }
 ```
 
@@ -4557,13 +4489,13 @@ You can also combine suffixes with wildcards for more complex routing patterns:
 ```tsx
 // src/routes/files/{$}[.]txt
 export const Route = createFileRoute('/files/{$fileName}[.]txt')({
-  component: FileComponent,
+    component: FileComponent
 })
 
 function FileComponent() {
-  const { _splat } = Route.useParams()
-  // _splat will be the value before '.txt'
-  return <div>File Splat: {_splat}</div>
+    const { _splat } = Route.useParams()
+    // _splat will be the value before '.txt'
+    return <div>File Splat: {_splat}</div>
 }
 ```
 
@@ -4574,13 +4506,13 @@ You can combine both prefixes and suffixes to create very specific routing patte
 ```tsx
 // src/routes/users/user-{$userId}.json
 export const Route = createFileRoute('/users/user-{$userId}.json')({
-  component: UserComponent,
+    component: UserComponent
 })
 
 function UserComponent() {
-  const { userId } = Route.useParams()
-  // userId will be the value between 'user-' and '.json'
-  return <div>User ID: {userId}</div>
+    const { userId } = Route.useParams()
+    // userId will be the value between 'user-' and '.json'
+    return <div>User ID: {userId}</div>
 }
 ```
 
@@ -4598,19 +4530,19 @@ Optional path parameters are defined using curly braces with a dash prefix: `{-$
 // Single optional parameter
 // src/routes/posts/{-$category}.tsx
 export const Route = createFileRoute('/posts/{-$category}')({
-  component: PostsComponent,
+    component: PostsComponent
 })
 
 // Multiple optional parameters
 // src/routes/posts/{-$category}/{-$slug}.tsx
 export const Route = createFileRoute('/posts/{-$category}/{-$slug}')({
-  component: PostComponent,
+    component: PostComponent
 })
 
 // Mixed required and optional parameters
 // src/routes/users/$id/{-$tab}.tsx
 export const Route = createFileRoute('/users/$id/{-$tab}')({
-  component: UserComponent,
+    component: UserComponent
 })
 ```
 
@@ -4630,9 +4562,9 @@ Optional parameters work exactly like regular parameters in your components, but
 
 ```tsx
 function PostsComponent() {
-  const { category } = Route.useParams()
+    const { category } = Route.useParams()
 
-  return <div>{category ? `Posts in ${category}` : 'All Posts'}</div>
+    return <div>{category ? `Posts in ${category}` : 'All Posts'}</div>
 }
 ```
 
@@ -4642,10 +4574,10 @@ Optional parameters are available in loaders and may be `undefined`:
 
 ```tsx
 export const Route = createFileRoute('/posts/{-$category}')({
-  loader: async ({ params }) => {
-    // params.category might be undefined
-    return fetchPosts({ category: params.category })
-  },
+    loader: async ({ params }) => {
+        // params.category might be undefined
+        return fetchPosts({ category: params.category })
+    }
 })
 ```
 
@@ -4655,12 +4587,12 @@ Optional parameters work in `beforeLoad` handlers as well:
 
 ```tsx
 export const Route = createFileRoute('/posts/{-$category}')({
-  beforeLoad: async ({ params }) => {
-    if (params.category) {
-      // Validate category exists
-      await validateCategory(params.category)
+    beforeLoad: async ({ params }) => {
+        if (params.category) {
+            // Validate category exists
+            await validateCategory(params.category)
+        }
     }
-  },
 })
 ```
 
@@ -4674,12 +4606,12 @@ Optional parameters support prefix and suffix patterns:
 // File route: /files/prefix{-$name}.txt
 // Matches: /files/prefix.txt and /files/prefixdocument.txt
 export const Route = createFileRoute('/files/prefix{-$name}.txt')({
-  component: FileComponent,
+    component: FileComponent
 })
 
 function FileComponent() {
-  const { name } = Route.useParams()
-  return <div>File: {name || 'default'}</div>
+    const { name } = Route.useParams()
+    return <div>File: {name || 'default'}</div>
 }
 ```
 
@@ -4691,26 +4623,26 @@ You can create routes where all parameters are optional:
 // Route: /{-$year}/{-$month}/{-$day}
 // Matches: /, /2023, /2023/12, /2023/12/25
 export const Route = createFileRoute('/{-$year}/{-$month}/{-$day}')({
-  component: DateComponent,
+    component: DateComponent
 })
 
 function DateComponent() {
-  const { year, month, day } = Route.useParams()
+    const { year, month, day } = Route.useParams()
 
-  if (!year) return <div>Select a year</div>
-  if (!month) return <div>Year: {year}</div>
-  if (!day)
+    if (!year) return <div>Select a year</div>
+    if (!month) return <div>Year: {year}</div>
+    if (!day)
+        return (
+            <div>
+                Month: {year}/{month}
+            </div>
+        )
+
     return (
-      <div>
-        Month: {year}/{month}
-      </div>
+        <div>
+            Date: {year}/{month}/{day}
+        </div>
     )
-
-  return (
-    <div>
-      Date: {year}/{month}/{day}
-    </div>
-  )
 }
 ```
 
@@ -4722,19 +4654,19 @@ Optional parameters can be combined with wildcards for complex routing patterns:
 // Route: /docs/{-$version}/$
 // Matches: /docs/extra/path, /docs/v2/extra/path
 export const Route = createFileRoute('/docs/{-$version}/$')({
-  component: DocsComponent,
+    component: DocsComponent
 })
 
 function DocsComponent() {
-  const { version } = Route.useParams()
-  const { _splat } = Route.useParams()
+    const { version } = Route.useParams()
+    const { _splat } = Route.useParams()
 
-  return (
-    <div>
-      Version: {version || 'latest'}
-      Path: {_splat}
-    </div>
-  )
+    return (
+        <div>
+            Version: {version || 'latest'}
+            Path: {_splat}
+        </div>
+    )
 }
 ```
 
@@ -4744,27 +4676,24 @@ When navigating to routes with optional parameters, you have fine-grained contro
 
 ```tsx
 function Navigation() {
-  return (
-    <div>
-      {/* Navigate with optional parameter */}
-      <Link to="/posts/{-$category}" params={{ category: 'tech' }}>
-        Tech Posts
-      </Link>
+    return (
+        <div>
+            {/* Navigate with optional parameter */}
+            <Link to='/posts/{-$category}' params={{ category: 'tech' }}>
+                Tech Posts
+            </Link>
 
-      {/* Navigate without optional parameter */}
-      <Link to="/posts/{-$category}" params={{ category: undefined }}>
-        All Posts
-      </Link>
+            {/* Navigate without optional parameter */}
+            <Link to='/posts/{-$category}' params={{ category: undefined }}>
+                All Posts
+            </Link>
 
-      {/* Navigate with multiple optional parameters */}
-      <Link
-        to="/posts/{-$category}/{-$slug}"
-        params={{ category: 'tech', slug: 'react-tips' }}
-      >
-        Specific Post
-      </Link>
-    </div>
-  )
+            {/* Navigate with multiple optional parameters */}
+            <Link to='/posts/{-$category}/{-$slug}' params={{ category: 'tech', slug: 'react-tips' }}>
+                Specific Post
+            </Link>
+        </div>
+    )
 }
 ```
 
@@ -4810,31 +4739,31 @@ Use optional language prefixes to support URLs like `/en/about`, `/fr/about`, or
 ```tsx
 // Route: /{-$locale}/about
 export const Route = createFileRoute('/{-$locale}/about')({
-  component: AboutComponent,
+    component: AboutComponent
 })
 
 function AboutComponent() {
-  const { locale } = Route.useParams()
-  const currentLocale = locale || 'en' // Default to English
+    const { locale } = Route.useParams()
+    const currentLocale = locale || 'en' // Default to English
 
-  const content = {
-    en: { title: 'About Us', description: 'Learn more about our company.' },
-    fr: {
-      title: 'À Propos',
-      description: 'En savoir plus sur notre entreprise.',
-    },
-    es: {
-      title: 'Acerca de',
-      description: 'Conoce más sobre nuestra empresa.',
-    },
-  }
+    const content = {
+        en: { title: 'About Us', description: 'Learn more about our company.' },
+        fr: {
+            title: 'À Propos',
+            description: 'En savoir plus sur notre entreprise.'
+        },
+        es: {
+            title: 'Acerca de',
+            description: 'Conoce más sobre nuestra empresa.'
+        }
+    }
 
-  return (
-    <div>
-      <h1>{content[currentLocale]?.title}</h1>
-      <p>{content[currentLocale]?.description}</p>
-    </div>
-  )
+    return (
+        <div>
+            <h1>{content[currentLocale]?.title}</h1>
+            <p>{content[currentLocale]?.description}</p>
+        </div>
+    )
 }
 ```
 
@@ -4852,40 +4781,40 @@ Combine optional parameters for more sophisticated i18n routing:
 ```tsx
 // Route: /{-$locale}/blog/{-$category}/$slug
 export const Route = createFileRoute('/{-$locale}/blog/{-$category}/$slug')({
-  beforeLoad: async ({ params }) => {
-    const locale = params.locale || 'en'
-    const category = params.category
+    beforeLoad: async ({ params }) => {
+        const locale = params.locale || 'en'
+        const category = params.category
 
-    // Validate locale and category
-    const validLocales = ['en', 'fr', 'es', 'de']
-    if (locale && !validLocales.includes(locale)) {
-      throw new Error('Invalid locale')
-    }
+        // Validate locale and category
+        const validLocales = ['en', 'fr', 'es', 'de']
+        if (locale && !validLocales.includes(locale)) {
+            throw new Error('Invalid locale')
+        }
 
-    return { locale, category }
-  },
-  loader: async ({ params, context }) => {
-    const { locale } = context
-    const { slug, category } = params
+        return { locale, category }
+    },
+    loader: async ({ params, context }) => {
+        const { locale } = context
+        const { slug, category } = params
 
-    return fetchBlogPost({ slug, category, locale })
-  },
-  component: BlogPostComponent,
+        return fetchBlogPost({ slug, category, locale })
+    },
+    component: BlogPostComponent
 })
 
 function BlogPostComponent() {
-  const { locale, category, slug } = Route.useParams()
-  const data = Route.useLoaderData()
+    const { locale, category, slug } = Route.useParams()
+    const data = Route.useLoaderData()
 
-  return (
-    <article>
-      <h1>{data.title}</h1>
-      <p>
-        Category: {category || 'All'} | Language: {locale || 'en'}
-      </p>
-      <div>{data.content}</div>
-    </article>
-  )
+    return (
+        <article>
+            <h1>{data.title}</h1>
+            <p>
+                Category: {category || 'All'} | Language: {locale || 'en'}
+            </p>
+            <div>{data.content}</div>
+        </article>
+    )
 }
 ```
 
@@ -4902,31 +4831,31 @@ Create language switchers using optional i18n parameters with function-style par
 
 ```tsx
 function LanguageSwitcher() {
-  const currentParams = useParams({ strict: false })
+    const currentParams = useParams({ strict: false })
 
-  const languages = [
-    { code: 'en', name: 'English' },
-    { code: 'fr', name: 'Français' },
-    { code: 'es', name: 'Español' },
-  ]
+    const languages = [
+        { code: 'en', name: 'English' },
+        { code: 'fr', name: 'Français' },
+        { code: 'es', name: 'Español' }
+    ]
 
-  return (
-    <div className="language-switcher">
-      {languages.map(({ code, name }) => (
-        <Link
-          key={code}
-          to="/{-$locale}/blog/{-$category}/$slug"
-          params={(prev) => ({
-            ...prev,
-            locale: code === 'en' ? undefined : code, // Remove 'en' for clean URLs
-          })}
-          className={currentParams.locale === code ? 'active' : ''}
-        >
-          {name}
-        </Link>
-      ))}
-    </div>
-  )
+    return (
+        <div className='language-switcher'>
+            {languages.map(({ code, name }) => (
+                <Link
+                    key={code}
+                    to='/{-$locale}/blog/{-$category}/$slug'
+                    params={(prev) => ({
+                        ...prev,
+                        locale: code === 'en' ? undefined : code // Remove 'en' for clean URLs
+                    })}
+                    className={currentParams.locale === code ? 'active' : ''}
+                >
+                    {name}
+                </Link>
+            ))}
+        </div>
+    )
 }
 ```
 
@@ -4934,48 +4863,39 @@ You can also create more sophisticated language switching logic:
 
 ```tsx
 function AdvancedLanguageSwitcher() {
-  const currentParams = useParams({ strict: false })
+    const currentParams = useParams({ strict: false })
 
-  const handleLanguageChange = (newLocale: string) => {
-    return (prev: any) => {
-      // Preserve all existing params but update locale
-      const updatedParams = { ...prev }
+    const handleLanguageChange = (newLocale: string) => {
+        return (prev: any) => {
+            // Preserve all existing params but update locale
+            const updatedParams = { ...prev }
 
-      if (newLocale === 'en') {
-        // Remove locale for clean English URLs
-        delete updatedParams.locale
-      } else {
-        updatedParams.locale = newLocale
-      }
+            if (newLocale === 'en') {
+                // Remove locale for clean English URLs
+                delete updatedParams.locale
+            } else {
+                updatedParams.locale = newLocale
+            }
 
-      return updatedParams
+            return updatedParams
+        }
     }
-  }
 
-  return (
-    <div className="language-switcher">
-      <Link
-        to="/{-$locale}/blog/{-$category}/$slug"
-        params={handleLanguageChange('fr')}
-      >
-        Français
-      </Link>
+    return (
+        <div className='language-switcher'>
+            <Link to='/{-$locale}/blog/{-$category}/$slug' params={handleLanguageChange('fr')}>
+                Français
+            </Link>
 
-      <Link
-        to="/{-$locale}/blog/{-$category}/$slug"
-        params={handleLanguageChange('es')}
-      >
-        Español
-      </Link>
+            <Link to='/{-$locale}/blog/{-$category}/$slug' params={handleLanguageChange('es')}>
+                Español
+            </Link>
 
-      <Link
-        to="/{-$locale}/blog/{-$category}/$slug"
-        params={handleLanguageChange('en')}
-      >
-        English
-      </Link>
-    </div>
-  )
+            <Link to='/{-$locale}/blog/{-$category}/$slug' params={handleLanguageChange('en')}>
+                English
+            </Link>
+        </div>
+    )
 }
 ```
 
@@ -4995,24 +4915,24 @@ Organize i18n routes using optional parameters for flexible locale handling:
 
 // routes/{-$locale}/index.tsx
 export const Route = createFileRoute('/{-$locale}/')({
-  component: HomeComponent,
+    component: HomeComponent
 })
 
 function HomeComponent() {
-  const { locale } = Route.useParams()
-  const isRTL = ['ar', 'he', 'fa'].includes(locale || '')
+    const { locale } = Route.useParams()
+    const isRTL = ['ar', 'he', 'fa'].includes(locale || '')
 
-  return (
-    <div dir={isRTL ? 'rtl' : 'ltr'}>
-      <h1>Welcome ({locale || 'en'})</h1>
-      {/* Localized content */}
-    </div>
-  )
+    return (
+        <div dir={isRTL ? 'rtl' : 'ltr'}>
+            <h1>Welcome ({locale || 'en'})</h1>
+            {/* Localized content */}
+        </div>
+    )
 }
 
 // routes/{-$locale}/about.tsx
 export const Route = createFileRoute('/{-$locale}/about')({
-  component: AboutComponent,
+    component: AboutComponent
 })
 ```
 
@@ -5022,48 +4942,48 @@ Handle SEO for i18n routes properly:
 
 ```tsx
 export const Route = createFileRoute('/{-$locale}/products/$id')({
-  component: ProductComponent,
-  head: ({ params, loaderData }) => {
-    const locale = params.locale || 'en'
-    const product = loaderData
+    component: ProductComponent,
+    head: ({ params, loaderData }) => {
+        const locale = params.locale || 'en'
+        const product = loaderData
 
-    return {
-      title: product.title[locale] || product.title.en,
-      meta: [
-        {
-          name: 'description',
-          content: product.description[locale] || product.description.en,
-        },
-        {
-          property: 'og:locale',
-          content: locale,
-        },
-      ],
-      links: [
-        // Canonical URL (always use default locale format)
-        {
-          rel: 'canonical',
-          href: `https://example.com/products/${params.id}`,
-        },
-        // Alternate language versions
-        {
-          rel: 'alternate',
-          hreflang: 'en',
-          href: `https://example.com/products/${params.id}`,
-        },
-        {
-          rel: 'alternate',
-          hreflang: 'fr',
-          href: `https://example.com/fr/products/${params.id}`,
-        },
-        {
-          rel: 'alternate',
-          hreflang: 'es',
-          href: `https://example.com/es/products/${params.id}`,
-        },
-      ],
+        return {
+            title: product.title[locale] || product.title.en,
+            meta: [
+                {
+                    name: 'description',
+                    content: product.description[locale] || product.description.en
+                },
+                {
+                    property: 'og:locale',
+                    content: locale
+                }
+            ],
+            links: [
+                // Canonical URL (always use default locale format)
+                {
+                    rel: 'canonical',
+                    href: `https://example.com/products/${params.id}`
+                },
+                // Alternate language versions
+                {
+                    rel: 'alternate',
+                    hreflang: 'en',
+                    href: `https://example.com/products/${params.id}`
+                },
+                {
+                    rel: 'alternate',
+                    hreflang: 'fr',
+                    href: `https://example.com/fr/products/${params.id}`
+                },
+                {
+                    rel: 'alternate',
+                    hreflang: 'es',
+                    href: `https://example.com/es/products/${params.id}`
+                }
+            ]
+        }
     }
-  },
 })
 ```
 
@@ -5077,47 +4997,47 @@ type Locale = 'en' | 'fr' | 'es' | 'de'
 
 // Type-safe locale validation
 function validateLocale(locale: string | undefined): locale is Locale {
-  return ['en', 'fr', 'es', 'de'].includes(locale as Locale)
+    return ['en', 'fr', 'es', 'de'].includes(locale as Locale)
 }
 
 export const Route = createFileRoute('/{-$locale}/shop/{-$category}')({
-  beforeLoad: async ({ params }) => {
-    const { locale } = params
+    beforeLoad: async ({ params }) => {
+        const { locale } = params
 
-    // Type-safe locale validation
-    if (locale && !validateLocale(locale)) {
-      throw redirect({
-        to: '/shop/{-$category}',
-        params: { category: params.category },
-      })
-    }
+        // Type-safe locale validation
+        if (locale && !validateLocale(locale)) {
+            throw redirect({
+                to: '/shop/{-$category}',
+                params: { category: params.category }
+            })
+        }
 
-    return {
-      locale: (locale as Locale) || 'en',
-      isDefaultLocale: !locale || locale === 'en',
-    }
-  },
-  component: ShopComponent,
+        return {
+            locale: (locale as Locale) || 'en',
+            isDefaultLocale: !locale || locale === 'en'
+        }
+    },
+    component: ShopComponent
 })
 
 function ShopComponent() {
-  const { locale, category } = Route.useParams()
-  const { isDefaultLocale } = Route.useRouteContext()
+    const { locale, category } = Route.useParams()
+    const { isDefaultLocale } = Route.useRouteContext()
 
-  // TypeScript knows locale is Locale | undefined
-  // and we have validated it in beforeLoad
+    // TypeScript knows locale is Locale | undefined
+    // and we have validated it in beforeLoad
 
-  return (
-    <div>
-      <h1>Shop {category ? `- ${category}` : ''}</h1>
-      <p>Language: {locale || 'en'}</p>
-      {!isDefaultLocale && (
-        <Link to="/shop/{-$category}" params={{ category }}>
-          View in English
-        </Link>
-      )}
-    </div>
-  )
+    return (
+        <div>
+            <h1>Shop {category ? `- ${category}` : ''}</h1>
+            <p>Language: {locale || 'en'}</p>
+            {!isDefaultLocale && (
+                <Link to='/shop/{-$category}' params={{ category }}>
+                    View in English
+                </Link>
+            )}
+        </div>
+    )
 }
 ```
 
@@ -5131,8 +5051,8 @@ Example usage:
 
 ```tsx
 const router = createRouter({
-  // ...
-  pathParamsAllowedCharacters: ['@'],
+    // ...
+    pathParamsAllowedCharacters: ['@']
 })
 ```
 
@@ -5154,14 +5074,14 @@ Preloading in TanStack Router is a way to load a route before the user actually 
 ## Supported Preloading Strategies
 
 - Intent
-  - Preloading by **"intent"** works by using hover and touch start events on `<Link>` components to preload the dependencies for the destination route.
-  - This strategy is useful for preloading routes that the user is likely to visit next.
+    - Preloading by **"intent"** works by using hover and touch start events on `<Link>` components to preload the dependencies for the destination route.
+    - This strategy is useful for preloading routes that the user is likely to visit next.
 - Viewport Visibility
-  - Preloading by **"viewport**" works by using the Intersection Observer API to preload the dependencies for the destination route when the `<Link>` component is in the viewport.
-  - This strategy is useful for preloading routes that are below the fold or off-screen.
+    - Preloading by **"viewport**" works by using the Intersection Observer API to preload the dependencies for the destination route when the `<Link>` component is in the viewport.
+    - This strategy is useful for preloading routes that are below the fold or off-screen.
 - Render
-  - Preloading by **"render"** works by preloading the dependencies for the destination route as soon as the `<Link>` component is rendered in the DOM.
-  - This strategy is useful for preloading routes that are always needed.
+    - Preloading by **"render"** works by preloading the dependencies for the destination route as soon as the `<Link>` component is rendered in the DOM.
+    - This strategy is useful for preloading routes that are always needed.
 
 ## How long does preloaded data stay in memory?
 
@@ -5178,8 +5098,8 @@ The simplest way to preload routes for your application is to set the `defaultPr
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  // ...
-  defaultPreload: 'intent',
+    // ...
+    defaultPreload: 'intent'
 })
 ```
 
@@ -5193,8 +5113,8 @@ By default, preloading will start after **50ms** of the user hovering or touchin
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  // ...
-  defaultPreloadDelay: 100,
+    // ...
+    defaultPreloadDelay: 100
 })
 ```
 
@@ -5210,8 +5130,8 @@ To change this, you can set the `defaultPreloadStaleTime` option on your router:
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  // ...
-  defaultPreloadStaleTime: 10_000,
+    // ...
+    defaultPreloadStaleTime: 10_000
 })
 ```
 
@@ -5220,9 +5140,9 @@ Or, you can use the `routeOptions.preloadStaleTime` option on individual routes:
 ```tsx
 // src/routes/posts.$postId.tsx
 export const Route = createFileRoute('/posts/$postId')({
-  loader: async ({ params }) => fetchPost(params.postId),
-  // Preload the route again if the preload cache is older than 10 seconds
-  preloadStaleTime: 10_000,
+    loader: async ({ params }) => fetchPost(params.postId),
+    // Preload the route again if the preload cache is older than 10 seconds
+    preloadStaleTime: 10_000
 })
 ```
 
@@ -5238,8 +5158,8 @@ For example:
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  // ...
-  defaultPreloadStaleTime: 0,
+    // ...
+    defaultPreloadStaleTime: 0
 })
 ```
 
@@ -5251,24 +5171,24 @@ If you need to manually preload a route, you can use the router's `preloadRoute`
 
 ```tsx
 function Component() {
-  const router = useRouter()
+    const router = useRouter()
 
-  useEffect(() => {
-    async function preload() {
-      try {
-        const matches = await router.preloadRoute({
-          to: postRoute,
-          params: { id: 1 },
-        })
-      } catch (err) {
-        // Failed to preload route
-      }
-    }
+    useEffect(() => {
+        async function preload() {
+            try {
+                const matches = await router.preloadRoute({
+                    to: postRoute,
+                    params: { id: 1 }
+                })
+            } catch (err) {
+                // Failed to preload route
+            }
+        }
 
-    preload()
-  }, [router])
+        preload()
+    }, [router])
 
-  return <div />
+    return <div />
 }
 ```
 
@@ -5276,26 +5196,26 @@ If you need to preload only the JS chunk of a route, you can use the router's `l
 
 ```tsx
 function Component() {
-  const router = useRouter()
+    const router = useRouter()
 
-  useEffect(() => {
-    async function preloadRouteChunks() {
-      try {
-        const postsRoute = router.routesByPath['/posts']
-        await Promise.all([
-          router.loadRouteChunk(router.routesByPath['/']),
-          router.loadRouteChunk(postsRoute),
-          router.loadRouteChunk(postsRoute.parentRoute),
-        ])
-      } catch (err) {
-        // Failed to preload route chunk
-      }
-    }
+    useEffect(() => {
+        async function preloadRouteChunks() {
+            try {
+                const postsRoute = router.routesByPath['/posts']
+                await Promise.all([
+                    router.loadRouteChunk(router.routesByPath['/']),
+                    router.loadRouteChunk(postsRoute),
+                    router.loadRouteChunk(postsRoute.parentRoute)
+                ])
+            } catch (err) {
+                // Failed to preload route chunk
+            }
+        }
 
-    preloadRouteChunks()
-  }, [router])
+        preloadRouteChunks()
+    }, [router])
 
-  return <div />
+    return <div />
 }
 ```
 
@@ -5330,12 +5250,12 @@ The `select` function can perform various calculations on the router state, allo
 
 ```tsx
 const result = Route.useSearch({
-  select: (search) => {
-    return {
-      foo: search.foo,
-      hello: `hello ${search.foo}`,
+    select: (search) => {
+        return {
+            foo: search.foo,
+            hello: `hello ${search.foo}`
+        }
     }
-  },
 })
 ```
 
@@ -5349,8 +5269,8 @@ To enable structural sharing for fine grained selectors, you have two options:
 
 ```tsx
 const router = createRouter({
-  routeTree,
-  defaultStructuralSharing: true,
+    routeTree,
+    defaultStructuralSharing: true
 })
 ```
 
@@ -5358,13 +5278,13 @@ const router = createRouter({
 
 ```tsx
 const result = Route.useSearch({
-  select: (search) => {
-    return {
-      foo: search.foo,
-      hello: `hello ${search.foo}`,
-    }
-  },
-  structuralSharing: true,
+    select: (search) => {
+        return {
+            foo: search.foo,
+            hello: `hello ${search.foo}`
+        }
+    },
+    structuralSharing: true
 })
 ```
 
@@ -5375,12 +5295,12 @@ In line with TanStack Router's type-safe design, TypeScript will raise an error 
 
 ```tsx
 const result = Route.useSearch({
-  select: (search) => {
-    return {
-      date: new Date(),
-    }
-  },
-  structuralSharing: true,
+    select: (search) => {
+        return {
+            date: new Date()
+        }
+    },
+    structuralSharing: true
 })
 ```
 
@@ -5406,19 +5326,19 @@ Route masking utilizes the `location.state` API to store the desired runtime loc
 
 ```tsx
 const location = {
-  pathname: '/photos/5',
-  search: '',
-  hash: '',
-  state: {
-    key: 'wesdfs',
-    __tempKey: 'sadfasd',
-    __tempLocation: {
-      pathname: '/photo/5/modal',
-      search: '',
-      hash: '',
-      state: {},
-    },
-  },
+    pathname: '/photos/5',
+    search: '',
+    hash: '',
+    state: {
+        key: 'wesdfs',
+        __tempKey: 'sadfasd',
+        __tempLocation: {
+            pathname: '/photo/5/modal',
+            search: '',
+            hash: '',
+            state: {}
+        }
+    }
 }
 ```
 
@@ -5443,16 +5363,16 @@ The `<Link>` and `navigate()` APIs both accept a `mask` option that can be used 
 
 ```tsx
 <Link
-  to="/photos/$photoId/modal"
-  params={{ photoId: 5 }}
-  mask={{
-    to: '/photos/$photoId',
-    params: {
-      photoId: 5,
-    },
-  }}
+    to='/photos/$photoId/modal'
+    params={{ photoId: 5 }}
+    mask={{
+        to: '/photos/$photoId',
+        params: {
+            photoId: 5
+        }
+    }}
 >
-  Open Photo
+    Open Photo
 </Link>
 ```
 
@@ -5462,16 +5382,16 @@ And here's an example of using it with the `navigate()` API:
 const navigate = useNavigate()
 
 function onOpenPhoto() {
-  navigate({
-    to: '/photos/$photoId/modal',
-    params: { photoId: 5 },
-    mask: {
-      to: '/photos/$photoId',
-      params: {
-        photoId: 5,
-      },
-    },
-  })
+    navigate({
+        to: '/photos/$photoId/modal',
+        params: { photoId: 5 },
+        mask: {
+            to: '/photos/$photoId',
+            params: {
+                photoId: 5
+            }
+        }
+    })
 }
 ```
 
@@ -5485,17 +5405,17 @@ In addition to the imperative API, you can also use the Router's `routeMasks` op
 import { createRouteMask } from '@tanstack/react-router'
 
 const photoModalToPhotoMask = createRouteMask({
-  routeTree,
-  from: '/photos/$photoId/modal',
-  to: '/photos/$photoId',
-  params: (prev) => ({
-    photoId: prev.photoId,
-  }),
+    routeTree,
+    from: '/photos/$photoId/modal',
+    to: '/photos/$photoId',
+    params: (prev) => ({
+        photoId: prev.photoId
+    })
 })
 
 const router = createRouter({
-  routeTree,
-  routeMasks: [photoModalToPhotoMask],
+    routeTree,
+    routeMasks: [photoModalToPhotoMask]
 })
 ```
 
@@ -5530,11 +5450,11 @@ If you want to unmask a URL locally when the page is reloaded, you have 3 option
 TanStack Router's router context is a very powerful tool that can be used for dependency injection among many other things. Aptly named, the router context is passed through the router and down through each matching route. At each route in the hierarchy, the context can be modified or added to. Here's a few ways you might use the router context practically:
 
 - Dependency Injection
-  - You can supply dependencies (e.g. a loader function, a data fetching client, a mutation service) which the route and all child routes can access and use without importing or creating directly.
+    - You can supply dependencies (e.g. a loader function, a data fetching client, a mutation service) which the route and all child routes can access and use without importing or creating directly.
 - Breadcrumbs
-  - While the main context object for each route is merged as it descends, each route's unique context is also stored making it possible to attach breadcrumbs or methods to each route's context.
+    - While the main context object for each route is merged as it descends, each route's unique context is also stored making it possible to attach breadcrumbs or methods to each route's context.
 - Dynamic meta tag management
-  - You can attach meta tags to each route's context and then use a meta tag manager to dynamically update the meta tags on the page as the user navigates the site.
+    - You can attach meta tags to each route's context and then use a meta tag manager to dynamically update the meta tags on the page as the user navigates the site.
 
 These are just suggested uses of the router context. You can use it for whatever you want!
 
@@ -5543,27 +5463,24 @@ These are just suggested uses of the router context. You can use it for whatever
 Like everything else, the root router context is strictly typed. This type can be augmented via any route's `beforeLoad` option as it is merged down the route match tree. To constrain the type of the root router context, you must use the `createRootRouteWithContext<YourContextTypeHere>()(routeOptions)` function to create a new router context instead of the `createRootRoute()` function to create your root route. Here's an example:
 
 ```tsx
-import {
-  createRootRouteWithContext,
-  createRouter,
-} from '@tanstack/react-router'
+import { createRootRouteWithContext, createRouter } from '@tanstack/react-router'
 
 interface MyRouterContext {
-  user: User
+    user: User
 }
 
 // Use the routerContext to create your root route
 const rootRoute = createRootRouteWithContext<MyRouterContext>()({
-  component: App,
+    component: App
 })
 
 const routeTree = rootRoute.addChildren([
-  // ...
+    // ...
 ])
 
 // Use the routerContext to create your router
 const router = createRouter({
-  routeTree,
+    routeTree
 })
 ```
 
@@ -5582,13 +5499,13 @@ import { createRouter } from '@tanstack/react-router'
 
 // Use the routerContext you created to create your router
 const router = createRouter({
-  routeTree,
-  context: {
-    user: {
-      id: '123',
-      name: 'John Doe',
-    },
-  },
+    routeTree,
+    context: {
+        user: {
+            id: '123',
+            name: 'John Doe'
+        }
+    }
 })
 ```
 
@@ -5598,19 +5515,19 @@ If you need to invalidate the context state you are passing into the router, you
 
 ```tsx
 function useAuth() {
-  const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
+    const router = useRouter()
+    const [user, setUser] = useState<User | null>(null)
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user)
-      router.invalidate()
-    })
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setUser(user)
+            router.invalidate()
+        })
 
-    return unsubscribe
-  }, [])
+        return unsubscribe
+    }, [])
 
-  return user
+    return user
 }
 ```
 
@@ -5621,8 +5538,8 @@ Once you have defined the router context type, you can use it in your route defi
 ```tsx
 // src/routes/todos.tsx
 export const Route = createFileRoute('/todos')({
-  component: Todos,
-  loader: ({ context }) => fetchTodosByUserId(context.user.id),
+    component: Todos,
+    loader: ({ context }) => fetchTodosByUserId(context.user.id)
 })
 ```
 
@@ -5632,17 +5549,17 @@ Let's try this with a simple function to fetch some todos:
 
 ```tsx
 const fetchTodosByUserId = async ({ userId }) => {
-  const response = await fetch(`/api/todos?userId=${userId}`)
-  const data = await response.json()
-  return data
+    const response = await fetch(`/api/todos?userId=${userId}`)
+    const data = await response.json()
+    return data
 }
 
 const router = createRouter({
-  routeTree: rootRoute,
-  context: {
-    userId: '123',
-    fetchTodosByUserId,
-  },
+    routeTree: rootRoute,
+    context: {
+        userId: '123',
+        fetchTodosByUserId
+    }
 })
 ```
 
@@ -5651,34 +5568,31 @@ Then, in your route:
 ```tsx
 // src/routes/todos.tsx
 export const Route = createFileRoute('/todos')({
-  component: Todos,
-  loader: ({ context }) => context.fetchTodosByUserId(context.userId),
+    component: Todos,
+    loader: ({ context }) => context.fetchTodosByUserId(context.userId)
 })
 ```
 
 ### How about an external data fetching library?
 
 ```tsx
-import {
-  createRootRouteWithContext,
-  createRouter,
-} from '@tanstack/react-router'
+import { createRootRouteWithContext, createRouter } from '@tanstack/react-router'
 
 interface MyRouterContext {
-  queryClient: QueryClient
+    queryClient: QueryClient
 }
 
 const rootRoute = createRootRouteWithContext<MyRouterContext>()({
-  component: App,
+    component: App
 })
 
 const queryClient = new QueryClient()
 
 const router = createRouter({
-  routeTree: rootRoute,
-  context: {
-    queryClient,
-  },
+    routeTree: rootRoute,
+    context: {
+        queryClient
+    }
 })
 ```
 
@@ -5687,13 +5601,13 @@ Then, in your route:
 ```tsx
 // src/routes/todos.tsx
 export const Route = createFileRoute('/todos')({
-  component: Todos,
-  loader: async ({ context }) => {
-    await context.queryClient.ensureQueryData({
-      queryKey: ['todos', { userId: user.id }],
-      queryFn: fetchTodos,
-    })
-  },
+    component: Todos,
+    loader: async ({ context }) => {
+        await context.queryClient.ensureQueryData({
+            queryKey: ['todos', { userId: user.id }],
+            queryFn: fetchTodos
+        })
+    }
 })
 ```
 
@@ -5713,11 +5627,11 @@ import { createRootRouteWithContext } from '@tanstack/react-router'
 import { useNetworkStrength } from '@/hooks/useNetworkStrength'
 
 interface MyRouterContext {
-  networkStrength: ReturnType<typeof useNetworkStrength>
+    networkStrength: ReturnType<typeof useNetworkStrength>
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: App,
+    component: App
 })
 ```
 
@@ -5731,10 +5645,10 @@ import { createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 
 export const router = createRouter({
-  routeTree,
-  context: {
-    networkStrength: undefined!, // We'll set this in React-land
-  },
+    routeTree,
+    context: {
+        networkStrength: undefined! // We'll set this in React-land
+    }
 })
 ```
 
@@ -5747,9 +5661,9 @@ import { router } from './router'
 import { useNetworkStrength } from '@/hooks/useNetworkStrength'
 
 function App() {
-  const networkStrength = useNetworkStrength()
-  // Inject the returned value from the hook into the router context
-  return <RouterProvider router={router} context={{ networkStrength }} />
+    const networkStrength = useNetworkStrength()
+    // Inject the returned value from the hook into the router context
+    return <RouterProvider router={router} context={{ networkStrength }} />
 }
 
 // ...
@@ -5763,12 +5677,12 @@ So, now in our route's `loader` function, we can access the `networkStrength` ho
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts')({
-  component: Posts,
-  loader: ({ context }) => {
-    if (context.networkStrength === 'STRONG') {
-      // Do something
+    component: Posts,
+    loader: ({ context }) => {
+        if (context.networkStrength === 'STRONG') {
+            // Do something
+        }
     }
-  },
 })
 ```
 
@@ -5782,11 +5696,11 @@ The router context is passed down the route tree and is merged at each route. Th
 import { createRootRouteWithContext } from '@tanstack/react-router'
 
 interface MyRouterContext {
-  foo: boolean
+    foo: boolean
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: App,
+    component: App
 })
 ```
 
@@ -5798,10 +5712,10 @@ import { createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 
 const router = createRouter({
-  routeTree,
-  context: {
-    foo: true,
-  },
+    routeTree,
+    context: {
+        foo: true
+    }
 })
 ```
 
@@ -5811,16 +5725,16 @@ const router = createRouter({
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/todos')({
-  component: Todos,
-  beforeLoad: () => {
-    return {
-      bar: true,
+    component: Todos,
+    beforeLoad: () => {
+        return {
+            bar: true
+        }
+    },
+    loader: ({ context }) => {
+        context.foo // true
+        context.bar // true
     }
-  },
-  loader: ({ context }) => {
-    context.foo // true
-    context.bar // true
-  },
 })
 ```
 
@@ -5831,20 +5745,20 @@ Context, especially the isolated route `context` objects, make it trivial to acc
 ```tsx
 // src/routes/__root.tsx
 export const Route = createRootRoute({
-  component: () => {
-    const matches = useRouterState({ select: (s) => s.matches })
+    component: () => {
+        const matches = useRouterState({ select: (s) => s.matches })
 
-    const breadcrumbs = matches
-      .filter((match) => match.context.getTitle)
-      .map(({ pathname, context }) => {
-        return {
-          title: context.getTitle(),
-          path: pathname,
-        }
-      })
+        const breadcrumbs = matches
+            .filter((match) => match.context.getTitle)
+            .map(({ pathname, context }) => {
+                return {
+                    title: context.getTitle(),
+                    path: pathname
+                }
+            })
 
-    // ...
-  },
+        // ...
+    }
 })
 ```
 
@@ -5853,24 +5767,22 @@ Using that same route context, we could also generate a title tag for our page's
 ```tsx
 // src/routes/__root.tsx
 export const Route = createRootRoute({
-  component: () => {
-    const matches = useRouterState({ select: (s) => s.matches })
+    component: () => {
+        const matches = useRouterState({ select: (s) => s.matches })
 
-    const matchWithTitle = [...matches]
-      .reverse()
-      .find((d) => d.context.getTitle)
+        const matchWithTitle = [...matches].reverse().find((d) => d.context.getTitle)
 
-    const title = matchWithTitle?.context.getTitle() || 'My App'
+        const title = matchWithTitle?.context.getTitle() || 'My App'
 
-    return (
-      <html>
-        <head>
-          <title>{title}</title>
-        </head>
-        <body>{/* ... */}</body>
-      </html>
-    )
-  },
+        return (
+            <html>
+                <head>
+                    <title>{title}</title>
+                </head>
+                <body>{/* ... */}</body>
+            </html>
+        )
+    }
 })
 ```
 
@@ -5886,20 +5798,17 @@ By default, scroll-to-top mimics the behavior of the browser, which means only t
 
 ```tsx
 const router = createRouter({
-  scrollToTopSelectors: ['#main-scrollable-area'],
+    scrollToTopSelectors: ['#main-scrollable-area']
 })
 ```
 
 For complex selectors that cannot be simply resolved using `document.querySelector(selector)`, you can pass functions that return HTML elements to `routerOptions.scrollToTopSelectors`:
 
 ```tsx
-const selector = () =>
-  document
-    .querySelector('#shadowRootParent')
-    ?.shadowRoot?.querySelector('#main-scrollable-area')
+const selector = () => document.querySelector('#shadowRootParent')?.shadowRoot?.querySelector('#main-scrollable-area')
 
 const router = createRouter({
-  scrollToTopSelectors: [selector],
+    scrollToTopSelectors: [selector]
 })
 ```
 
@@ -5931,7 +5840,7 @@ That may sound like a lot, but for you, it's as simple as this:
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  scrollRestoration: true,
+    scrollRestoration: true
 })
 ```
 
@@ -5956,7 +5865,7 @@ You could sync scrolling to the pathname:
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  getScrollRestorationKey: (location) => location.pathname,
+    getScrollRestorationKey: (location) => location.pathname
 })
 ```
 
@@ -5966,12 +5875,10 @@ You can conditionally sync only some paths, then use the key for the rest:
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  getScrollRestorationKey: (location) => {
-    const paths = ['/', '/chat']
-    return paths.includes(location.pathname)
-      ? location.pathname
-      : location.state.__TSR_key!
-  },
+    getScrollRestorationKey: (location) => {
+        const paths = ['/', '/chat']
+        return paths.includes(location.pathname) ? location.pathname : location.state.__TSR_key!
+    }
 })
 ```
 
@@ -6026,38 +5933,38 @@ To manually control scroll restoration for a specific element, you can use the `
 
 ```tsx
 function Component() {
-  // We need a unique ID for manual scroll restoration on a specific element
-  // It should be as unique as possible for this element across your app
-  const scrollRestorationId = 'myVirtualizedContent'
+    // We need a unique ID for manual scroll restoration on a specific element
+    // It should be as unique as possible for this element across your app
+    const scrollRestorationId = 'myVirtualizedContent'
 
-  // We use that ID to get the scroll entry for this element
-  const scrollEntry = useElementScrollRestoration({
-    id: scrollRestorationId,
-  })
+    // We use that ID to get the scroll entry for this element
+    const scrollEntry = useElementScrollRestoration({
+        id: scrollRestorationId
+    })
 
-  // Let's use TanStack Virtual to virtualize some content!
-  const virtualizerParentRef = React.useRef<HTMLDivElement>(null)
-  const virtualizer = useVirtualizer({
-    count: 10000,
-    getScrollElement: () => virtualizerParentRef.current,
-    estimateSize: () => 100,
-    // We pass the scrollY from the scroll restoration entry to the virtualizer
-    // as the initial offset
-    initialOffset: scrollEntry?.scrollY,
-  })
+    // Let's use TanStack Virtual to virtualize some content!
+    const virtualizerParentRef = React.useRef<HTMLDivElement>(null)
+    const virtualizer = useVirtualizer({
+        count: 10000,
+        getScrollElement: () => virtualizerParentRef.current,
+        estimateSize: () => 100,
+        // We pass the scrollY from the scroll restoration entry to the virtualizer
+        // as the initial offset
+        initialOffset: scrollEntry?.scrollY
+    })
 
-  return (
-    <div
-      ref={virtualizerParentRef}
-      // We pass the scroll restoration ID to the element
-      // as a custom attribute that will get picked up by the
-      // scroll restoration watcher
-      data-scroll-restoration-id={scrollRestorationId}
-      className="flex-1 border rounded-lg overflow-auto relative"
-    >
-      ...
-    </div>
-  )
+    return (
+        <div
+            ref={virtualizerParentRef}
+            // We pass the scroll restoration ID to the element
+            // as a custom attribute that will get picked up by the
+            // scroll restoration watcher
+            data-scroll-restoration-id={scrollRestorationId}
+            className='flex-1 border rounded-lg overflow-auto relative'
+        >
+            ...
+        </div>
+    )
 }
 ```
 
@@ -6071,7 +5978,7 @@ To control the scroll behavior when navigating between pages, you can use the `s
 import { createRouter } from '@tanstack/react-router'
 
 const router = createRouter({
-  scrollRestorationBehavior: 'instant',
+    scrollRestorationBehavior: 'instant'
 })
 ```
 
@@ -6104,13 +6011,13 @@ Reality is very different from these assumptions though.
 You've probably seen search params like `?page=3` or `?filter-name=tanner` in the URL. There is no question that this is truly **a form of global state** living inside of the URL. It's valuable to store specific pieces of state in the URL because:
 
 - Users should be able to:
-  - Cmd/Ctrl + Click to open a link in a new tab and reliably see the state they expected
-  - Bookmark and share links from your application with others with assurances that they will see exactly the state as when the link was copied.
-  - Refresh your app or navigate back and forth between pages without losing their state
+    - Cmd/Ctrl + Click to open a link in a new tab and reliably see the state they expected
+    - Bookmark and share links from your application with others with assurances that they will see exactly the state as when the link was copied.
+    - Refresh your app or navigate back and forth between pages without losing their state
 - Developers should be able to easily:
-  - Add, remove or modify state in the URL with the same great DX as other state managers
-  - Easily validate search params coming from the URL in a format and type that is safe for their application to consume
-  - Read and write to search params without having to worry about the underlying serialization format
+    - Add, remove or modify state in the URL with the same great DX as other state managers
+    - Easily validate search params coming from the URL in a format and type that is safe for their application to consume
+    - Read and write to search params without having to worry about the underlying serialization format
 
 ## JSON-first Search Params
 
@@ -6120,15 +6027,15 @@ For example, navigating to the following route:
 
 ```tsx
 const link = (
-  <Link
-    to="/shop"
-    search={{
-      pageIndex: 3,
-      includeCategories: ['electronics', 'gifts'],
-      sortBy: 'price',
-      desc: true,
-    }}
-  />
+    <Link
+        to='/shop'
+        search={{
+            pageIndex: 3,
+            includeCategories: ['electronics', 'gifts'],
+            sortBy: 'price',
+            desc: true
+        }}
+    />
 )
 ```
 
@@ -6142,10 +6049,10 @@ When this URL is parsed, the search params will be accurately converted back to 
 
 ```json
 {
-  "pageIndex": 3,
-  "includeCategories": ["electronics", "gifts"],
-  "sortBy": "price",
-  "desc": true
+    "pageIndex": 3,
+    "includeCategories": ["electronics", "gifts"],
+    "sortBy": "price",
+    "desc": true
 }
 ```
 
@@ -6171,20 +6078,20 @@ TanStack Router provides convenient APIs for validating and typing search params
 type ProductSearchSortOptions = 'newest' | 'oldest' | 'price'
 
 type ProductSearch = {
-  page: number
-  filter: string
-  sort: ProductSearchSortOptions
+    page: number
+    filter: string
+    sort: ProductSearchSortOptions
 }
 
 export const Route = createFileRoute('/shop/products')({
-  validateSearch: (search: Record<string, unknown>): ProductSearch => {
-    // validate and parse the search params into a typed state
-    return {
-      page: Number(search?.page ?? 1),
-      filter: (search.filter as string) || '',
-      sort: (search.sort as ProductSearchSortOptions) || 'newest',
+    validateSearch: (search: Record<string, unknown>): ProductSearch => {
+        // validate and parse the search params into a typed state
+        return {
+            page: Number(search?.page ?? 1),
+            filter: (search.filter as string) || '',
+            sort: (search.sort as ProductSearchSortOptions) || 'newest'
+        }
     }
-  },
 })
 ```
 
@@ -6202,20 +6109,20 @@ Here's an example:
 type ProductSearchSortOptions = 'newest' | 'oldest' | 'price'
 
 type ProductSearch = {
-  page: number
-  filter: string
-  sort: ProductSearchSortOptions
+    page: number
+    filter: string
+    sort: ProductSearchSortOptions
 }
 
 export const Route = createFileRoute('/shop/products')({
-  validateSearch: (search: Record<string, unknown>): ProductSearch => {
-    // validate and parse the search params into a typed state
-    return {
-      page: Number(search?.page ?? 1),
-      filter: (search.filter as string) || '',
-      sort: (search.sort as ProductSearchSortOptions) || 'newest',
+    validateSearch: (search: Record<string, unknown>): ProductSearch => {
+        // validate and parse the search params into a typed state
+        return {
+            page: Number(search?.page ?? 1),
+            filter: (search.filter as string) || '',
+            sort: (search.sort as ProductSearchSortOptions) || 'newest'
+        }
     }
-  },
 })
 ```
 
@@ -6227,15 +6134,15 @@ Here's an example using the [Zod](https://zod.dev/) library (but feel free to us
 import { z } from 'zod'
 
 const productSearchSchema = z.object({
-  page: z.number().catch(1),
-  filter: z.string().catch(''),
-  sort: z.enum(['newest', 'oldest', 'price']).catch('newest'),
+    page: z.number().catch(1),
+    filter: z.string().catch(''),
+    sort: z.enum(['newest', 'oldest', 'price']).catch('newest')
 })
 
 type ProductSearch = z.infer<typeof productSearchSchema>
 
 export const Route = createFileRoute('/shop/products')({
-  validateSearch: (search) => productSearchSchema.parse(search),
+    validateSearch: (search) => productSearchSchema.parse(search)
 })
 ```
 
@@ -6258,20 +6165,20 @@ import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
 const productSearchSchema = z.object({
-  page: z.number().default(1),
-  filter: z.string().default(''),
-  sort: z.enum(['newest', 'oldest', 'price']).default('newest'),
+    page: z.number().default(1),
+    filter: z.string().default(''),
+    sort: z.enum(['newest', 'oldest', 'price']).default('newest')
 })
 
 export const Route = createFileRoute('/shop/products/')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 ```
 
 It might be surprising that when you try to navigate to this route, `search` is required. The following `Link` will type error as `search` is missing.
 
 ```tsx
-<Link to="/shop/products" />
+<Link to='/shop/products' />
 ```
 
 For validation libraries we recommend using adapters which infer the correct `input` and `output` types.
@@ -6286,20 +6193,20 @@ import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 
 const productSearchSchema = z.object({
-  page: z.number().default(1),
-  filter: z.string().default(''),
-  sort: z.enum(['newest', 'oldest', 'price']).default('newest'),
+    page: z.number().default(1),
+    filter: z.string().default(''),
+    sort: z.enum(['newest', 'oldest', 'price']).default('newest')
 })
 
 export const Route = createFileRoute('/shop/products/')({
-  validateSearch: zodValidator(productSearchSchema),
+    validateSearch: zodValidator(productSearchSchema)
 })
 ```
 
 The important part here is the following use of `Link` no longer requires `search` params
 
 ```tsx
-<Link to="/shop/products" />
+<Link to='/shop/products' />
 ```
 
 However the use of `catch` here overrides the types and makes `page`, `filter` and `sort` `unknown` causing type loss. We have handled this case by providing a `fallback` generic function which retains the types but provides a `fallback` value when validation fails
@@ -6310,15 +6217,13 @@ import { fallback, zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 
 const productSearchSchema = z.object({
-  page: fallback(z.number(), 1).default(1),
-  filter: fallback(z.string(), '').default(''),
-  sort: fallback(z.enum(['newest', 'oldest', 'price']), 'newest').default(
-    'newest',
-  ),
+    page: fallback(z.number(), 1).default(1),
+    filter: fallback(z.string(), '').default(''),
+    sort: fallback(z.enum(['newest', 'oldest', 'price']), 'newest').default('newest')
 })
 
 export const Route = createFileRoute('/shop/products/')({
-  validateSearch: zodValidator(productSearchSchema),
+    validateSearch: zodValidator(productSearchSchema)
 })
 ```
 
@@ -6328,19 +6233,17 @@ While not recommended, it is also possible to configure `input` and `output` typ
 
 ```tsx
 const productSearchSchema = z.object({
-  page: fallback(z.number(), 1).default(1),
-  filter: fallback(z.string(), '').default(''),
-  sort: fallback(z.enum(['newest', 'oldest', 'price']), 'newest').default(
-    'newest',
-  ),
+    page: fallback(z.number(), 1).default(1),
+    filter: fallback(z.string(), '').default(''),
+    sort: fallback(z.enum(['newest', 'oldest', 'price']), 'newest').default('newest')
 })
 
 export const Route = createFileRoute('/shop/products/')({
-  validateSearch: zodValidator({
-    schema: productSearchSchema,
-    input: 'output',
-    output: 'input',
-  }),
+    validateSearch: zodValidator({
+        schema: productSearchSchema,
+        input: 'output',
+        output: 'input'
+    })
 })
 ```
 
@@ -6358,16 +6261,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import * as v from 'valibot'
 
 const productSearchSchema = v.object({
-  page: v.optional(v.fallback(v.number(), 1), 1),
-  filter: v.optional(v.fallback(v.string(), ''), ''),
-  sort: v.optional(
-    v.fallback(v.picklist(['newest', 'oldest', 'price']), 'newest'),
-    'newest',
-  ),
+    page: v.optional(v.fallback(v.number(), 1), 1),
+    filter: v.optional(v.fallback(v.string(), ''), ''),
+    sort: v.optional(v.fallback(v.picklist(['newest', 'oldest', 'price']), 'newest'), 'newest')
 })
 
 export const Route = createFileRoute('/shop/products/')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 ```
 
@@ -6383,13 +6283,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
 
 const productSearchSchema = type({
-  page: 'number = 1',
-  filter: 'string = ""',
-  sort: '"newest" | "oldest" | "price" = "newest"',
+    page: 'number = 1',
+    filter: 'string = ""',
+    sort: '"newest" | "oldest" | "price" = "newest"'
 })
 
 export const Route = createFileRoute('/shop/products/')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 ```
 
@@ -6402,33 +6302,33 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Schema as S } from 'effect'
 
 const productSearchSchema = S.standardSchemaV1(
-  S.Struct({
-    page: S.NumberFromString.pipe(
-      S.optional,
-      S.withDefaults({
-        constructor: () => 1,
-        decoding: () => 1,
-      }),
-    ),
-    filter: S.String.pipe(
-      S.optional,
-      S.withDefaults({
-        constructor: () => '',
-        decoding: () => '',
-      }),
-    ),
-    sort: S.Literal('newest', 'oldest', 'price').pipe(
-      S.optional,
-      S.withDefaults({
-        constructor: () => 'newest' as const,
-        decoding: () => 'newest' as const,
-      }),
-    ),
-  }),
+    S.Struct({
+        page: S.NumberFromString.pipe(
+            S.optional,
+            S.withDefaults({
+                constructor: () => 1,
+                decoding: () => 1
+            })
+        ),
+        filter: S.String.pipe(
+            S.optional,
+            S.withDefaults({
+                constructor: () => '',
+                decoding: () => ''
+            })
+        ),
+        sort: S.Literal('newest', 'oldest', 'price').pipe(
+            S.optional,
+            S.withDefaults({
+                constructor: () => 'newest' as const,
+                decoding: () => 'newest' as const
+            })
+        )
+    })
 )
 
 export const Route = createFileRoute('/shop/products/')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 ```
 
@@ -6448,15 +6348,15 @@ The search parameters and types of parents are merged as you go down the route t
 
 ```tsx
 const productSearchSchema = z.object({
-  page: z.number().catch(1),
-  filter: z.string().catch(''),
-  sort: z.enum(['newest', 'oldest', 'price']).catch('newest'),
+    page: z.number().catch(1),
+    filter: z.string().catch(''),
+    sort: z.enum(['newest', 'oldest', 'price']).catch('newest')
 })
 
 type ProductSearch = z.infer<typeof productSearchSchema>
 
 export const Route = createFileRoute('/shop/products')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 ```
 
@@ -6464,10 +6364,10 @@ export const Route = createFileRoute('/shop/products')({
 
 ```tsx
 export const Route = createFileRoute('/shop/products/$productId')({
-  beforeLoad: ({ search }) => {
-    search
-    // ^? ProductSearch ✅
-  },
+    beforeLoad: ({ search }) => {
+        search
+        // ^? ProductSearch ✅
+    }
 })
 ```
 
@@ -6479,13 +6379,13 @@ You can access your route's validated search params in your route's `component` 
 // /routes/shop.products.tsx
 
 export const Route = createFileRoute('/shop/products')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 
 const ProductList = () => {
-  const { page, filter, sort } = Route.useSearch()
+    const { page, filter, sort } = Route.useSearch()
 
-  return <div>...</div>
+    return <div>...</div>
 }
 ```
 
@@ -6499,8 +6399,8 @@ You can access your route's validated search params anywhere in your app using t
 ```tsx
 // /routes/shop.products.tsx
 export const Route = createFileRoute('/shop/products')({
-  validateSearch: productSearchSchema,
-  // ...
+    validateSearch: productSearchSchema
+    // ...
 })
 
 // Somewhere else...
@@ -6509,15 +6409,15 @@ export const Route = createFileRoute('/shop/products')({
 const routeApi = getRouteApi('/shop/products')
 
 const ProductList = () => {
-  const routeSearch = routeApi.useSearch()
+    const routeSearch = routeApi.useSearch()
 
-  // OR
+    // OR
 
-  const { page, filter, sort } = useSearch({
-    from: Route.fullPath,
-  })
+    const { page, filter, sort } = useSearch({
+        from: Route.fullPath
+    })
 
-  return <div>...</div>
+    return <div>...</div>
 }
 ```
 
@@ -6525,16 +6425,16 @@ Or, you can loosen up the type-safety and get an optional `search` object by pas
 
 ```tsx
 function ProductList() {
-  const search = useSearch({
-    strict: false,
-  })
-  // {
-  //   page: number | undefined
-  //   filter: string | undefined
-  //   sort: 'newest' | 'oldest' | 'price' | undefined
-  // }
+    const search = useSearch({
+        strict: false
+    })
+    // {
+    //   page: number | undefined
+    //   filter: string | undefined
+    //   sort: 'newest' | 'oldest' | 'price' | undefined
+    // }
 
-  return <div>...</div>
+    return <div>...</div>
 }
 ```
 
@@ -6552,17 +6452,17 @@ Here's an example:
 ```tsx
 // /routes/shop.products.tsx
 export const Route = createFileRoute('/shop/products')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 
 const ProductList = () => {
-  return (
-    <div>
-      <Link from={Route.fullPath} search={(prev) => ({ page: prev.page + 1 })}>
-        Next Page
-      </Link>
-    </div>
-  )
+    return (
+        <div>
+            <Link from={Route.fullPath} search={(prev) => ({ page: prev.page + 1 })}>
+                Next Page
+            </Link>
+        </div>
+    )
 }
 ```
 
@@ -6574,13 +6474,13 @@ Here is an example that illustrates this:
 ```tsx
 // `page` is a search param that is defined in the __root route and hence available on all routes.
 const PageSelector = () => {
-  return (
-    <div>
-      <Link to="." search={(prev) => ({ ...prev, page: prev.page + 1 })}>
-        Next Page
-      </Link>
-    </div>
-  )
+    return (
+        <div>
+            <Link to='.' search={(prev) => ({ ...prev, page: prev.page + 1 })}>
+                Next Page
+            </Link>
+        </div>
+    )
 }
 ```
 
@@ -6609,25 +6509,25 @@ The `navigate` function also accepts a `search` option that works the same way a
 ```tsx
 // /routes/shop.products.tsx
 export const Route = createFileRoute('/shop/products/$productId')({
-  validateSearch: productSearchSchema,
+    validateSearch: productSearchSchema
 })
 
 const ProductList = () => {
-  const navigate = useNavigate({ from: Route.fullPath })
+    const navigate = useNavigate({ from: Route.fullPath })
 
-  return (
-    <div>
-      <button
-        onClick={() => {
-          navigate({
-            search: (prev) => ({ page: prev.page + 1 }),
-          })
-        }}
-      >
-        Next Page
-      </button>
-    </div>
-  )
+    return (
+        <div>
+            <button
+                onClick={() => {
+                    navigate({
+                        search: (prev) => ({ page: prev.page + 1 })
+                    })
+                }}
+            >
+                Next Page
+            </button>
+        </div>
+    )
 }
 ```
 
@@ -6655,22 +6555,22 @@ import { createFileRoute } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 
 const searchSchema = z.object({
-  rootValue: z.string().optional(),
+    rootValue: z.string().optional()
 })
 
 export const Route = createRootRoute({
-  validateSearch: zodValidator(searchSchema),
-  search: {
-    middlewares: [
-      ({ search, next }) => {
-        const result = next(search)
-        return {
-          rootValue: search.rootValue,
-          ...result,
-        }
-      },
-    ],
-  },
+    validateSearch: zodValidator(searchSchema),
+    search: {
+        middlewares: [
+            ({ search, next }) => {
+                const result = next(search)
+                return {
+                    rootValue: search.rootValue,
+                    ...result
+                }
+            }
+        ]
+    }
 })
 ```
 
@@ -6682,14 +6582,14 @@ import { createFileRoute, retainSearchParams } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 
 const searchSchema = z.object({
-  rootValue: z.string().optional(),
+    rootValue: z.string().optional()
 })
 
 export const Route = createRootRoute({
-  validateSearch: zodValidator(searchSchema),
-  search: {
-    middlewares: [retainSearchParams(['rootValue'])],
-  },
+    validateSearch: zodValidator(searchSchema),
+    search: {
+        middlewares: [retainSearchParams(['rootValue'])]
+    }
 })
 ```
 
@@ -6701,52 +6601,44 @@ import { createFileRoute, stripSearchParams } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
 
 const defaultValues = {
-  one: 'abc',
-  two: 'xyz',
+    one: 'abc',
+    two: 'xyz'
 }
 
 const searchSchema = z.object({
-  one: z.string().default(defaultValues.one),
-  two: z.string().default(defaultValues.two),
+    one: z.string().default(defaultValues.one),
+    two: z.string().default(defaultValues.two)
 })
 
 export const Route = createFileRoute('/hello')({
-  validateSearch: zodValidator(searchSchema),
-  search: {
-    // strip default values
-    middlewares: [stripSearchParams(defaultValues)],
-  },
+    validateSearch: zodValidator(searchSchema),
+    search: {
+        // strip default values
+        middlewares: [stripSearchParams(defaultValues)]
+    }
 })
 ```
 
 Multiple middlewares can be chained. The following example shows how to combine both `retainSearchParams` and `stripSearchParams`.
 
 ```tsx
-import {
-  Link,
-  createFileRoute,
-  retainSearchParams,
-  stripSearchParams,
-} from '@tanstack/react-router'
+import { Link, createFileRoute, retainSearchParams, stripSearchParams } from '@tanstack/react-router'
 import { z } from 'zod'
 import { zodValidator } from '@tanstack/zod-adapter'
 
 const defaultValues = ['foo', 'bar']
 
 export const Route = createFileRoute('/search')({
-  validateSearch: zodValidator(
-    z.object({
-      retainMe: z.string().optional(),
-      arrayWithDefaults: z.string().array().default(defaultValues),
-      required: z.string(),
-    }),
-  ),
-  search: {
-    middlewares: [
-      retainSearchParams(['retainMe']),
-      stripSearchParams({ arrayWithDefaults: defaultValues }),
-    ],
-  },
+    validateSearch: zodValidator(
+        z.object({
+            retainMe: z.string().optional(),
+            arrayWithDefaults: z.string().array().default(defaultValues),
+            required: z.string()
+        })
+    ),
+    search: {
+        middlewares: [retainSearchParams(['retainMe']), stripSearchParams({ arrayWithDefaults: defaultValues })]
+    }
 })
 ```
 
@@ -6760,10 +6652,10 @@ Server Side Rendering (SSR) is the process of rendering a component on the serve
 There are usually two different flavors of SSR to be considered:
 
 - Non-streaming SSR
-  - The entire page is rendered on the server and sent to the client in one single HTML request, including the serialized data the application needs to hydrate on the client.
+    - The entire page is rendered on the server and sent to the client in one single HTML request, including the serialized data the application needs to hydrate on the client.
 - Streaming SSR
-  - The critical first paint of the page is rendered on the server and sent to the client in one single HTML request, including the serialized data the application needs to hydrate on the client
-  - The rest of the page is then streamed to the client as it is rendered on the server.
+    - The critical first paint of the page is rendered on the server and sent to the client in one single HTML request, including the serialized data the application needs to hydrate on the client
+    - The rest of the page is then streamed to the client as it is rendered on the server.
 
 This guide will explain how to implement both flavors of SSR with TanStack Router!
 
@@ -6774,16 +6666,16 @@ Non-Streaming server-side rendering is the classic process of rendering the mark
 To implement non-streaming SSR with TanStack Router, you will need the following utilities:
 
 - `RouterClient` from `@tanstack/react-router`
-  - e.g. `<RouterClient router={router} />`
-  - Rendering this component in your client entry will render your application and also automatically implement the `Wrap` component option on `Router`
+    - e.g. `<RouterClient router={router} />`
+    - Rendering this component in your client entry will render your application and also automatically implement the `Wrap` component option on `Router`
 - And, either:
-  - `defaultRenderHandler` from `@tanstack/react-router`
-    - This will render your application in your server entry and also automatically handle application-level hydration/dehydration and also automatically implement the RouterServer component.
-      or:
-  - `renderRouterToString` from `@tanstack/react-router`
-    - This differs from defaultRenderHandler in that it allows you to manually specify the `Wrap` component option on `Router` together with any other providers you may need to wrap it with.
-  - `RouterServer` from `@tanstack/react-router`
-    - This implements the `Wrap` component option on `Router`
+    - `defaultRenderHandler` from `@tanstack/react-router`
+        - This will render your application in your server entry and also automatically handle application-level hydration/dehydration and also automatically implement the RouterServer component.
+          or:
+    - `renderRouterToString` from `@tanstack/react-router`
+        - This differs from defaultRenderHandler in that it allows you to manually specify the `Wrap` component option on `Router` together with any other providers you may need to wrap it with.
+    - `RouterServer` from `@tanstack/react-router`
+        - This implements the `Wrap` component option on `Router`
 
 ### Automatic Server History
 
@@ -6807,13 +6699,13 @@ import { createRouter as createTanstackRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 
 export function createRouter() {
-  return createTanstackRouter({ routeTree })
+    return createTanstackRouter({ routeTree })
 }
 
 declare module '@tanstack/react-router' {
-  interface Register {
-    router: ReturnType<typeof createRouter>
-  }
+    interface Register {
+        router: ReturnType<typeof createRouter>
+    }
 }
 ```
 
@@ -6825,16 +6717,13 @@ using `defaultRenderHandler`
 
 ```tsx
 // src/entry-server.tsx
-import {
-  createRequestHandler,
-  defaultRenderToString,
-} from '@tanstack/react-router/ssr/server'
+import { createRequestHandler, defaultRenderToString } from '@tanstack/react-router/ssr/server'
 import { createRouter } from './router'
 
 export async function render({ request }: { request: Request }) {
-  const handler = createRequestHandler({ request, createRouter })
+    const handler = createRequestHandler({ request, createRouter })
 
-  return await handler(defaultRenderHandler)
+    return await handler(defaultRenderHandler)
 }
 ```
 
@@ -6842,24 +6731,20 @@ using `renderRouterToString`
 
 ```tsx
 // src/entry-server.tsx
-import {
-  createRequestHandler,
-  renderRouterToString,
-  RouterServer,
-} from '@tanstack/react-router/ssr/server'
+import { createRequestHandler, renderRouterToString, RouterServer } from '@tanstack/react-router/ssr/server'
 import { createRouter } from './router'
 
 export function render({ request }: { request: Request }) {
-  const handler = createRequestHandler({ request, createRouter })
+    const handler = createRequestHandler({ request, createRouter })
 
-  return handler(({ request, responseHeaders, router }) =>
-    renderRouterToString({
-      request,
-      responseHeaders,
-      router,
-      children: <RouterServer router={router} />,
-    }),
-  )
+    return handler(({ request, responseHeaders, router }) =>
+        renderRouterToString({
+            request,
+            responseHeaders,
+            router,
+            children: <RouterServer router={router} />
+        })
+    )
 }
 ```
 
@@ -6904,16 +6789,13 @@ using `defaultStreamHandler`
 
 ```tsx
 // src/entry-server.tsx
-import {
-  createRequestHandler,
-  defaultStreamHandler,
-} from '@tanstack/react-router/ssr/server'
+import { createRequestHandler, defaultStreamHandler } from '@tanstack/react-router/ssr/server'
 import { createRouter } from './router'
 
 export async function render({ request }: { request: Request }) {
-  const handler = createRequestHandler({ request, createRouter })
+    const handler = createRequestHandler({ request, createRouter })
 
-  return await handler(defaultStreamHandler)
+    return await handler(defaultStreamHandler)
 }
 ```
 
@@ -6921,24 +6803,20 @@ using `renderRouterToStream`
 
 ```tsx
 // src/entry-server.tsx
-import {
-  createRequestHandler,
-  renderRouterToStream,
-  RouterServer,
-} from '@tanstack/react-router/ssr/server'
+import { createRequestHandler, renderRouterToStream, RouterServer } from '@tanstack/react-router/ssr/server'
 import { createRouter } from './router'
 
 export function render({ request }: { request: Request }) {
-  const handler = createRequestHandler({ request, createRouter })
+    const handler = createRequestHandler({ request, createRouter })
 
-  return handler(({ request, responseHeaders, router }) =>
-    renderRouterToStream({
-      request,
-      responseHeaders,
-      router,
-      children: <RouterServer router={router} />,
-    }),
-  )
+    return handler(({ request, responseHeaders, router }) =>
+        renderRouterToStream({
+            request,
+            responseHeaders,
+            router,
+            children: <RouterServer router={router} />
+        })
+    )
 }
 ```
 
@@ -6975,9 +6853,9 @@ In addition to being able to access this data from the route itself, you can als
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts')({
-  staticData: {
-    customData: 'Hello!',
-  },
+    staticData: {
+        customData: 'Hello!'
+    }
 })
 ```
 
@@ -6989,17 +6867,17 @@ You can then access this data anywhere you have access to your routes, including
 import { createRootRoute } from '@tanstack/react-router'
 
 export const Route = createRootRoute({
-  component: () => {
-    const matches = useMatches()
+    component: () => {
+        const matches = useMatches()
 
-    return (
-      <div>
-        {matches.map((match) => {
-          return <div key={match.id}>{match.staticData.customData}</div>
-        })}
-      </div>
-    )
-  },
+        return (
+            <div>
+                {matches.map((match) => {
+                    return <div key={match.id}>{match.staticData.customData}</div>
+                })}
+            </div>
+        )
+    }
 })
 ```
 
@@ -7009,9 +6887,9 @@ If you want to enforce that a route has static data, you can use declaration mer
 
 ```tsx
 declare module '@tanstack/react-router' {
-  interface StaticDataRouteOption {
-    customData: string
-  }
+    interface StaticDataRouteOption {
+        customData: string
+    }
 }
 ```
 
@@ -7021,9 +6899,9 @@ Now, if you try to create a route without the `customData` property, you'll get 
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts')({
-  staticData: {
-    // Property 'customData' is missing in type '{ customData: number; }' but required in type 'StaticDataRouteOption'.ts(2741)
-  },
+    staticData: {
+        // Property 'customData' is missing in type '{ customData: number; }' but required in type 'StaticDataRouteOption'.ts(2741)
+    }
 })
 ```
 
@@ -7033,9 +6911,9 @@ If you want to make static data optional, simply add a `?` to the property:
 
 ```tsx
 declare module '@tanstack/react-router' {
-  interface StaticDataRouteOption {
-    customData?: string
-  }
+    interface StaticDataRouteOption {
+        customData?: string
+    }
 }
 ```
 
@@ -7050,26 +6928,25 @@ Use staticData to control which routes show or hide layout elements:
 ```tsx
 // routes/admin/route.tsx
 export const Route = createFileRoute('/admin')({
-  staticData: { showNavbar: false },
-  component: AdminLayout,
+    staticData: { showNavbar: false },
+    component: AdminLayout
 })
 ```
 
 ```tsx
 // routes/__root.tsx
 function RootComponent() {
-  const showNavbar = useMatches({
-    select: (matches) =>
-      !matches.some((m) => m.staticData?.showNavbar === false),
-  })
+    const showNavbar = useMatches({
+        select: (matches) => !matches.some((m) => m.staticData?.showNavbar === false)
+    })
 
-  return showNavbar ? (
-    <Navbar>
-      <Outlet />
-    </Navbar>
-  ) : (
-    <Outlet />
-  )
+    return showNavbar ? (
+        <Navbar>
+            <Outlet />
+        </Navbar>
+    ) : (
+        <Outlet />
+    )
 }
 ```
 
@@ -7078,26 +6955,26 @@ function RootComponent() {
 ```tsx
 // routes/posts/$postId.tsx
 export const Route = createFileRoute('/posts/$postId')({
-  staticData: {
-    getTitle: () => 'Post Details',
-  },
+    staticData: {
+        getTitle: () => 'Post Details'
+    }
 })
 ```
 
 ```tsx
 // In a Breadcrumb component
 function Breadcrumbs() {
-  const matches = useMatches()
+    const matches = useMatches()
 
-  return (
-    <nav>
-      {matches
-        .filter((m) => m.staticData?.getTitle)
-        .map((m) => (
-          <span key={m.id}>{m.staticData.getTitle()}</span>
-        ))}
-    </nav>
-  )
+    return (
+        <nav>
+            {matches
+                .filter((m) => m.staticData?.getTitle)
+                .map((m) => (
+                    <span key={m.id}>{m.staticData.getTitle()}</span>
+                ))}
+        </nav>
+    )
 }
 ```
 
@@ -7131,7 +7008,7 @@ So, don't forget to pass the parent route to your child routes!
 
 ```tsx
 const parentRoute = createRoute({
-  getParentRoute: () => parentRoute,
+    getParentRoute: () => parentRoute
 })
 ```
 
@@ -7141,13 +7018,13 @@ For the types of your router to work with top-level exports like `Link`, `useNav
 
 ```ts
 const router = createRouter({
-  // ...
+    // ...
 })
 
 declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router
-  }
+    interface Register {
+        router: typeof router
+    }
 }
 ```
 
@@ -7159,18 +7036,18 @@ Component context is a wonderful tool in React and other frameworks for providin
 
 ```tsx
 export const Route = createFileRoute('/posts')({
-  component: PostsComponent,
+    component: PostsComponent
 })
 
 function PostsComponent() {
-  // Each route has type-safe versions of most of the built-in hooks from TanStack Router
-  const params = Route.useParams()
-  const search = Route.useSearch()
+    // Each route has type-safe versions of most of the built-in hooks from TanStack Router
+    const params = Route.useParams()
+    const search = Route.useSearch()
 
-  // Some hooks require context from the *entire* router, not just the current route. To achieve type-safety here,
-  // we must pass the `from` param to tell the hook our relative position in the route hierarchy.
-  const navigate = useNavigate({ from: Route.fullPath })
-  // ... etc
+    // Some hooks require context from the *entire* router, not just the current route. To achieve type-safety here,
+    // we must pass the `from` param to tell the hook our relative position in the route hierarchy.
+    const navigate = useNavigate({ from: Route.fullPath })
+    // ... etc
 }
 ```
 
@@ -7192,7 +7069,7 @@ If you are rendering a component that is shared across multiple routes, or you a
 
 ```tsx
 function MyComponent() {
-  const search = useSearch({ strict: false })
+    const search = useSearch({ strict: false })
 }
 ```
 
@@ -7206,19 +7083,19 @@ The `createRootRouteWithContext` factory creates a new router with the instantia
 
 ```tsx
 const rootRoute = createRootRouteWithContext<{ whateverYouWant: true }>()({
-  component: App,
+    component: App
 })
 
 const routeTree = rootRoute.addChildren([
-  // ... all child routes will have access to `whateverYouWant` in their context
+    // ... all child routes will have access to `whateverYouWant` in their context
 ])
 
 const router = createRouter({
-  routeTree,
-  context: {
-    // This will be required to be passed now
-    whateverYouWant: true,
-  },
+    routeTree,
+    context: {
+        // This will be required to be passed now
+        whateverYouWant: true
+    }
 })
 ```
 
@@ -7232,16 +7109,15 @@ A great pattern with client side data caches (TanStack Query, etc.) is to prefet
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId/deep')({
-  loader: ({ context: { queryClient }, params: { postId } }) =>
-    queryClient.ensureQueryData(postQueryOptions(postId)),
-  component: PostDeepComponent,
+    loader: ({ context: { queryClient }, params: { postId } }) => queryClient.ensureQueryData(postQueryOptions(postId)),
+    component: PostDeepComponent
 })
 
 function PostDeepComponent() {
-  const params = Route.useParams()
-  const data = useSuspenseQuery(postQueryOptions(params.postId))
+    const params = Route.useParams()
+    const data = useSuspenseQuery(postQueryOptions(params.postId))
 
-  return <></>
+    return <></>
 }
 ```
 
@@ -7249,17 +7125,17 @@ This may look fine and for small route trees and you may not notice any TS perfo
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId/deep')({
-  loader: async ({ context: { queryClient }, params: { postId } }) => {
-    await queryClient.ensureQueryData(postQueryOptions(postId))
-  },
-  component: PostDeepComponent,
+    loader: async ({ context: { queryClient }, params: { postId } }) => {
+        await queryClient.ensureQueryData(postQueryOptions(postId))
+    },
+    component: PostDeepComponent
 })
 
 function PostDeepComponent() {
-  const params = Route.useParams()
-  const data = useSuspenseQuery(postQueryOptions(params.postId))
+    const params = Route.useParams()
+    const data = useSuspenseQuery(postQueryOptions(params.postId))
 
-  return <></>
+    return <></>
 }
 ```
 
@@ -7307,8 +7183,8 @@ It's typical of routes to have `params` `search`, `loaders` or `context` that ca
 
 ```tsx
 const routeTree = rootRoute.addChildren({
-  postsRoute: postsRoute.addChildren({ postRoute, postsIndexRoute }),
-  indexRoute,
+    postsRoute: postsRoute.addChildren({ postRoute, postsIndexRoute }),
+    indexRoute
 })
 ```
 
@@ -7360,19 +7236,19 @@ You can also use this to narrow the type of `LinkProps` to a specific type to be
 
 ```tsx
 export const myLinkProps = [
-  {
-    to: '/posts',
-  },
-  {
-    to: '/posts/$postId',
-    params: { postId: 'postId' },
-  },
+    {
+        to: '/posts'
+    },
+    {
+        to: '/posts/$postId',
+        params: { postId: 'postId' }
+    }
 ] as const satisfies ReadonlyArray<LinkProps>
 
 export type MyLinkProps = (typeof myLinkProps)[number]
 
 const MyComponent = (props: { linkProps: MyLinkProps }) => {
-  return <Link {...props.linkProps} />
+    return <Link {...props.linkProps} />
 }
 ```
 
@@ -7382,15 +7258,15 @@ Another solution is not to use `LinkProps` and to provide inversion of control t
 
 ```tsx
 export interface MyComponentProps {
-  readonly renderLink: () => React.ReactNode
+    readonly renderLink: () => React.ReactNode
 }
 
 const MyComponent = (props: MyComponentProps) => {
-  return <div>{props.renderLink()}</div>
+    return <div>{props.renderLink()}</div>
 }
 
 const Page = () => {
-  return <MyComponent renderLink={() => <Link to="/absolute" />} />
+    return <MyComponent renderLink={() => <Link to='/absolute' />} />
 }
 ```
 
@@ -7406,24 +7282,21 @@ Most types exposed by TanStack Router are internal, subject to breaking changes 
 `ValidateLinkOptions` type checks object literal types to ensure they conform to `Link` options at inference sites. For example, you may have a generic `HeadingLink` component which accepts a `title` prop along with `linkOptions`, the idea being this component can be re-used for any navigation.
 
 ```tsx
-export interface HeaderLinkProps<
-  TRouter extends RegisteredRouter = RegisteredRouter,
-  TOptions = unknown,
-> {
-  title: string
-  linkOptions: ValidateLinkOptions<TRouter, TOptions>
+export interface HeaderLinkProps<TRouter extends RegisteredRouter = RegisteredRouter, TOptions = unknown> {
+    title: string
+    linkOptions: ValidateLinkOptions<TRouter, TOptions>
 }
 
 export function HeadingLink<TRouter extends RegisteredRouter, TOptions>(
-  props: HeaderLinkProps<TRouter, TOptions>,
+    props: HeaderLinkProps<TRouter, TOptions>
 ): React.ReactNode
 export function HeadingLink(props: HeaderLinkProps): React.ReactNode {
-  return (
-    <>
-      <h1>{props.title}</h1>
-      <Link {...props.linkOptions} />
-    </>
-  )
+    return (
+        <>
+            <h1>{props.title}</h1>
+            <Link {...props.linkOptions} />
+        </>
+    )
 }
 ```
 
@@ -7444,77 +7317,68 @@ All navigation type utilities have an array variant. `ValidateLinkOptionsArray` 
 
 ```tsx
 export interface MenuProps<
-  TRouter extends RegisteredRouter = RegisteredRouter,
-  TItems extends ReadonlyArray<unknown> = ReadonlyArray<unknown>,
+    TRouter extends RegisteredRouter = RegisteredRouter,
+    TItems extends ReadonlyArray<unknown> = ReadonlyArray<unknown>
 > {
-  items: ValidateLinkOptionsArray<TRouter, TItems>
+    items: ValidateLinkOptionsArray<TRouter, TItems>
 }
 
-export function Menu<
-  TRouter extends RegisteredRouter = RegisteredRouter,
-  TItems extends ReadonlyArray<unknown>,
->(props: MenuProps<TRouter, TItems>): React.ReactNode
+export function Menu<TRouter extends RegisteredRouter = RegisteredRouter, TItems extends ReadonlyArray<unknown>>(
+    props: MenuProps<TRouter, TItems>
+): React.ReactNode
 export function Menu(props: MenuProps): React.ReactNode {
-  return (
-    <ul>
-      {props.items.map((item) => (
-        <li>
-          <Link {...item} />
-        </li>
-      ))}
-    </ul>
-  )
+    return (
+        <ul>
+            {props.items.map((item) => (
+                <li>
+                    <Link {...item} />
+                </li>
+            ))}
+        </ul>
+    )
 }
 ```
 
 This of course allows the following `items` prop to be completely type-safe
 
 ```tsx
-<Menu
-  items={[
-    { to: '/posts' },
-    { to: '/posts/$postId', params: { postId: 'postId' } },
-  ]}
-/>
+<Menu items={[{ to: '/posts' }, { to: '/posts/$postId', params: { postId: 'postId' } }]} />
 ```
 
 It is also possible to fix `from` for each `Link` options in the array. This would allow all `Menu` items to navigate relative to `from`. Additional type checking of `from` can be provided by the `ValidateFromPath` utility
 
 ```tsx
 export interface MenuProps<
-  TRouter extends RegisteredRouter = RegisteredRouter,
-  TItems extends ReadonlyArray<unknown> = ReadonlyArray<unknown>,
-  TFrom extends string = string,
+    TRouter extends RegisteredRouter = RegisteredRouter,
+    TItems extends ReadonlyArray<unknown> = ReadonlyArray<unknown>,
+    TFrom extends string = string
 > {
-  from: ValidateFromPath<TRouter, TFrom>
-  items: ValidateLinkOptionsArray<TRouter, TItems, TFrom>
+    from: ValidateFromPath<TRouter, TFrom>
+    items: ValidateLinkOptionsArray<TRouter, TItems, TFrom>
 }
 
 export function Menu<
-  TRouter extends RegisteredRouter = RegisteredRouter,
-  TItems extends ReadonlyArray<unknown>,
-  TFrom extends string = string,
+    TRouter extends RegisteredRouter = RegisteredRouter,
+    TItems extends ReadonlyArray<unknown>,
+    TFrom extends string = string
 >(props: MenuProps<TRouter, TItems, TFrom>): React.ReactNode
 export function Menu(props: MenuProps): React.ReactNode {
-  return (
-    <ul>
-      {props.items.map((item) => (
-        <li>
-          <Link {...item} from={props.from} />
-        </li>
-      ))}
-    </ul>
-  )
+    return (
+        <ul>
+            {props.items.map((item) => (
+                <li>
+                    <Link {...item} from={props.from} />
+                </li>
+            ))}
+        </ul>
+    )
 }
 ```
 
 `ValidateLinkOptionsArray` allows you to fix `from` by providing an extra type parameter. The result is a type safe array of `Link` options providing navigation relative to `from`
 
 ```tsx
-<Menu
-  from="/posts"
-  items={[{ to: '.' }, { to: './$postId', params: { postId: 'postId' } }]}
-/>
+<Menu from='/posts' items={[{ to: '.' }, { to: './$postId', params: { postId: 'postId' } }]} />
 ```
 
 ## Type checking redirect options with `ValidateRedirectOptions`
@@ -7522,24 +7386,18 @@ export function Menu(props: MenuProps): React.ReactNode {
 `ValidateRedirectOptions` type checks object literal types to ensure they conform to redirect options at inference sites. For example, you may need a generic `fetchOrRedirect` function which accepts a `url` along with `redirectOptions`, the idea being this function will redirect when the `fetch` fails.
 
 ```tsx
-export async function fetchOrRedirect<
-  TRouter extends RegisteredRouter = RegisteredRouter,
-  TOptions,
->(
-  url: string,
-  redirectOptions: ValidateRedirectOptions<TRouter, TOptions>,
+export async function fetchOrRedirect<TRouter extends RegisteredRouter = RegisteredRouter, TOptions>(
+    url: string,
+    redirectOptions: ValidateRedirectOptions<TRouter, TOptions>
 ): Promise<unknown>
-export async function fetchOrRedirect(
-  url: string,
-  redirectOptions: ValidateRedirectOptions,
-): Promise<unknown> {
-  const response = await fetch(url)
+export async function fetchOrRedirect(url: string, redirectOptions: ValidateRedirectOptions): Promise<unknown> {
+    const response = await fetch(url)
 
-  if (!response.ok && response.status === 401) {
-    throw redirect(redirectOptions)
-  }
+    if (!response.ok && response.status === 401) {
+        throw redirect(redirectOptions)
+    }
 
-  return await response.json()
+    return await response.json()
 }
 ```
 
@@ -7557,31 +7415,26 @@ fetchOrRedirect('http://example.com/', { to: '/login' })
 
 ```tsx
 export interface UseConditionalNavigateResult {
-  enable: () => void
-  disable: () => void
-  navigate: () => void
+    enable: () => void
+    disable: () => void
+    navigate: () => void
 }
 
-export function useConditionalNavigate<
-  TRouter extends RegisteredRouter = RegisteredRouter,
-  TOptions,
->(
-  navigateOptions: ValidateNavigateOptions<TRouter, TOptions>,
+export function useConditionalNavigate<TRouter extends RegisteredRouter = RegisteredRouter, TOptions>(
+    navigateOptions: ValidateNavigateOptions<TRouter, TOptions>
 ): UseConditionalNavigateResult
-export function useConditionalNavigate(
-  navigateOptions: ValidateNavigateOptions,
-): UseConditionalNavigateResult {
-  const [enabled, setEnabled] = useState(false)
-  const navigate = useNavigate()
-  return {
-    enable: () => setEnabled(true),
-    disable: () => setEnabled(false),
-    navigate: () => {
-      if (enabled) {
-        navigate(navigateOptions)
-      }
-    },
-  }
+export function useConditionalNavigate(navigateOptions: ValidateNavigateOptions): UseConditionalNavigateResult {
+    const [enabled, setEnabled] = useState(false)
+    const navigate = useNavigate()
+    return {
+        enable: () => setEnabled(true),
+        disable: () => setEnabled(false),
+        navigate: () => {
+            if (enabled) {
+                navigate(navigateOptions)
+            }
+        }
+    }
 }
 ```
 
@@ -7591,8 +7444,7 @@ The result of this is that `navigateOptions` passed to `useConditionalNavigate` 
 
 ```tsx
 const { enable, disable, navigate } = useConditionalNavigate({
-  to: '/posts/$postId',
-  params: { postId: 'postId' },
+    to: '/posts/$postId',
+    params: { postId: 'postId' }
 })
 ```
-

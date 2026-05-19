@@ -11,19 +11,21 @@ import Typography from '@mui/material/Typography'
 import Logo from '../../../assets/svg/icons/logo.svg?react'
 import PasswordInput from '../../common/mui/PasswordInput'
 import { useMutation } from '@tanstack/react-query'
-import AuthService from '../../../services/gin/auth.service'
+import AuthService from '../../../services/bff/auth.service'
 import { tokenFacade } from '../../../stores/token/token.facade'
 import { useNotify } from '../../../stores/notification/notification.selector'
+import { useSetUser } from '../../../stores/auth/auth.selector'
 
 const LoginForm: React.FC = () => {
     const { t } = useTranslation('auth')
     const navigate = useNavigate()
     const notify = useNotify()
+    const setUser = useSetUser()
 
     const loginSchema = useMemo(
         () =>
             z.object({
-                username: z.string().trim().min(1, t('login.error.usernameRequired')),
+                email: z.email(t('login.error.emailInvalid')),
                 password: z.string().trim().min(1, t('login.error.passwordRequired'))
             }),
         [t]
@@ -35,17 +37,16 @@ const LoginForm: React.FC = () => {
         resolver: zodResolver(loginSchema)
     })
 
-    const mutationLogin = useMutation({
-        mutationFn: (data: LoginFormData) => AuthService.login(data.username, data.password),
+    const loginMutation = useMutation({
+        mutationFn: (data: LoginFormData) => AuthService.login(data.email, data.password),
         onSuccess: (data) => {
             notify(t('login.success.loginSuccess'), 'success')
-            tokenFacade.login(data.accessToken, data.refreshToken)
-            setTimeout(() => {
-                navigate({ to: '/' })
-            }, 500)
+            tokenFacade.login(data.data.accessToken, data.data.refreshToken)
+            setUser({ id: data.data.id, email: data.data.email })
+            navigate({ to: '/' })
         },
-        onError: () => {
-            notify(t('login.error.invalidCredentials'), 'error')
+        onError: (e) => {
+            notify(e.message ?? t('login.error.invalidCredentials'), 'error')
         }
     })
 
@@ -61,14 +62,14 @@ const LoginForm: React.FC = () => {
                 </Typography>
             </Stack>
 
-            <Stack component='form' onSubmit={form.handleSubmit((data) => mutationLogin.mutate(data))} spacing={2}>
+            <Stack component='form' onSubmit={form.handleSubmit((data) => loginMutation.mutate(data))} spacing={2}>
                 <TextField
-                    {...form.register('username')}
-                    label={t('login.username')}
-                    error={!!form.formState.errors.username}
-                    helperText={form.formState.errors.username?.message || ''}
+                    {...form.register('email')}
+                    label={t('login.email')}
+                    error={!!form.formState.errors.email}
+                    helperText={form.formState.errors.email?.message || ''}
                     fullWidth
-                    autoComplete='username'
+                    autoComplete='email'
                     autoFocus
                     required
                 />
@@ -87,7 +88,7 @@ const LoginForm: React.FC = () => {
                     type='submit'
                     variant='contained'
                     size='large'
-                    loading={form.formState.isSubmitting || mutationLogin.isPending}
+                    loading={form.formState.isSubmitting || loginMutation.isPending}
                     fullWidth
                 >
                     {t('login.submit')}
@@ -100,7 +101,7 @@ const LoginForm: React.FC = () => {
                 </Typography>
                 <Link to='/auth' search={{ mode: 'register' }}>
                     <Typography variant='body2' color='primary'>
-                        {t('login.signUp')}
+                        {t('login.register')}
                     </Typography>
                 </Link>
             </Stack>

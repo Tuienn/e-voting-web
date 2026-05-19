@@ -5,7 +5,6 @@ import BottomNavbar from './BottomNavbar'
 import type { INavbarItem } from '../../../types/common'
 import { useTranslation } from 'react-i18next'
 import HomeIcon from '@mui/icons-material/Home'
-import PersonIcon from '@mui/icons-material/Person'
 import { useLocation } from '@tanstack/react-router'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 
@@ -19,14 +18,7 @@ const MainLayout: React.FC<Props> = (props) => {
     const location = useLocation()
     const activeHrefTo = location.pathname
 
-    const navbarItems: INavbarItem[] = [
-        { label: t('home'), hrefTo: '/', icon: <HomeIcon /> },
-        {
-            label: t('personal'),
-            hrefTo: '/personal',
-            icon: <PersonIcon />
-        }
-    ]
+    const navbarItems: INavbarItem[] = [{ label: t('home'), hrefTo: '/', icon: <HomeIcon /> }]
 
     return (
         <Box>

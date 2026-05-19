@@ -1,8 +1,8 @@
 {
-    "typescript.preferences.autoImportSpecifierExcludeRegexes": ["^@mui/[^/]+$"],
-    "typescript.preferences.importModuleSpecifier": "relative",
-    "typescript.suggest.autoImports": true,
-    "typescript.updateImportsOnFileMove.enabled": "always",
+    "js/ts.preferences.autoImportSpecifierExcludeRegexes": ["^@mui/[^/]+$"],
+    "js/ts.preferences.importModuleSpecifier": "relative",
+    "js/ts.suggest.autoImports": true,
+    "js/ts.updateImportsOnFileMove.enabled": "always",
     "chat.mcp.discovery.enabled": {
         "claude-desktop": true,
         "windsurf": true,

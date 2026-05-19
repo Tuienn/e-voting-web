@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import Logo from '../../../assets/svg/icons/logo.svg?react'
 import PasswordInput from '../../common/mui/PasswordInput'
 import { useMutation } from '@tanstack/react-query'
-import AuthService from '../../../services/gin/auth.service'
+import AuthService from '../../../services/bff/auth.service'
 import { tokenFacade } from '../../../stores/token/token.facade'
 import { useNotify } from '../../../stores/notification/notification.selector'
 
@@ -24,11 +24,7 @@ const RegisterForm: React.FC = () => {
         () =>
             z
                 .object({
-                    username: z
-                        .string()
-                        .trim()
-                        .min(1, t('register.error.usernameRequired'))
-                        .min(3, t('register.error.usernameMinLength')),
+                    email: z.email(t('register.error.emailInvalid')),
                     password: z
                         .string()
                         .trim()
@@ -49,8 +45,8 @@ const RegisterForm: React.FC = () => {
         resolver: zodResolver(registerSchema)
     })
 
-    const mutationRegiser = useMutation({
-        mutationFn: (data: RegisterFormData) => AuthService.register(data.username, data.password),
+    const registerMutation = useMutation({
+        mutationFn: (data: RegisterFormData) => AuthService.register(data.email, data.password),
         onSuccess: (data) => {
             notify(t('register.success.registerSuccess'), 'success')
             tokenFacade.login(data.accessToken, data.refreshToken)
@@ -58,8 +54,8 @@ const RegisterForm: React.FC = () => {
                 navigate({ to: '/' })
             }, 500)
         },
-        onError: () => {
-            notify(t('register.error.registerFailed'), 'error')
+        onError: (e) => {
+            notify(e.message ?? t('register.error.registerFailed'), 'error')
         }
     })
 
@@ -75,14 +71,14 @@ const RegisterForm: React.FC = () => {
                 </Typography>
             </Stack>
 
-            <Stack component='form' onSubmit={form.handleSubmit((data) => mutationRegiser.mutate(data))} spacing={2}>
+            <Stack component='form' onSubmit={form.handleSubmit((data) => registerMutation.mutate(data))} spacing={2}>
                 <TextField
-                    {...form.register('username')}
-                    label={t('register.username')}
-                    error={!!form.formState.errors.username}
-                    helperText={form.formState.errors.username?.message || ''}
+                    {...form.register('email')}
+                    label={t('register.email')}
+                    error={!!form.formState.errors.email}
+                    helperText={form.formState.errors.email?.message || ''}
                     fullWidth
-                    autoComplete='username'
+                    autoComplete='email'
                     autoFocus
                     required
                 />
@@ -111,7 +107,7 @@ const RegisterForm: React.FC = () => {
                     type='submit'
                     variant='contained'
                     size='large'
-                    loading={form.formState.isSubmitting || mutationRegiser.isPending}
+                    loading={form.formState.isSubmitting || registerMutation.isPending}
                     fullWidth
                 >
                     {t('register.submit')}
@@ -124,7 +120,7 @@ const RegisterForm: React.FC = () => {
                 </Typography>
                 <Link to='/auth' search={{ mode: 'login' }}>
                     <Typography variant='body2' color='primary'>
-                        {t('register.signIn')}
+                        {t('register.login')}
                     </Typography>
                 </Link>
             </Stack>

@@ -260,9 +260,9 @@ Once installed, you can verify the installation by checking your `package.json` 
 
 ```json
 {
-  "dependencies": {
-    "@tanstack/react-router": "^x.x.x"
-  }
+    "dependencies": {
+        "@tanstack/react-router": "^x.x.x"
+    }
 }
 ```
 
@@ -315,14 +315,14 @@ Using JSX for defining your routes is **out of the question**, as TypeScript wil
 ```tsx
 // ⛔️ This is not possible
 function App() {
-  return (
-    <Router>
-      <Route path="/posts" component={PostsPage} />
-      <Route path="/posts/$postId" component={PostIdPage} />
-      {/* ... */}
-    </Router>
-    // ^? TypeScript cannot infer the routes in this configuration
-  )
+    return (
+        <Router>
+            <Route path='/posts' component={PostsPage} />
+            <Route path='/posts/$postId' component={PostIdPage} />
+            {/* ... */}
+        </Router>
+        // ^? TypeScript cannot infer the routes in this configuration
+    )
 }
 ```
 
@@ -333,17 +333,17 @@ And since this would mean that you'd have to manually type the `to` prop of the 
 ```tsx
 // ⛔️ This file will just keep growing and growing...
 const router = createRouter({
-  routes: {
-    posts: {
-      component: PostsPage, // /posts
-      children: {
-        $postId: {
-          component: PostIdPage, // /posts/$postId
-        },
-      },
-    },
-    // ...
-  },
+    routes: {
+        posts: {
+            component: PostsPage, // /posts
+            children: {
+                $postId: {
+                    component: PostIdPage // /posts/$postId
+                }
+            }
+        }
+        // ...
+    }
 })
 ```
 
@@ -378,11 +378,11 @@ There were two approaches we considered for this:
 ```tsx
 import { router } from '@/src/app'
 export const PostsIdLink = () => {
-  return (
-    <Link<typeof router> to="/posts/$postId" params={{ postId: '123' }}>
-      Go to post 123
-    </Link>
-  )
+    return (
+        <Link<typeof router> to='/posts/$postId' params={{ postId: '123' }}>
+            Go to post 123
+        </Link>
+    )
 }
 ```
 
@@ -395,9 +395,9 @@ You'll do this once in your application.
 ```tsx
 // src/app.tsx
 declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router
-  }
+    interface Register {
+        router: typeof router
+    }
 }
 ```
 
@@ -405,15 +405,15 @@ And then you can benefit from its auto-complete anywhere in your app without hav
 
 ```tsx
 export const PostsIdLink = () => {
-  return (
-    <Link
-      to="/posts/$postId"
-      // ^? TypeScript will auto-complete this for you
-      params={{ postId: '123' }} // and this too!
-    >
-      Go to post 123
-    </Link>
-  )
+    return (
+        <Link
+            to='/posts/$postId'
+            // ^? TypeScript will auto-complete this for you
+            params={{ postId: '123' }} // and this too!
+        >
+            Go to post 123
+        </Link>
+    )
 }
 ```
 
@@ -439,8 +439,8 @@ import { createRoute } from '@tanstack/react-router'
 import { postsRoute } from './postsRoute'
 
 export const postsIndexRoute = createRoute({
-  getParentRoute: () => postsRoute,
-  path: '/',
+    getParentRoute: () => postsRoute,
+    path: '/'
 })
 ```
 
@@ -453,9 +453,7 @@ But this is only one part of setting up a basic application. TanStack Router req
 > 🤯 If this route-tree were in its own file for an application with ~40-50 routes, it can easily grow up to 700+ lines.
 
 ```tsx
-const routeTree = rootRoute.addChildren([
-  postsRoute.addChildren([postsIndexRoute, postsIdRoute]),
-])
+const routeTree = rootRoute.addChildren([postsRoute.addChildren([postsIndexRoute, postsIdRoute])])
 ```
 
 This complexity only increases as you begin to use more features of the router, such as nested context, loaders, search param validation, etc. As such, it no longer becomes feasible to define your routes in a single file. And so, users end up building their own _semi consistent_ way of defining their routes across multiple files. This can lead to inconsistencies and errors in the route configuration.
@@ -467,9 +465,9 @@ import { createRoute, lazyRouteComponent } from '@tanstack/react-router'
 import { postsRoute } from './postsRoute'
 
 export const postsIndexRoute = createRoute({
-  getParentRoute: () => postsRoute,
-  path: '/',
-  component: lazyRouteComponent(() => import('../page-components/posts/index')),
+    getParentRoute: () => postsRoute,
+    path: '/',
+    component: lazyRouteComponent(() => import('../page-components/posts/index'))
 })
 ```
 
@@ -494,7 +492,7 @@ Let's take a look at how the route configuration for the previous example would 
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/posts/')({
-  component: () => 'Posts index component goes here!!!',
+    component: () => 'Posts index component goes here!!!'
 })
 ```
 
@@ -558,24 +556,24 @@ The easiest way for the devtools to work is to render them inside of your root r
 
 ```tsx
 const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
+    component: () => (
+        <>
+            <Outlet />
+            <TanStackRouterDevtools />
+        </>
+    )
 })
 
 const routeTree = rootRoute.addChildren([
-  // ... other routes
+    // ... other routes
 ])
 
 const router = createRouter({
-  routeTree,
+    routeTree
 })
 
 function App() {
-  return <RouterProvider router={router} />
+    return <RouterProvider router={router} />
 }
 ```
 
@@ -585,12 +583,12 @@ If rendering the devtools inside of the `RouterProvider` isn't your cup of tea, 
 
 ```tsx
 function App() {
-  return (
-    <>
-      <RouterProvider router={router} />
-      <TanStackRouterDevtools router={router} />
-    </>
-  )
+    return (
+        <>
+            <RouterProvider router={router} />
+            <TanStackRouterDevtools router={router} />
+        </>
+    )
 }
 ```
 
@@ -604,37 +602,37 @@ Place the following code as high in your React app as you can. The closer it is 
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 function App() {
-  return (
-    <>
-      <Router />
-      <TanStackRouterDevtools initialIsOpen={false} />
-    </>
-  )
+    return (
+        <>
+            <Router />
+            <TanStackRouterDevtools initialIsOpen={false} />
+        </>
+    )
 }
 ```
 
 ### Devtools Options
 
 - `router: Router`
-  - The router instance to connect to.
+    - The router instance to connect to.
 - `initialIsOpen: Boolean`
-  - Set this `true` if you want the devtools to default to being open.
+    - Set this `true` if you want the devtools to default to being open.
 - `panelProps: PropsObject`
-  - Use this to add props to the panel. For example, you can add `className`, `style` (merge and override default style), etc.
+    - Use this to add props to the panel. For example, you can add `className`, `style` (merge and override default style), etc.
 - `closeButtonProps: PropsObject`
-  - Use this to add props to the close button. For example, you can add `className`, `style` (merge and override default style), `onClick` (extend default handler), etc.
+    - Use this to add props to the close button. For example, you can add `className`, `style` (merge and override default style), `onClick` (extend default handler), etc.
 - `toggleButtonProps: PropsObject`
-  - Use this to add props to the toggle button. For example, you can add `className`, `style` (merge and override default style), `onClick` (extend default handler), etc.
+    - Use this to add props to the toggle button. For example, you can add `className`, `style` (merge and override default style), `onClick` (extend default handler), etc.
 - `position?: "top-left" | "top-right" | "bottom-left" | "bottom-right"`
-  - Defaults to `bottom-left`.
-  - The position of the TanStack Router logo to open and close the devtools panel.
+    - Defaults to `bottom-left`.
+    - The position of the TanStack Router logo to open and close the devtools panel.
 - `shadowDOMTarget?: ShadowRoot`
-  - Specifies a Shadow DOM target for the devtools.
-  - By default, devtool styles are applied to the `<head>` tag of the main document (light DOM). When a `shadowDOMTarget` is provided, styles will be applied within this Shadow DOM instead.
+    - Specifies a Shadow DOM target for the devtools.
+    - By default, devtool styles are applied to the `<head>` tag of the main document (light DOM). When a `shadowDOMTarget` is provided, styles will be applied within this Shadow DOM instead.
 - `containerElement?: string | any`
-  - Use this to render the devtools inside a different type of container element for ally purposes.
-  - Any string which corresponds to a valid intrinsic JSX element is allowed.
-  - Defaults to 'footer'.
+    - Use this to render the devtools inside a different type of container element for ally purposes.
+    - Any string which corresponds to a valid intrinsic JSX element is allowed.
+    - Defaults to 'footer'.
 
 ## Fixed Mode
 
@@ -647,10 +645,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 It can then be attached to provided shadow DOM target:
 
 ```js
-<TanStackRouterDevtoolsPanel
-  shadowDOMTarget={shadowContainer}
-  router={router}
-/>
+<TanStackRouterDevtoolsPanel shadowDOMTarget={shadowContainer} router={router} />
 ```
 
 Click [here](https://tanstack.com/router/latest/docs/framework/react/examples/basic-devtools-panel) to see a live example of this in StackBlitz.
@@ -663,36 +658,32 @@ Embedded Mode will embed the devtools as a regular component in your application
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 function App() {
-  return (
-    <>
-      <Router router={router} />
-      <TanStackRouterDevtoolsPanel
-        router={router}
-        style={styles}
-        className={className}
-      />
-    </>
-  )
+    return (
+        <>
+            <Router router={router} />
+            <TanStackRouterDevtoolsPanel router={router} style={styles} className={className} />
+        </>
+    )
 }
 ```
 
 ### DevtoolsPanel Options
 
 - `router: Router`
-  - The router instance to connect to.
+    - The router instance to connect to.
 - `style: StyleObject`
-  - The standard React style object used to style a component with inline styles.
+    - The standard React style object used to style a component with inline styles.
 - `className: string`
-  - The standard React className property used to style a component with classes.
+    - The standard React className property used to style a component with classes.
 - `isOpen?: boolean`
-  - A boolean variable indicating whether the panel is open or closed.
+    - A boolean variable indicating whether the panel is open or closed.
 - `setIsOpen?: (isOpen: boolean) => void`
-  - A function that toggles the open and close state of the panel.
+    - A function that toggles the open and close state of the panel.
 - `handleDragStart?: (e: any) => void`
-  - Handles the opening and closing the devtools panel.
+    - Handles the opening and closing the devtools panel.
 - `shadowDOMTarget?: ShadowRoot`
-  - Specifies a Shadow DOM target for the devtools.
-  - By default, devtool styles are applied to the `<head>` tag of the main document (light DOM). When a `shadowDOMTarget` is provided, styles will be applied within this Shadow DOM instead.
+    - Specifies a Shadow DOM target for the devtools.
+    - By default, devtool styles are applied to the `<head>` tag of the main document (light DOM). When a `shadowDOMTarget` is provided, styles will be applied within this Shadow DOM instead.
 
 # Frequently Asked Questions
 
@@ -735,27 +726,26 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { isAuthenticated } from '../utils/auth'
 
 export const Route = createFileRoute('/_pathless-layout', {
-  beforeLoad: async () => {
-    // Check if the user is authenticated
-    const authed = await isAuthenticated()
-    if (!authed) {
-      // Redirect the user to the login page
-      return '/login'
-    }
-  },
-  component: PathlessLayoutRouteComponent,
-  // ...
+    beforeLoad: async () => {
+        // Check if the user is authenticated
+        const authed = await isAuthenticated()
+        if (!authed) {
+            // Redirect the user to the login page
+            return '/login'
+        }
+    },
+    component: PathlessLayoutRouteComponent
+    // ...
 })
 
 function PathlessLayoutRouteComponent() {
-  return (
-    <div>
-      <h1>You are authed</h1>
-      <Outlet />
-    </div>
-  )
+    return (
+        <div>
+            <h1>You are authed</h1>
+            <Outlet />
+        </div>
+    )
 }
 ```
 
 </details>
-

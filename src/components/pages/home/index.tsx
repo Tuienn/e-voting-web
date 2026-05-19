@@ -1,10 +1,11 @@
 import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
 
 const HomePage: React.FC = () => {
     return (
-        <div>
+        <Container>
             <Button variant='contained'>Click me</Button>
-        </div>
+        </Container>
     )
 }
 

@@ -23,12 +23,16 @@ import { useTranslation } from 'react-i18next'
 import ThemeSwitch from '../../common/setting/ThemeSwitch'
 import LanguageSelector from '../../common/setting/LanguageSelector'
 import ThemeColorSelector from '../../common/setting/ThemeColorSelector'
+import { useClearUser } from '../../../stores/auth/auth.selector'
+import { useMutation } from '@tanstack/react-query'
+import AuthService from '../../../services/bff/auth.service'
 
 const PersonalPage: React.FC = () => {
     const { t } = useTranslation('personal')
     const navigate = useNavigate()
     const notify = useNotify()
     const [showLogoutDialog, setShowLogoutDialog] = useState(false)
+    const clearUser = useClearUser()
 
     // TODO: Replace with real user data from API/store
     const user = {
@@ -41,12 +45,19 @@ const PersonalPage: React.FC = () => {
         setShowLogoutDialog(true)
     }
 
-    const handleConfirmLogout = () => {
-        tokenFacade.logout()
-        notify(t('logout.success'), 'success')
-        navigate({ to: '/' })
-        setShowLogoutDialog(false)
-    }
+    const logoutMutation = useMutation({
+        mutationFn: async () => {
+            const refreshToken = tokenFacade.getRefreshToken()
+            await AuthService.signOut(refreshToken!)
+        },
+        onSuccess: () => {
+            tokenFacade.logout()
+            clearUser()
+            notify(t('logout.success'), 'success')
+            navigate({ to: '/' })
+            setShowLogoutDialog(false)
+        }
+    })
 
     return (
         <Container maxWidth='lg' className='children-main-layout'>
@@ -115,9 +126,10 @@ const PersonalPage: React.FC = () => {
             <AlertDialog
                 open={showLogoutDialog}
                 onClose={() => setShowLogoutDialog(false)}
-                onOk={handleConfirmLogout}
+                onOk={logoutMutation.mutate}
                 title={t('logout.confirmTitle')}
                 description={t('logout.confirmMessage')}
+                loading={logoutMutation.isPending}
             />
         </Container>
     )

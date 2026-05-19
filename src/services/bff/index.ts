@@ -1,20 +1,20 @@
-import { API_URL } from '../../constants/env.config'
+import { BFF_API_URL } from '../../constants/env.config'
 import { tokenFacade } from '../../stores/token/token.facade'
 import axios from 'axios'
 
-const REFRESH_PATH = '/auth/refresh-token'
-const LOGIN_PATH = '/auth/login'
+const REFRESH_PATH = '/identity/auth/refresh-token'
+const LOGIN_PATH = '/identity/auth/sign-in'
 
 const API = axios.create({
-    baseURL: API_URL,
+    baseURL: BFF_API_URL,
     headers: {
-        Accept: 'application/json',
-        'ngrok-skip-browser-warning': 'true'
+        Accept: 'application/json'
     }
 })
 
-export const ginApiService = async <T = any>(url: string, options?: RequestInit, _retried = false): Promise<T> => {
+export const bffApiService = async <T = any>(url: string, options?: RequestInit, _retried = false): Promise<T> => {
     const token = tokenFacade.getAccessToken()
+    const method = options?.method || 'GET'
 
     // Prepare headers
     const headers: Record<string, string> = {
@@ -29,7 +29,7 @@ export const ginApiService = async <T = any>(url: string, options?: RequestInit,
 
     try {
         const response = await API.request({
-            url: `/v1/api${url}`,
+            url: `/api/v1${url}`,
             method: (options?.method as any) || 'GET',
             headers,
             data:
@@ -59,13 +59,15 @@ export const ginApiService = async <T = any>(url: string, options?: RequestInit,
             const refreshToken = tokenFacade.getRefreshToken()
             if (!refreshToken) {
                 tokenFacade.logout()
-                throw new Error('Phiên đăng nhập đã hết hạn (không có refresh token).')
+                const message = data?.message || 'Refresh token is required'
+                console.error(`${method} ${url}: ${message}`)
+                throw new Error(message)
             }
 
             try {
                 // Gọi refresh (KHÔNG gửi Authorization)
                 const refreshResponse = await API.request({
-                    url: `/v1/api${REFRESH_PATH}`,
+                    url: `/api/v1${REFRESH_PATH}`,
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -85,20 +87,23 @@ export const ginApiService = async <T = any>(url: string, options?: RequestInit,
                 tokenFacade.login(refreshData.data.accessToken, refreshData.data.refreshToken)
 
                 // Retry lại request gốc đúng 1 lần với token mới
-                return ginApiService<T>(url, options, true)
+                return bffApiService<T>(url, options, true)
             } catch (refreshError) {
                 tokenFacade.logout()
-                throw new Error(
-                    axios.isAxiosError(refreshError)
-                        ? refreshError.response?.data?.message ||
-                              `Refresh token thất bại (HTTP ${refreshError.response?.status})`
-                        : 'Refresh token thất bại'
-                )
+                const refreshMessage = axios.isAxiosError(refreshError)
+                    ? refreshError.response?.data?.message ||
+                      `Refresh token thất bại (HTTP ${refreshError.response?.status})`
+                    : refreshError instanceof Error
+                      ? refreshError.message
+                      : 'Refresh token thất bại'
+                console.error(`${method} ${url}: ${refreshMessage}`)
+                throw new Error(refreshMessage)
             }
         }
 
         // Các lỗi khác: ném message hợp lý
         const message = data?.message || error.message || `HTTP ${status || 'Unknown'}`
+        console.error(`${method} ${url}: ${message}`)
         throw new Error(message)
     }
 }

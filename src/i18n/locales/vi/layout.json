@@ -2,11 +2,16 @@
     "home": "Trang chủ",
     "personal": "Cá nhân",
     "login": "Đăng nhập",
-    "deposit": "Nạp tiền",
-    "withdraw": "Rút tiền",
+    "signOut": "Đăng xuất",
     "notFound": {
         "title": "Không tìm thấy trang",
         "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.",
+        "homeButton": "Về trang chủ",
+        "backButton": "Quay lại"
+    },
+    "forbidden": {
+        "title": "Truy cập bị từ chối",
+        "description": "Bạn không có quyền truy cập trang này.",
         "homeButton": "Về trang chủ",
         "backButton": "Quay lại"
     },
