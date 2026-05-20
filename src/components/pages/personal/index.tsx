@@ -45,7 +45,7 @@ const PersonalPage: React.FC = () => {
         setShowLogoutDialog(true)
     }
 
-    const logoutMutation = useMutation({
+    const mutateLogout = useMutation({
         mutationFn: async () => {
             const refreshToken = tokenFacade.getRefreshToken()
             await AuthService.signOut(refreshToken!)
@@ -126,10 +126,10 @@ const PersonalPage: React.FC = () => {
             <AlertDialog
                 open={showLogoutDialog}
                 onClose={() => setShowLogoutDialog(false)}
-                onOk={logoutMutation.mutate}
+                onOk={mutateLogout.mutate}
                 title={t('logout.confirmTitle')}
                 description={t('logout.confirmMessage')}
-                loading={logoutMutation.isPending}
+                loading={mutateLogout.isPending}
             />
         </Container>
     )

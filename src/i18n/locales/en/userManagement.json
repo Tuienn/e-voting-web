@@ -4,5 +4,63 @@
         "addUser": "Add user",
         "importExcel": "Import from Excel",
         "importExcelTooltip": "Import users from an Excel file with format:  email, password, name, role (optional)."
+    },
+    "filter": {
+        "email": "Email",
+        "name": "Name",
+        "role": "Role",
+        "roleOptions": {
+            "admin": "Admin",
+            "voter": "Voter",
+            "candidate": "Candidate"
+        },
+        "status": "Status",
+        "statusOptions": {
+            "active": "Active",
+            "inactive": "Inactive"
+        }
+    },
+    "table": {
+        "email": "Email",
+        "name": "Name",
+        "role": "Role",
+        "status": "Status",
+        "actions": "Actions",
+        "chip": {
+            "enable": "Click to enable",
+            "disable": "Click to disable"
+        },
+        "selectedUsers": "{{count}} users selected"
+    },
+    "query": {
+        "fetchUsersError": "Failed to fetch users",
+        "fetchUserError": "Failed to fetch user"
+    },
+    "mutate": {
+        "disableUserSuccess": "Disable user successfully",
+        "disableUserError": "Disable user failed",
+        "enableUserSuccess": "Enable user successfully",
+        "enableUserError": "Enable user failed",
+        "createUserSuccess": "Create user successfully",
+        "createUserError": "Create user failed",
+        "updateUserSuccess": "Update user successfully",
+        "updateUserError": "Update user failed"
+    },
+    "drawer": {
+        "editUserTitle": "Edit user",
+        "addUserTitle": "Add user",
+        "email": "Email",
+        "name": "Name",
+        "password": "Password",
+        "role": "Role",
+        "reset": "Reload",
+        "update": "Update",
+        "create": "Create",
+        "validation": {
+            "emailInvalid": "Email is invalid",
+            "nameMinLength": "Name must be at least 2 characters",
+            "passwordRequired": "Password is required",
+            "passwordMinLength": "Password must be at least 6 characters"
+        }
     }
 }

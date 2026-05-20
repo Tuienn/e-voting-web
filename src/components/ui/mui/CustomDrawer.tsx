@@ -21,7 +21,7 @@ const CustomDrawer: React.FC<Props> = (props) => {
         <Drawer open={props.open} onClose={props.onClose} anchor={breakpoint.md ? 'right' : 'bottom'}>
             <Box
                 p={2}
-                minWidth={300}
+                minWidth={400}
                 minHeight={300}
                 overflow={'auto'}
                 maxHeight={breakpoint.md ? '100vh' : '50vh'}

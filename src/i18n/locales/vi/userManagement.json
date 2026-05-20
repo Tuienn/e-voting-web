@@ -4,5 +4,63 @@
         "addUser": "Thêm người dùng",
         "importExcel": "Nhập từ Excel",
         "importExcelTooltip": "Nhập người dùng từ một tệp Excel với định dạng: email, mật khẩu, tên, vai trò (tùy chọn)."
+    },
+    "filter": {
+        "email": "Email",
+        "name": "Tên",
+        "role": "Vai trò",
+        "roleOptions": {
+            "admin": "Quản trị viên",
+            "voter": "Cử tri",
+            "candidate": "Ứng cử viên"
+        },
+        "status": "Trạng thái",
+        "statusOptions": {
+            "active": "Hoạt động",
+            "inactive": "Không hoạt động"
+        }
+    },
+    "table": {
+        "email": "Email",
+        "name": "Tên",
+        "role": "Vai trò",
+        "status": "Trạng thái",
+        "actions": "Hành động",
+        "chip": {
+            "enable": "Nhấn để kích hoạt",
+            "disable": "Nhấn để vô hiệu hóa"
+        },
+        "selectedUsers": "{{count}} người dùng được chọn"
+    },
+    "query": {
+        "fetchUsersError": "Tải danh sách người dùng thất bại",
+        "fetchUserError": "Tải thông tin người dùng thất bại"
+    },
+    "mutate": {
+        "disableUserSuccess": "Vô hiệu hóa người dùng thành công",
+        "disableUserError": "Vô hiệu hóa người dùng thất bại",
+        "enableUserSuccess": "Kích hoạt người dùng thành công",
+        "enableUserError": "Kích hoạt người dùng thất bại",
+        "createUserSuccess": "Tạo người dùng thành công",
+        "createUserError": "Tạo người dùng thất bại",
+        "updateUserSuccess": "Cập nhật người dùng thành công",
+        "updateUserError": "Cập nhật người dùng thất bại"
+    },
+    "drawer": {
+        "editUserTitle": "Chỉnh sửa người dùng",
+        "addUserTitle": "Thêm người dùng",
+        "email": "Email",
+        "name": "Tên",
+        "password": "Mật khẩu",
+        "role": "Vai trò",
+        "reset": "Tải lại",
+        "update": "Cập nhật",
+        "create": "Tạo mới",
+        "validation": {
+            "emailInvalid": "Email không hợp lệ",
+            "nameMinLength": "Tên phải có ít nhất 2 ký tự",
+            "passwordRequired": "Vui lòng nhập mật khẩu",
+            "passwordMinLength": "Mật khẩu phải có ít nhất 6 ký tự"
+        }
     }
 }

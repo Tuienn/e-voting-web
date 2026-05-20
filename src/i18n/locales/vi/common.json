@@ -4,5 +4,14 @@
         "confirm": "Xác nhận",
         "ok": "Đồng ý",
         "close": "Đóng"
+    },
+    "filter": {
+        "title": "Bộ lọc",
+        "reset": "Đặt lại",
+        "search": "Tìm kiếm"
+    },
+    "customTable": {
+        "rowsPerPage": "Số hàng mỗi trang",
+        "selectedItems": "Đã chọn {{count}} mục"
     }
 }

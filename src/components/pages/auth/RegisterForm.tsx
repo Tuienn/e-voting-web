@@ -46,7 +46,7 @@ const RegisterForm: React.FC = () => {
         resolver: zodResolver(registerSchema)
     })
 
-    const registerMutation = useMutation({
+    const mutateRegister = useMutation({
         mutationFn: (data: RegisterFormData) => AuthService.register(data.email, data.password),
         onSuccess: (data) => {
             notify(t('register.success.registerSuccess'), 'success')
@@ -72,7 +72,7 @@ const RegisterForm: React.FC = () => {
                 </Typography>
             </Stack>
 
-            <Stack component='form' onSubmit={form.handleSubmit((data) => registerMutation.mutate(data))} spacing={2}>
+            <Stack component='form' onSubmit={form.handleSubmit((data) => mutateRegister.mutate(data))} spacing={2}>
                 <TextField
                     {...form.register('email')}
                     label={t('register.email')}
@@ -108,7 +108,7 @@ const RegisterForm: React.FC = () => {
                     type='submit'
                     variant='contained'
                     size='large'
-                    loading={form.formState.isSubmitting || registerMutation.isPending}
+                    loading={form.formState.isSubmitting || mutateRegister.isPending}
                     fullWidth
                     startIcon={<SendIcon />}
                 >

@@ -58,9 +58,17 @@ export const bffApiService = async <T = any>(url: string, options?: RequestInit,
             !url.startsWith(REFRESH_PATH) &&
             !url.startsWith(LOGIN_PATH)
         ) {
+            console.warn(`${method} ${url} returned ${status}. Attempting to refresh token...`)
             const refreshToken = tokenFacade.getRefreshToken()
             if (!refreshToken) {
                 tokenFacade.logout()
+                useAuthStore.getState().clearUser()
+                redirect({
+                    to: '/auth',
+                    search: {
+                        mode: 'login'
+                    }
+                })
                 const message = data?.message || 'Refresh token is required'
                 console.error(`${method} ${url}: ${message}`)
                 throw new Error(message)
@@ -84,7 +92,12 @@ export const bffApiService = async <T = any>(url: string, options?: RequestInit,
                     //NOTE - Nếu refresh không trả về accessToken mới thì logout luôn (tránh vòng lặp refresh)
                     tokenFacade.logout()
                     useAuthStore.getState().clearUser()
-                    redirect({ to: '/auth' })
+                    redirect({
+                        to: '/auth',
+                        search: {
+                            mode: 'login'
+                        }
+                    })
                     throw new Error(refreshData?.message || 'Refresh token thất bại')
                 }
 
