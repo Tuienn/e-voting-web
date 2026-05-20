@@ -28,7 +28,7 @@ const MainLayout: React.FC<Props> = (props) => {
 
     return (
         <Box>
-            {(breakpoint.md || ['/', '/personal'].includes(activeHrefTo)) && (
+            {['/', '/personal', '/user-management', '/election-management'].includes(activeHrefTo) && (
                 <TopNavbar items={navbarItems} activeHrefTo={activeHrefTo} />
             )}
             {props.children}
