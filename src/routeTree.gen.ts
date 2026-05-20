@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutUserManagementRouteImport } from './routes/_layout/user-management'
 import { Route as LayoutPersonalRouteImport } from './routes/_layout/personal'
+import { Route as LayoutElectionManagementRouteImport } from './routes/_layout/election-management'
 
 const AuthRoute = AuthRouteImport.update({
     id: '/auth',
@@ -28,35 +30,58 @@ const LayoutIndexRoute = LayoutIndexRouteImport.update({
     path: '/',
     getParentRoute: () => LayoutRoute
 } as any)
+const LayoutUserManagementRoute = LayoutUserManagementRouteImport.update({
+    id: '/user-management',
+    path: '/user-management',
+    getParentRoute: () => LayoutRoute
+} as any)
 const LayoutPersonalRoute = LayoutPersonalRouteImport.update({
     id: '/personal',
     path: '/personal',
+    getParentRoute: () => LayoutRoute
+} as any)
+const LayoutElectionManagementRoute = LayoutElectionManagementRouteImport.update({
+    id: '/election-management',
+    path: '/election-management',
     getParentRoute: () => LayoutRoute
 } as any)
 
 export interface FileRoutesByFullPath {
     '/': typeof LayoutIndexRoute
     '/auth': typeof AuthRoute
+    '/election-management': typeof LayoutElectionManagementRoute
     '/personal': typeof LayoutPersonalRoute
+    '/user-management': typeof LayoutUserManagementRoute
 }
 export interface FileRoutesByTo {
     '/auth': typeof AuthRoute
+    '/election-management': typeof LayoutElectionManagementRoute
     '/personal': typeof LayoutPersonalRoute
+    '/user-management': typeof LayoutUserManagementRoute
     '/': typeof LayoutIndexRoute
 }
 export interface FileRoutesById {
     __root__: typeof rootRouteImport
     '/_layout': typeof LayoutRouteWithChildren
     '/auth': typeof AuthRoute
+    '/_layout/election-management': typeof LayoutElectionManagementRoute
     '/_layout/personal': typeof LayoutPersonalRoute
+    '/_layout/user-management': typeof LayoutUserManagementRoute
     '/_layout/': typeof LayoutIndexRoute
 }
 export interface FileRouteTypes {
     fileRoutesByFullPath: FileRoutesByFullPath
-    fullPaths: '/' | '/auth' | '/personal'
+    fullPaths: '/' | '/auth' | '/election-management' | '/personal' | '/user-management'
     fileRoutesByTo: FileRoutesByTo
-    to: '/auth' | '/personal' | '/'
-    id: '__root__' | '/_layout' | '/auth' | '/_layout/personal' | '/_layout/'
+    to: '/auth' | '/election-management' | '/personal' | '/user-management' | '/'
+    id:
+        | '__root__'
+        | '/_layout'
+        | '/auth'
+        | '/_layout/election-management'
+        | '/_layout/personal'
+        | '/_layout/user-management'
+        | '/_layout/'
     fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,6 +112,13 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof LayoutIndexRouteImport
             parentRoute: typeof LayoutRoute
         }
+        '/_layout/user-management': {
+            id: '/_layout/user-management'
+            path: '/user-management'
+            fullPath: '/user-management'
+            preLoaderRoute: typeof LayoutUserManagementRouteImport
+            parentRoute: typeof LayoutRoute
+        }
         '/_layout/personal': {
             id: '/_layout/personal'
             path: '/personal'
@@ -94,16 +126,27 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof LayoutPersonalRouteImport
             parentRoute: typeof LayoutRoute
         }
+        '/_layout/election-management': {
+            id: '/_layout/election-management'
+            path: '/election-management'
+            fullPath: '/election-management'
+            preLoaderRoute: typeof LayoutElectionManagementRouteImport
+            parentRoute: typeof LayoutRoute
+        }
     }
 }
 
 interface LayoutRouteChildren {
+    LayoutElectionManagementRoute: typeof LayoutElectionManagementRoute
     LayoutPersonalRoute: typeof LayoutPersonalRoute
+    LayoutUserManagementRoute: typeof LayoutUserManagementRoute
     LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+    LayoutElectionManagementRoute: LayoutElectionManagementRoute,
     LayoutPersonalRoute: LayoutPersonalRoute,
+    LayoutUserManagementRoute: LayoutUserManagementRoute,
     LayoutIndexRoute: LayoutIndexRoute
 }
 

@@ -1,0 +1,8 @@
+{
+    "title": "User management",
+    "headerActions": {
+        "addUser": "Add user",
+        "importExcel": "Import from Excel",
+        "importExcelTooltip": "Import users from an Excel file with format:  email, password, name, role (optional)."
+    }
+}

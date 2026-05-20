@@ -1,0 +1,8 @@
+{
+    "title": "Quản lý người dùng",
+    "headerActions": {
+        "addUser": "Thêm người dùng",
+        "importExcel": "Nhập từ Excel",
+        "importExcelTooltip": "Nhập người dùng từ một tệp Excel với định dạng: email, mật khẩu, tên, vai trò (tùy chọn)."
+    }
+}

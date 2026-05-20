@@ -14,6 +14,7 @@ import { useMutation } from '@tanstack/react-query'
 import AuthService from '../../../services/bff/auth.service'
 import { tokenFacade } from '../../../stores/token/token.facade'
 import { useNotify } from '../../../stores/notification/notification.selector'
+import SendIcon from '@mui/icons-material/Send'
 
 const RegisterForm: React.FC = () => {
     const { t } = useTranslation('auth')
@@ -109,6 +110,7 @@ const RegisterForm: React.FC = () => {
                     size='large'
                     loading={form.formState.isSubmitting || registerMutation.isPending}
                     fullWidth
+                    startIcon={<SendIcon />}
                 >
                     {t('register.submit')}
                 </Button>

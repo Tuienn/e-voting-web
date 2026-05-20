@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next'
 import HomeIcon from '@mui/icons-material/Home'
 import { useLocation } from '@tanstack/react-router'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
+import HowToVoteIcon from '@mui/icons-material/HowToVote'
 
 interface Props {
     children: ReactNode
@@ -18,7 +20,11 @@ const MainLayout: React.FC<Props> = (props) => {
     const location = useLocation()
     const activeHrefTo = location.pathname
 
-    const navbarItems: INavbarItem[] = [{ label: t('home'), hrefTo: '/', icon: <HomeIcon /> }]
+    const navbarItems: INavbarItem[] = [
+        { label: t('home'), hrefTo: '/', icon: <HomeIcon /> },
+        { label: t('userManagement'), hrefTo: '/user-management', icon: <PeopleAltIcon /> },
+        { label: t('electionManagement'), hrefTo: '/election-management', icon: <HowToVoteIcon /> }
+    ]
 
     return (
         <Box>

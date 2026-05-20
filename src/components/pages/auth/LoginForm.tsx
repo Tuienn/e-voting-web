@@ -15,6 +15,7 @@ import AuthService from '../../../services/bff/auth.service'
 import { tokenFacade } from '../../../stores/token/token.facade'
 import { useNotify } from '../../../stores/notification/notification.selector'
 import { useSetUser } from '../../../stores/auth/auth.selector'
+import LoginIcon from '@mui/icons-material/Login'
 
 const LoginForm: React.FC = () => {
     const { t } = useTranslation('auth')
@@ -90,6 +91,7 @@ const LoginForm: React.FC = () => {
                     size='large'
                     loading={form.formState.isSubmitting || loginMutation.isPending}
                     fullWidth
+                    startIcon={<LoginIcon />}
                 >
                     {t('login.submit')}
                 </Button>
