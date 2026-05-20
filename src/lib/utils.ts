@@ -6,3 +6,11 @@ export const queryString = (params: Record<string, any>): string => {
 
     return query ? `?${query}` : ''
 }
+
+export function removeEmptyValues<T extends Record<string, any>>(obj: T) {
+    return Object.fromEntries(
+        Object.entries(obj).filter(([_, value]) => {
+            return value !== undefined && value !== null && value !== ''
+        })
+    ) as Partial<T>
+}

@@ -9,11 +9,12 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Logo from '../../../assets/svg/icons/logo.svg?react'
-import PasswordInput from '../../common/mui/PasswordInput'
+import PasswordInput from '../../ui/mui/PasswordInput'
 import { useMutation } from '@tanstack/react-query'
 import AuthService from '../../../services/bff/auth.service'
 import { tokenFacade } from '../../../stores/token/token.facade'
 import { useNotify } from '../../../stores/notification/notification.selector'
+import SendIcon from '@mui/icons-material/Send'
 
 const RegisterForm: React.FC = () => {
     const { t } = useTranslation('auth')
@@ -45,7 +46,7 @@ const RegisterForm: React.FC = () => {
         resolver: zodResolver(registerSchema)
     })
 
-    const registerMutation = useMutation({
+    const mutateRegister = useMutation({
         mutationFn: (data: RegisterFormData) => AuthService.register(data.email, data.password),
         onSuccess: (data) => {
             notify(t('register.success.registerSuccess'), 'success')
@@ -71,7 +72,7 @@ const RegisterForm: React.FC = () => {
                 </Typography>
             </Stack>
 
-            <Stack component='form' onSubmit={form.handleSubmit((data) => registerMutation.mutate(data))} spacing={2}>
+            <Stack component='form' onSubmit={form.handleSubmit((data) => mutateRegister.mutate(data))} spacing={2}>
                 <TextField
                     {...form.register('email')}
                     label={t('register.email')}
@@ -107,8 +108,9 @@ const RegisterForm: React.FC = () => {
                     type='submit'
                     variant='contained'
                     size='large'
-                    loading={form.formState.isSubmitting || registerMutation.isPending}
+                    loading={form.formState.isSubmitting || mutateRegister.isPending}
                     fullWidth
+                    startIcon={<SendIcon />}
                 >
                     {t('register.submit')}
                 </Button>

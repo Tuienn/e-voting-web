@@ -5,7 +5,7 @@ import { useAuthStore } from '../stores/auth/auth.store'
 import AuthService from '../services/bff/auth.service'
 
 const authSearchSchema = z.object({
-    mode: z.enum(['login', 'register']).optional().default('login')
+    mode: z.enum(['login', 'register']).catch('login')
 })
 
 export const Route = createFileRoute('/auth')({

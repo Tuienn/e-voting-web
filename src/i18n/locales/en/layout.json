@@ -1,6 +1,8 @@
 {
     "home": "Home",
     "personal": "Personal",
+    "electionManagement": "Election",
+    "userManagement": "User",
     "login": "Login",
     "signOut": "Sign out",
     "notFound": {

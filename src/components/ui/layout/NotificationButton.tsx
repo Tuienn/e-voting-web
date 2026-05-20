@@ -9,8 +9,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import Circle from '@mui/icons-material/Circle'
-import CustomPopover from '../../common/mui/CustomPopover'
-import { useTranslation } from 'react-i18next'
+import CustomPopover from '../mui/CustomPopover'
 
 interface INotification {
     id: string
@@ -21,8 +20,6 @@ interface INotification {
 }
 
 const NotificationButton: React.FC = () => {
-    const { t } = useTranslation('layout')
-
     // Mock data
     const notifications: INotification[] = [
         {
@@ -69,14 +66,6 @@ const NotificationButton: React.FC = () => {
             }}
             openContent={(close) => (
                 <Box sx={{ width: { xs: 320, sm: 400 }, maxHeight: 500 }}>
-                    <Box px={2} py={1}>
-                        <Typography variant='h6' fontWeight='bold'>
-                            {t('notifications.title')}
-                        </Typography>
-                    </Box>
-
-                    <Divider />
-
                     <List sx={{ p: 0 }}>
                         {notifications.map((notification, index) => (
                             <Box key={notification.id}>

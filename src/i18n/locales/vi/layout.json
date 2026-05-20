@@ -1,6 +1,8 @@
 {
     "home": "Trang chủ",
     "personal": "Cá nhân",
+    "electionManagement": "Cuộc bầu cử",
+    "userManagement": "Người dùng",
     "login": "Đăng nhập",
     "signOut": "Đăng xuất",
     "notFound": {

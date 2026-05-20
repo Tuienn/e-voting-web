@@ -15,14 +15,14 @@ import Palette from '@mui/icons-material/Palette'
 import InfoUser from './InfoUser'
 import SettingItem from './SettingItem'
 import SettingItemGroup from './SettingItemGroup'
-import AlertDialog from '../../common/mui/AlertDialog'
+import AlertDialog from '../../ui/mui/AlertDialog'
 import { useNavigate } from '@tanstack/react-router'
 import { tokenFacade } from '../../../stores/token/token.facade'
 import { useNotify } from '../../../stores/notification/notification.selector'
 import { useTranslation } from 'react-i18next'
-import ThemeSwitch from '../../common/setting/ThemeSwitch'
-import LanguageSelector from '../../common/setting/LanguageSelector'
-import ThemeColorSelector from '../../common/setting/ThemeColorSelector'
+import ThemeSwitch from '../../ui/setting/ThemeSwitch'
+import LanguageSelector from '../../ui/setting/LanguageSelector'
+import ThemeColorSelector from '../../ui/setting/ThemeColorSelector'
 import { useClearUser } from '../../../stores/auth/auth.selector'
 import { useMutation } from '@tanstack/react-query'
 import AuthService from '../../../services/bff/auth.service'
@@ -45,7 +45,7 @@ const PersonalPage: React.FC = () => {
         setShowLogoutDialog(true)
     }
 
-    const logoutMutation = useMutation({
+    const mutateLogout = useMutation({
         mutationFn: async () => {
             const refreshToken = tokenFacade.getRefreshToken()
             await AuthService.signOut(refreshToken!)
@@ -126,10 +126,10 @@ const PersonalPage: React.FC = () => {
             <AlertDialog
                 open={showLogoutDialog}
                 onClose={() => setShowLogoutDialog(false)}
-                onOk={logoutMutation.mutate}
+                onOk={mutateLogout.mutate}
                 title={t('logout.confirmTitle')}
                 description={t('logout.confirmMessage')}
-                loading={logoutMutation.isPending}
+                loading={mutateLogout.isPending}
             />
         </Container>
     )

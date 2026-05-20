@@ -9,12 +9,13 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Logo from '../../../assets/svg/icons/logo.svg?react'
-import PasswordInput from '../../common/mui/PasswordInput'
+import PasswordInput from '../../ui/mui/PasswordInput'
 import { useMutation } from '@tanstack/react-query'
 import AuthService from '../../../services/bff/auth.service'
 import { tokenFacade } from '../../../stores/token/token.facade'
 import { useNotify } from '../../../stores/notification/notification.selector'
 import { useSetUser } from '../../../stores/auth/auth.selector'
+import LoginIcon from '@mui/icons-material/Login'
 
 const LoginForm: React.FC = () => {
     const { t } = useTranslation('auth')
@@ -37,7 +38,7 @@ const LoginForm: React.FC = () => {
         resolver: zodResolver(loginSchema)
     })
 
-    const loginMutation = useMutation({
+    const mutateLogin = useMutation({
         mutationFn: (data: LoginFormData) => AuthService.login(data.email, data.password),
         onSuccess: (data) => {
             notify(t('login.success.loginSuccess'), 'success')
@@ -62,7 +63,7 @@ const LoginForm: React.FC = () => {
                 </Typography>
             </Stack>
 
-            <Stack component='form' onSubmit={form.handleSubmit((data) => loginMutation.mutate(data))} spacing={2}>
+            <Stack component='form' onSubmit={form.handleSubmit((data) => mutateLogin.mutate(data))} spacing={2}>
                 <TextField
                     {...form.register('email')}
                     label={t('login.email')}
@@ -88,8 +89,9 @@ const LoginForm: React.FC = () => {
                     type='submit'
                     variant='contained'
                     size='large'
-                    loading={form.formState.isSubmitting || loginMutation.isPending}
+                    loading={form.formState.isSubmitting || mutateLogin.isPending}
                     fullWidth
+                    startIcon={<LoginIcon />}
                 >
                     {t('login.submit')}
                 </Button>

@@ -4,5 +4,14 @@
         "confirm": "Confirm",
         "ok": "OK",
         "close": "Close"
+    },
+    "filter": {
+        "title": "Filter",
+        "reset": "Reset",
+        "search": "Search"
+    },
+    "customTable": {
+        "rowsPerPage": "Rows per page",
+        "selectedItems": "{{count}} items selected"
     }
 }
