@@ -9,7 +9,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import Circle from '@mui/icons-material/Circle'
-import CustomPopover from '../../common/mui/CustomPopover'
+import CustomPopover from '../mui/CustomPopover'
 
 interface INotification {
     id: string

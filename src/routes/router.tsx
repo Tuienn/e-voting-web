@@ -1,11 +1,11 @@
 import { createRouter, lazyRouteComponent } from '@tanstack/react-router'
-import SuspendComponent from '../components/common/layout/SuspendComponent'
+import SuspendComponent from '../components/ui/layout/SuspendComponent'
 import { routeTree } from '../routeTree.gen'
 
 export const router = createRouter({
     routeTree,
     defaultPendingComponent: SuspendComponent,
-    defaultNotFoundComponent: lazyRouteComponent(() => import('../components/common/layout/NotFoundPage'))
+    defaultNotFoundComponent: lazyRouteComponent(() => import('../components/ui/layout/NotFoundPage'))
 })
 
 declare module '@tanstack/react-router' {
