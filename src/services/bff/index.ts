@@ -1,6 +1,8 @@
+import { redirect } from '@tanstack/react-router'
 import { BFF_API_URL } from '../../constants/env.config'
 import { tokenFacade } from '../../stores/token/token.facade'
 import axios from 'axios'
+import { useAuthStore } from '../../stores/auth/auth.store'
 
 const REFRESH_PATH = '/identity/auth/refresh-token'
 const LOGIN_PATH = '/identity/auth/sign-in'
@@ -79,7 +81,10 @@ export const bffApiService = async <T = any>(url: string, options?: RequestInit,
                 const refreshData = refreshResponse.data
 
                 if (!refreshData?.data?.accessToken) {
+                    //NOTE - Nếu refresh không trả về accessToken mới thì logout luôn (tránh vòng lặp refresh)
                     tokenFacade.logout()
+                    useAuthStore.getState().clearUser()
+                    redirect({ to: '/auth' })
                     throw new Error(refreshData?.message || 'Refresh token thất bại')
                 }
 
