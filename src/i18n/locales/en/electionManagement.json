@@ -1,3 +1,49 @@
 {
-    "title": "Election management"
+    "title": "Election management",
+    "headerActions": {
+        "createElection": "Create election"
+    },
+    "filter": {
+        "name": "Name",
+        "status": "Status",
+        "startDate": "Start date",
+        "endDate": "End date"
+    },
+    "status": {
+        "pending": "Pending",
+        "active": "Active",
+        "closed": "Closed",
+        "completed": "Completed"
+    },
+    "table": {
+        "name": "Name",
+        "status": "Status",
+        "startDate": "Start date",
+        "endDate": "End date"
+    },
+    "query": {
+        "fetchElectionsError": "Failed to fetch elections"
+    },
+    "mutate": {
+        "createElectionSuccess": "Create election successfully",
+        "createElectionError": "Create election failed",
+        "createElectionPartialError": "Election was created, but adding voters failed: {{message}}",
+        "addToElectionSuccess": "Add voters to election successfully",
+        "addToElectionError": "Add voters to election failed"
+    },
+    "drawer": {
+        "title": "Create election",
+        "name": "Election name",
+        "candidates": "Candidates",
+        "voters": "Voters",
+        "reset": "Reset",
+        "create": "Create",
+        "retryAddVoters": "Retry add voters",
+        "partialCreateWarning": "The election was created, but voters were not added. Review the voter list and retry.",
+        "validation": {
+            "nameMinLength": "Election name must be at least 3 characters",
+            "candidatesRequired": "Select at least 2 candidates",
+            "votersRequired": "Select at least 3 voters"
+        }
+    }
 }

@@ -13,5 +13,6 @@
     "customTable": {
         "rowsPerPage": "Số hàng mỗi trang",
         "selectedItems": "Đã chọn {{count}} mục"
-    }
+    },
+    "autocompleteNoOptions": "Không có lựa chọn"
 }

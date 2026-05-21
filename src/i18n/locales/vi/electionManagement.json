@@ -1,3 +1,49 @@
 {
-    "title": "Quản lý cuộc bầu cử"
+    "title": "Quản lý cuộc bầu cử",
+    "headerActions": {
+        "createElection": "Tạo cuộc bầu cử"
+    },
+    "filter": {
+        "name": "Tên",
+        "status": "Trạng thái",
+        "startDate": "Thời gian bắt đầu",
+        "endDate": "Thời gian kết thúc"
+    },
+    "status": {
+        "pending": "Chờ bắt đầu",
+        "active": "Đang diễn ra",
+        "closed": "Đã đóng",
+        "completed": "Hoàn tất"
+    },
+    "table": {
+        "name": "Tên",
+        "status": "Trạng thái",
+        "startDate": "Thời gian bắt đầu",
+        "endDate": "Thời gian kết thúc"
+    },
+    "query": {
+        "fetchElectionsError": "Tải danh sách cuộc bầu cử thất bại"
+    },
+    "mutate": {
+        "createElectionSuccess": "Tạo cuộc bầu cử thành công",
+        "createElectionError": "Tạo cuộc bầu cử thất bại",
+        "createElectionPartialError": "Cuộc bầu cử đã được tạo, nhưng thêm cử tri thất bại: {{message}}",
+        "addToElectionSuccess": "Thêm cử tri vào cuộc bầu cử thành công",
+        "addToElectionError": "Thêm cử tri vào cuộc bầu cử thất bại"
+    },
+    "drawer": {
+        "title": "Tạo cuộc bầu cử",
+        "name": "Tên cuộc bầu cử",
+        "candidates": "Ứng cử viên",
+        "voters": "Cử tri",
+        "reset": "Đặt lại",
+        "create": "Tạo mới",
+        "retryAddVoters": "Thử thêm cử tri lại",
+        "partialCreateWarning": "Cuộc bầu cử đã được tạo, nhưng cử tri chưa được thêm. Kiểm tra danh sách cử tri rồi thử lại.",
+        "validation": {
+            "nameMinLength": "Tên cuộc bầu cử phải có ít nhất 3 ký tự",
+            "candidatesRequired": "Chọn ít nhất 2 ứng cử viên",
+            "votersRequired": "Chọn ít nhất 3 cử tri"
+        }
+    }
 }

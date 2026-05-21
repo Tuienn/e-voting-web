@@ -30,7 +30,9 @@
             "enable": "Click to enable",
             "disable": "Click to disable"
         },
-        "selectedUsers": "{{count}} users selected"
+        "selectedUsers": "{{count}} users selected",
+        "addToElection": "Add to election",
+        "selectedUsersInvalidWarning": "Some selected users on this page are not active voters"
     },
     "query": {
         "fetchUsersError": "Failed to fetch users",
@@ -44,7 +46,10 @@
         "createUserSuccess": "Create user successfully",
         "createUserError": "Create user failed",
         "updateUserSuccess": "Update user successfully",
-        "updateUserError": "Update user failed"
+        "updateUserError": "Update user failed",
+        "addToElectionSuccess": "Add voters to election successfully",
+        "addToElectionError": "Add voters to election failed",
+        "addToElectionRequired": "Please select an election"
     },
     "drawer": {
         "editUserTitle": "Edit user",
@@ -61,6 +66,13 @@
             "nameMinLength": "Name must be at least 2 characters",
             "passwordRequired": "Password is required",
             "passwordMinLength": "Password must be at least 6 characters"
-        }
+        },
+        "electionList": "Election list"
+    },
+    "addToElectionDialog": {
+        "title": "Add selected users to election",
+        "confirm": "Add voters",
+        "election": "Election",
+        "invalidSelectionWarning": "The current selection includes users that are not active voters. You can still submit, but the server may reject them."
     }
 }

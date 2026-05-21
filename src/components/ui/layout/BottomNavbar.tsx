@@ -3,11 +3,11 @@ import Box from '@mui/material/Box'
 import BottomNavigation from '@mui/material/BottomNavigation'
 import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 
-import type { INavbarItem } from '../../../types/common'
+import type { NavbarItem } from '../../../types/common'
 import { Link } from '@tanstack/react-router'
 
 interface Props {
-    items: INavbarItem[]
+    items: NavbarItem[]
     activeHrefTo: string
 }
 

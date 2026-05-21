@@ -18,7 +18,12 @@ export const Route = createFileRoute('/_layout')({
                     email: data.data.email
                 })
             } catch {
-                throw redirect({ to: '/auth' })
+                throw redirect({
+                    to: '/auth',
+                    search: {
+                        mode: 'login'
+                    }
+                })
             }
         }
     }

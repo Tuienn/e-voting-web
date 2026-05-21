@@ -17,6 +17,9 @@ import AddIcon from '@mui/icons-material/Add'
 import ModeEditIcon from '@mui/icons-material/ModeEdit'
 import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
+import type { CreateUserRole, UserRole } from '../../../types/user'
+import Divider from '@mui/material/Divider'
+import ElectionList from './ElectionList'
 
 interface Props {
     userId: string | null | undefined
@@ -28,9 +31,8 @@ const DEFAULT_FORM_VALUES = {
     email: '',
     name: '',
     password: '',
-    role: 'VOTER' as 'ADMIN' | 'VOTER' | 'CANDIDATE'
+    role: 'VOTER' as UserRole
 }
-type UserRole = (typeof DEFAULT_FORM_VALUES)['role']
 const CREATE_ROLE_OPTIONS = ['VOTER', 'CANDIDATE'] as const
 const EDIT_ROLE_OPTIONS = ['ADMIN', 'VOTER', 'CANDIDATE'] as const
 
@@ -108,7 +110,7 @@ const UserDetailDrawer: React.FC<Props> = (props) => {
                 email: data.email,
                 name: data.name,
                 password: data.password || '',
-                role: data.role as 'VOTER' | 'CANDIDATE'
+                role: data.role as CreateUserRole
             }),
         onSuccess: () => {
             notify(t('mutate.createUserSuccess'), 'success')
@@ -308,6 +310,12 @@ const UserDetailDrawer: React.FC<Props> = (props) => {
                             />
                         </Tooltip>
                     ))}
+
+                {queryUser.isSuccess && ['VOTER', 'CANDIDATE'].includes(queryUser.data.data.role) && (
+                    <>
+                        <Divider /> <ElectionList userId={queryUser.data.data.id} role={queryUser.data.data.role} />
+                    </>
+                )}
             </Stack>
         </CustomDrawer>
     )

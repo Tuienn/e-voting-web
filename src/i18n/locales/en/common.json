@@ -13,5 +13,6 @@
     "customTable": {
         "rowsPerPage": "Rows per page",
         "selectedItems": "{{count}} items selected"
-    }
+    },
+    "autocompleteNoOptions": "No options"
 }

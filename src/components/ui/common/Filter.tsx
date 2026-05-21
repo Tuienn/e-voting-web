@@ -11,14 +11,18 @@ import TextField from '@mui/material/TextField'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import z from 'zod'
+import dayjs from 'dayjs'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useSearch } from '@tanstack/react-router'
 import { removeEmptyValues } from '../../../lib/utils'
 import { useEffect } from 'react'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-interface IItemFilter {
-    type: 'input' | 'select' | 'date' | 'datetime'
+interface ItemFilter {
+    type: 'input' | 'select' | 'datetime'
     name: string
     label: string
     setting?: {
@@ -31,7 +35,7 @@ interface IItemFilter {
 interface Props {
     searchFullPath: any
     navigateFullPath: any
-    items: IItemFilter[]
+    items: ItemFilter[]
 }
 
 const Filter: React.FC<Props> = (props) => {
@@ -78,10 +82,10 @@ const Filter: React.FC<Props> = (props) => {
     const onSubmit = (data: z.infer<typeof formSchema>) => {
         //NOTE - Khi form submit thì sẽ đẩy toàn bộ value form vào searchParams
         navigate({
-            search: {
+            search: removeEmptyValues({
                 ...searchParams,
-                ...removeEmptyValues(data) //NOTE - Loại bỏ những trường có value là rỗng để tránh việc url bị dài thêm những trường ko cần thiết
-            }
+                ...data
+            }) as any //NOTE - Loại bỏ những trường có value là rỗng để tránh việc url bị dài thêm những trường ko cần thiết
         })
     }
 
@@ -97,7 +101,7 @@ const Filter: React.FC<Props> = (props) => {
                 <Typography variant='h6'>{t('filter.title')}</Typography>
 
                 <ButtonGroup variant='outlined'>
-                    <ResponsiveButton icon={<ReplayIcon />} color='error' onClick={onReset}>
+                    <ResponsiveButton icon={<ReplayIcon />} color='error' type='button' onClick={onReset}>
                         {t('filter.reset')}
                     </ResponsiveButton>
                     <ResponsiveButton icon={<SearchIcon />} color='primary' type='submit'>
@@ -120,23 +124,47 @@ const Filter: React.FC<Props> = (props) => {
                         <Controller
                             name={item.name}
                             control={form.control}
-                            render={({ field: { ref, ...field } }) => (
-                                <TextField
-                                    {...field}
-                                    inputRef={ref}
-                                    value={field.value ?? ''}
-                                    fullWidth
-                                    label={item.label}
-                                    select={item.type === 'select'}
-                                >
-                                    {item.type === 'select' &&
-                                        item.setting?.select?.options.map((option, index) => (
-                                            <MenuItem key={index} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                </TextField>
-                            )}
+                            render={({ field: { ref, ...field } }) => {
+                                if (item.type === 'datetime') {
+                                    const value = typeof field.value === 'string' ? field.value : ''
+
+                                    return (
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <DateTimePicker
+                                                label={item.label}
+                                                value={value ? dayjs(value) : null}
+                                                onChange={(value) =>
+                                                    field.onChange(value?.isValid() ? value.toISOString() : '')
+                                                }
+                                                slotProps={{
+                                                    textField: {
+                                                        fullWidth: true,
+                                                        inputRef: ref
+                                                    }
+                                                }}
+                                            />
+                                        </LocalizationProvider>
+                                    )
+                                }
+
+                                return (
+                                    <TextField
+                                        {...field}
+                                        inputRef={ref}
+                                        value={field.value ?? ''}
+                                        fullWidth
+                                        label={item.label}
+                                        select={item.type === 'select'}
+                                    >
+                                        {item.type === 'select' &&
+                                            item.setting?.select?.options.map((option, index) => (
+                                                <MenuItem key={index} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                    </TextField>
+                                )
+                            }}
                         />
                     </Grid>
                 ))}

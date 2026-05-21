@@ -41,6 +41,7 @@ export const bffApiService = async <T = any>(url: string, options?: RequestInit,
                       ? JSON.parse(options.body as string)
                       : undefined
         })
+        console.info(`${method} ${url} called successfully`)
 
         return (response.data ?? (undefined as unknown)) as T
     } catch (error) {

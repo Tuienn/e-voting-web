@@ -15,6 +15,7 @@ interface Props {
     description?: string
     children?: React.ReactNode
     loading?: boolean
+    okDisabled?: boolean
 }
 
 const AlertDialog: React.FC<Props> = (props) => {
@@ -39,11 +40,11 @@ const AlertDialog: React.FC<Props> = (props) => {
                     {props.children}
                 </DialogContent>
             )}
-            <DialogActions>
+            <DialogActions sx={{ px: 3 }}>
                 <Button color='error' onClick={props.onClose} disabled={props.loading}>
                     {t('dialog.cancel')}
                 </Button>
-                <Button onClick={props.onOk} autoFocus variant='contained' disabled={props.loading}>
+                <Button onClick={props.onOk} autoFocus variant='contained' disabled={props.loading || props.okDisabled}>
                     {props.okText || t('dialog.confirm')}
                 </Button>
             </DialogActions>

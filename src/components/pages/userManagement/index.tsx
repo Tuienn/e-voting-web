@@ -10,13 +10,22 @@ import CustomTable from '../../ui/common/CustomTable'
 import { useSearch } from '@tanstack/react-router'
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import UserService from '../../../services/bff/user.service'
-import Chip from '@mui/material/Chip'
+import Chip, { type ChipProps } from '@mui/material/Chip'
 import { useNotify } from '../../../stores/notification/notification.selector'
 import { useEffect, useState } from 'react'
 import Alert from '@mui/material/Alert'
-import IconButton from '@mui/material/IconButton'
-import EditIcon from '@mui/icons-material/Edit'
+import Button from '@mui/material/Button'
 import UserDetailDrawer from './UserDetailDrawer'
+import AlertTitle from '@mui/material/AlertTitle'
+import AddVoterToElection from './AddVoterToElection'
+import type { User, UserRole } from '../../../types/user'
+import Link from '@mui/material/Link'
+
+const ROLE_COLOR_CHIP: Record<UserRole, ChipProps['color']> = {
+    ADMIN: 'primary',
+    CANDIDATE: 'info',
+    VOTER: 'secondary'
+}
 
 const UserManagementPage: React.FC = () => {
     const { t } = useTranslation('userManagement')
@@ -24,6 +33,13 @@ const UserManagementPage: React.FC = () => {
     const notify = useNotify()
     const [selectedCheckboxIds, setSelectedCheckboxIds] = useState<string[]>([])
     const [userId, setUserId] = useState<string | null | undefined>(undefined)
+    const [isAddToElectionDialogOpen, setIsAddToElectionDialogOpen] = useState(false)
+
+    const ROLE_LABEL_CHIP: Record<UserRole, string> = {
+        ADMIN: t('filter.roleOptions.admin'),
+        CANDIDATE: t('filter.roleOptions.candidate'),
+        VOTER: t('filter.roleOptions.voter')
+    }
 
     const queryFilterUsers = useQuery({
         queryKey: ['filterUsers', searchParams],
@@ -39,6 +55,10 @@ const UserManagementPage: React.FC = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [queryFilterUsers.isError])
+
+    const hasInvalidVisibleSelection = (queryFilterUsers.data?.data.data || []).some(
+        (user) => selectedCheckboxIds.includes(user.id) && (user.role !== 'VOTER' || !user.isActive)
+    )
 
     const mutateDisableUser = useMutation({
         mutationFn: (id: string) => UserService.disableUserById(id),
@@ -134,8 +154,16 @@ const UserManagementPage: React.FC = () => {
             />
 
             {selectedCheckboxIds.length > 0 && (
-                <Alert severity='info' sx={{ borderRadius: 0 }}>
-                    {t('table.selectedUsers', { count: selectedCheckboxIds.length })}
+                <Alert
+                    severity={hasInvalidVisibleSelection ? 'warning' : 'info'}
+                    action={
+                        <Button color='inherit' onClick={() => setIsAddToElectionDialogOpen(true)} sx={{ my: 'auto' }}>
+                            {t('table.addToElection')}
+                        </Button>
+                    }
+                >
+                    <AlertTitle>{t('table.selectedUsers', { count: selectedCheckboxIds.length })}</AlertTitle>
+                    {hasInvalidVisibleSelection && <span>{t('table.selectedUsersInvalidWarning')}</span>}
                 </Alert>
             )}
             <CustomTable
@@ -150,7 +178,17 @@ const UserManagementPage: React.FC = () => {
                 items={[
                     {
                         header: t('table.email'),
-                        name: 'email'
+                        name: 'email',
+                        render: (item) => (
+                            <Link
+                                sx={{
+                                    cursor: 'pointer'
+                                }}
+                                onClick={() => setUserId(item.id)}
+                            >
+                                {item.email}
+                            </Link>
+                        )
                     },
                     {
                         header: t('table.name'),
@@ -166,20 +204,14 @@ const UserManagementPage: React.FC = () => {
                     {
                         header: t('table.role'),
                         name: 'role',
-                        render: (item) => {
-                            if (item.role === 'ADMIN')
-                                return <Chip label={t('filter.roleOptions.admin')} color='primary' />
-                            if (item.role === 'VOTER')
-                                return <Chip label={t('filter.roleOptions.voter')} color='secondary' />
-                            if (item.role === 'CANDIDATE')
-                                return <Chip label={t('filter.roleOptions.candidate')} color='info' />
-                            return <Chip label={item.role} />
-                        }
+                        render: (item: User) => (
+                            <Chip label={ROLE_LABEL_CHIP[item.role]} color={ROLE_COLOR_CHIP[item.role]} />
+                        )
                     },
                     {
                         header: t('table.status'),
                         name: 'isActive',
-                        render: (item) =>
+                        render: (item: User) =>
                             item.isActive ? (
                                 <Tooltip title={t('table.chip.disable')}>
                                     <Chip
@@ -199,28 +231,21 @@ const UserManagementPage: React.FC = () => {
                                     />
                                 </Tooltip>
                             )
-                    },
-                    {
-                        header: t('table.actions'),
-                        name: 'actions',
-                        sx: {
-                            position: 'sticky',
-                            right: 0,
-                            borderLeft: '0.5px solid',
-                            backgroundColor: 'background.paper'
-                        },
-                        align: 'center',
-                        render: (item) => (
-                            <IconButton onClick={() => setUserId(item.id)}>
-                                <EditIcon />
-                            </IconButton>
-                        )
                     }
                 ]}
                 data={queryFilterUsers.data?.data.data || []}
             />
 
             <UserDetailDrawer userId={userId} onSetUserId={setUserId} />
+            <AddVoterToElection
+                open={isAddToElectionDialogOpen}
+                onClose={() => {
+                    setIsAddToElectionDialogOpen(false)
+                    setSelectedCheckboxIds([])
+                }}
+                selectedCheckboxIds={selectedCheckboxIds}
+                hasInvalidVisibleSelection={hasInvalidVisibleSelection}
+            />
         </Container>
     )
 }

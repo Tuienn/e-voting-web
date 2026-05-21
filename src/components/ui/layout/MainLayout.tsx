@@ -2,9 +2,8 @@ import Box from '@mui/material/Box'
 import type { ReactNode } from 'react'
 import TopNavbar from './TopNavbar'
 import BottomNavbar from './BottomNavbar'
-import type { INavbarItem } from '../../../types/common'
+import type { NavbarItem } from '../../../types/common'
 import { useTranslation } from 'react-i18next'
-import HomeIcon from '@mui/icons-material/Home'
 import { useLocation } from '@tanstack/react-router'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
@@ -20,8 +19,8 @@ const MainLayout: React.FC<Props> = (props) => {
     const location = useLocation()
     const activeHrefTo = location.pathname
 
-    const navbarItems: INavbarItem[] = [
-        { label: t('home'), hrefTo: '/', icon: <HomeIcon /> },
+    const navbarItems: NavbarItem[] = [
+        // { label: t('home'), hrefTo: '/', icon: <HomeIcon /> },
         { label: t('userManagement'), hrefTo: '/user-management', icon: <PeopleAltIcon /> },
         { label: t('electionManagement'), hrefTo: '/election-management', icon: <HowToVoteIcon /> }
     ]

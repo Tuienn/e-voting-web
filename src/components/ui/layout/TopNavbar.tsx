@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 import Logo from '../../../assets/svg/icons/logo.svg?react'
 import Divider from '@mui/material/Divider'
 import AppBar from '@mui/material/AppBar'
-import type { INavbarItem } from '../../../types/common'
+import type { NavbarItem } from '../../../types/common'
 import TopNavbarActions from './TopNavbarActions'
 import Stack from '@mui/material/Stack'
 import useBreakpoint from '../../../hooks/useBreakpoint'
@@ -11,7 +11,7 @@ import Container from '@mui/material/Container'
 import NotificationButton from './NotificationButton'
 
 interface Props {
-    items: INavbarItem[]
+    items: NavbarItem[]
     activeHrefTo: string
 }
 

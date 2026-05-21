@@ -50,10 +50,8 @@ const RegisterForm: React.FC = () => {
         mutationFn: (data: RegisterFormData) => AuthService.register(data.email, data.password),
         onSuccess: (data) => {
             notify(t('register.success.registerSuccess'), 'success')
-            tokenFacade.login(data.accessToken, data.refreshToken)
-            setTimeout(() => {
-                navigate({ to: '/' })
-            }, 500)
+            tokenFacade.login(data.data.accessToken, data.data.refreshToken)
+            navigate({ to: '/' })
         },
         onError: (e) => {
             notify(e.message ?? t('register.error.registerFailed'), 'error')

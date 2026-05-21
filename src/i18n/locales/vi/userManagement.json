@@ -30,7 +30,9 @@
             "enable": "Nhấn để kích hoạt",
             "disable": "Nhấn để vô hiệu hóa"
         },
-        "selectedUsers": "{{count}} người dùng được chọn"
+        "selectedUsers": "{{count}} người dùng được chọn",
+        "addToElection": "Thêm vào bầu cử",
+        "selectedUsersInvalidWarning": "Một số người dùng đã chọn trên trang này không phải cử tri đang hoạt động"
     },
     "query": {
         "fetchUsersError": "Tải danh sách người dùng thất bại",
@@ -44,7 +46,10 @@
         "createUserSuccess": "Tạo người dùng thành công",
         "createUserError": "Tạo người dùng thất bại",
         "updateUserSuccess": "Cập nhật người dùng thành công",
-        "updateUserError": "Cập nhật người dùng thất bại"
+        "updateUserError": "Cập nhật người dùng thất bại",
+        "addToElectionSuccess": "Thêm cử tri vào cuộc bầu cử thành công",
+        "addToElectionError": "Thêm cử tri vào cuộc bầu cử thất bại",
+        "addToElectionRequired": "Vui lòng chọn cuộc bầu cử"
     },
     "drawer": {
         "editUserTitle": "Chỉnh sửa người dùng",
@@ -61,6 +66,13 @@
             "nameMinLength": "Tên phải có ít nhất 2 ký tự",
             "passwordRequired": "Vui lòng nhập mật khẩu",
             "passwordMinLength": "Mật khẩu phải có ít nhất 6 ký tự"
-        }
+        },
+        "electionList": "Danh sách cuộc bầu cử"
+    },
+    "addToElectionDialog": {
+        "title": "Thêm người dùng đã chọn vào cuộc bầu cử",
+        "confirm": "Thêm cử tri",
+        "election": "Cuộc bầu cử",
+        "invalidSelectionWarning": "Danh sách hiện tại có người dùng không phải cử tri đang hoạt động. Bạn vẫn có thể gửi, nhưng server có thể từ chối."
     }
 }
