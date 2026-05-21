@@ -5,8 +5,8 @@ import ResponsiveButton from '../../ui/mui/ResponsiveButton'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import Tooltip from '@mui/material/Tooltip'
-import Filter from '../../ui/common/Filter'
-import CustomTable from '../../ui/common/CustomTable'
+import Filter from '../../ui/mui/Filter'
+import CustomTable from '../../ui/mui/CustomTable'
 import { useSearch } from '@tanstack/react-router'
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import UserService from '../../../services/bff/user.service'
@@ -20,7 +20,8 @@ import AlertTitle from '@mui/material/AlertTitle'
 import AddVoterToElection from './AddVoterToElection'
 import type { User, UserRole } from '../../../types/user'
 import Link from '@mui/material/Link'
-import CustomTablePagination from '../../ui/common/CustomTablePagination'
+import CustomTablePagination from '../../ui/mui/CustomTablePagination'
+import LongText from '../../ui/mui/LongText'
 
 const ROLE_COLOR_CHIP: Record<UserRole, ChipProps['color']> = {
     ADMIN: 'primary',
@@ -187,20 +188,14 @@ const UserManagementPage: React.FC = () => {
                                 }}
                                 onClick={() => setUserId(item.id)}
                             >
-                                {item.email}
+                                <LongText value={item.email} />
                             </Link>
                         )
                     },
                     {
                         header: t('table.name'),
                         name: 'name',
-                        sx: {
-                            maxWidth: 200,
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap'
-                        },
-                        render: (item) => <Tooltip title={item.name}>{item.name}</Tooltip>
+                        render: (item) => <LongText value={item.name} />
                     },
                     {
                         header: t('table.role'),

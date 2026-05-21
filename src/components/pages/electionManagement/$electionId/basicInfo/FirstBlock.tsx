@@ -126,9 +126,14 @@ const FirstBlock: React.FC<Props> = (props) => {
                             {
                                 label: `${t('basicInfo.fields.blockchainTxId')}:`,
                                 value: (
-                                    <Typography sx={{ maxWidth: '20ch', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                        {data.blockchainRef ?? '-'}
-                                    </Typography>
+                                    <Stack direction='row' spacing={1} alignItems='center'>
+                                        <Typography
+                                            sx={{ maxWidth: '20ch', overflow: 'hidden', textOverflow: 'ellipsis' }}
+                                        >
+                                            {data.blockchainRef ?? '-'}
+                                        </Typography>
+                                        {data.blockchainRef && <CopyButton value={data.blockchainRef} />}
+                                    </Stack>
                                 )
                             },
                             {

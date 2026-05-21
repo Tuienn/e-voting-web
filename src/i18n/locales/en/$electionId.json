@@ -48,5 +48,24 @@
             "candidatesFailed": "Failed to update candidates",
             "votersFailed": "Failed to update voters"
         }
+    },
+    "voteList": {
+        "title": "Vote list",
+        "filter": {
+            "voterEmail": "Voter email",
+            "startDate": "Start date",
+            "endDate": "End date"
+        },
+        "table": {
+            "voteId": "Vote ID",
+            "voterEmail": "Voter email",
+            "voterName": "Voter name",
+            "blindedCommitment": "Blinded commitment",
+            "blockchainRef": "Blockchain Tx ID",
+            "createdAt": "Created at"
+        },
+        "error": {
+            "loadFailed": "Failed to load votes"
+        }
     }
 }

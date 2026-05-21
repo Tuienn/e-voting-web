@@ -145,8 +145,8 @@ const CustomTable: React.FC<Props> = (props) => {
                         })}
                     </TableBody>
                 </Table>
-                {props.pagination}
             </TableContainer>
+            {props.pagination}
         </Paper>
     )
 }

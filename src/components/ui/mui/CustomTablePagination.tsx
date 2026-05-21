@@ -25,7 +25,8 @@ const CustomTablePagination: React.FC<Props> = (props) => {
                 ...searchParams,
                 page: tablePage.page,
                 pageSize: tablePage.pageSize
-            } as any
+            } as any,
+            replace: true
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tablePage])

@@ -1,16 +1,5 @@
 import type { User, UserRole } from './user'
 
-export interface LoginPayload {
-    email: string
-    password: string
-}
-
-export type RegisterPayload = LoginPayload
-
-export interface RefreshTokenPayload {
-    refreshToken: string
-}
-
 export interface AuthTokens {
     accessToken: string
     refreshToken: string

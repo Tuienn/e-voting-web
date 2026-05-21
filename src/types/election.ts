@@ -28,6 +28,16 @@ export interface ElectionAllInfo extends Election {
     voters: User[]
 }
 
+export interface Vote {
+    id: string
+    electionId: string
+    voterId: string
+    blindedCommitment: string
+    blockchainRef: string
+    createdAt?: string
+    voter?: Pick<User, 'id' | 'email' | 'name'> | null
+}
+
 export interface CreateElectionPayload {
     name: string
     candidateIds: string[]

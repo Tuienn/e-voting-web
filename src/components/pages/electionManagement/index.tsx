@@ -10,13 +10,14 @@ import { useTranslation } from 'react-i18next'
 import ElectionService from '../../../services/bff/election.service'
 import { useNotify } from '../../../stores/notification/notification.selector'
 import type { Election, ElectionStatus } from '../../../types/election'
-import Filter from '../../ui/common/Filter'
-import CustomTable from '../../ui/common/CustomTable'
+import Filter from '../../ui/mui/Filter'
+import CustomTable from '../../ui/mui/CustomTable'
 import CustomHeader from '../../ui/layout/PageHeader'
 import ResponsiveButton from '../../ui/mui/ResponsiveButton'
 import CreateElectionDrawer from './CreateElectionDrawer'
 import { formatDateTime } from '../../../lib/utils'
-import CustomTablePagination from '../../ui/common/CustomTablePagination'
+import CustomTablePagination from '../../ui/mui/CustomTablePagination'
+import LongText from '../../ui/mui/LongText'
 
 const STATUS_COLOR_CHIP: Record<ElectionStatus, ChipProps['color']> = {
     PENDING: 'warning',
@@ -114,24 +115,17 @@ const ElectionManagementPage: React.FC = () => {
                     {
                         header: t('table.name'),
                         name: 'name',
-                        sx: {
-                            maxWidth: 280,
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap'
-                        },
+
                         render: (item: Election) => (
-                            <Tooltip title={item.name}>
-                                <Link
-                                    to={`/election-management/$electionId`}
-                                    params={{ electionId: item.id }}
-                                    search={{
-                                        tab: 0
-                                    }}
-                                >
-                                    {item.name}
-                                </Link>
-                            </Tooltip>
+                            <Link
+                                to={`/election-management/$electionId`}
+                                params={{ electionId: item.id }}
+                                search={{
+                                    tab: 0
+                                }}
+                            >
+                                <LongText value={item.name} />
+                            </Link>
                         )
                     },
                     {

@@ -51,9 +51,9 @@ const UserDetailDrawer: React.FC<Props> = (props) => {
     const queryClient = useQueryClient()
 
     const roleLabels: Record<UserRole, string> = {
-        ADMIN: t('filter.roleOptions.admin'),
-        VOTER: t('filter.roleOptions.voter'),
-        CANDIDATE: t('filter.roleOptions.candidate')
+        ADMIN: t('filter.roleOptions.ADMIN'),
+        VOTER: t('filter.roleOptions.VOTER'),
+        CANDIDATE: t('filter.roleOptions.CANDIDATE')
     }
 
     const formSchema = useMemo(() => {
@@ -328,6 +328,7 @@ const UserDetailDrawer: React.FC<Props> = (props) => {
                                             <Link
                                                 to={`/election-management/$electionId`}
                                                 params={{ electionId: election.id }}
+                                                search={{ tab: 0 }}
                                             >
                                                 <ListItemText primary={election.name} />
                                             </Link>

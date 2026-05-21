@@ -1,6 +1,6 @@
 import Paper from '@mui/material/Paper'
 import { useTranslation } from 'react-i18next'
-import ResponsiveButton from '../mui/ResponsiveButton'
+import ResponsiveButton from './ResponsiveButton'
 import ReplayIcon from '@mui/icons-material/Replay'
 import SearchIcon from '@mui/icons-material/Search'
 import Grid from '@mui/material/Grid'
@@ -34,6 +34,7 @@ interface Props {
     searchFullPath: any
     navigateFullPath: any
     items: ItemFilter[]
+    preserveSearchKeys?: string[]
 }
 
 const Filter: React.FC<Props> = (props) => {
@@ -88,8 +89,15 @@ const Filter: React.FC<Props> = (props) => {
     }
 
     const onReset = () => {
+        //NOTE - Khi reset thì chỉ giữ lại những trường đc preserve còn lại sẽ bị xóa khỏi searchParams
+        const preservedSearchParams = Object.fromEntries(
+            (props.preserveSearchKeys ?? [])
+                .map((key) => [key, searchParams[key]])
+                .filter(([, value]) => value !== undefined && value !== null && value !== '')
+        )
+
         navigate({
-            search: {} as any
+            search: preservedSearchParams as any
         })
     }
 

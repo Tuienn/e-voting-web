@@ -1,7 +1,7 @@
 import { queryString } from '../../lib/utils'
 import { bffApiService } from '.'
 import type { BffResponse, PaginationData, QueryParams } from '../../types/common'
-import type { CreateElectionPayload, Election, ElectionAllInfo } from '../../types/election'
+import type { CreateElectionPayload, Election, ElectionAllInfo, Vote } from '../../types/election'
 
 export default class ElectionService {
     private static readonly BASE_URL = '/coordinator/election'
@@ -9,6 +9,16 @@ export default class ElectionService {
     static filterElections = async (searchParams: QueryParams) => {
         return await bffApiService<BffResponse<PaginationData<Election>>>(
             `${this.BASE_URL}/filter${queryString(searchParams)}`
+        )
+    }
+
+    static filterVotesByElectionId = async (id: string, searchParams: QueryParams) => {
+        const voteSearchParams = Object.fromEntries(
+            Object.entries(searchParams).filter(([key]) => key !== 'tab')
+        ) as QueryParams
+
+        return await bffApiService<BffResponse<PaginationData<Vote>>>(
+            `${this.BASE_URL}/${id}/votes/filter${queryString(voteSearchParams)}`
         )
     }
 
