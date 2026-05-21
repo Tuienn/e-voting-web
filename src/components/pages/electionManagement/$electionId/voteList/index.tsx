@@ -11,6 +11,7 @@ import Filter from '../../../../ui/mui/Filter'
 import CustomTable from '../../../../ui/mui/CustomTable'
 import CustomTablePagination from '../../../../ui/mui/CustomTablePagination'
 import LongText from '../../../../ui/mui/LongText'
+import Alert from '@mui/material/Alert'
 
 interface Props {
     electionId: string
@@ -38,6 +39,18 @@ const VoteListPage: React.FC<Props> = (props) => {
 
     return (
         <Stack spacing={1} mt={2}>
+            <Alert
+                severity={
+                    (queryFilterVotes.data?.data.total || 0) === (queryFilterVotes.data?.data.totalVoters || 0)
+                        ? 'success'
+                        : 'warning'
+                }
+            >
+                {t('voteList.alert', {
+                    voteCount: queryFilterVotes.data?.data.total || 0,
+                    voterCount: queryFilterVotes.data?.data.totalVoters || 0
+                })}
+            </Alert>
             <Filter
                 searchFullPath={'/_layout/election-management/$electionId'}
                 navigateFullPath={'/election-management/$electionId'}

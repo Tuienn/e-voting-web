@@ -17,7 +17,7 @@ export default class ElectionService {
             Object.entries(searchParams).filter(([key]) => key !== 'tab')
         ) as QueryParams
 
-        return await bffApiService<BffResponse<PaginationData<Vote>>>(
+        return await bffApiService<BffResponse<PaginationData<Vote> & { totalVoters: number }>>(
             `${this.BASE_URL}/${id}/votes/filter${queryString(voteSearchParams)}`
         )
     }

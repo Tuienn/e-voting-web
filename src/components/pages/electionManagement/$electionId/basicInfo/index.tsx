@@ -9,6 +9,7 @@ import SecondBlock from './SecondBlock'
 import ThirdBlock from './ThirdBlock'
 import { useEffect } from 'react'
 import { useNotify } from '../../../../../stores/notification/notification.selector'
+import Alert from '@mui/material/Alert'
 
 interface Props {
     electionId: string
@@ -62,6 +63,9 @@ const BasicInfoElectionDetail: React.FC<Props> = (props) => {
 
     return (
         <Stack spacing={2} mt={2}>
+            {queryElection.data?.data.blockchainRef && (
+                <Alert severity='success'>{t('basicInfo.alertBlockchainRef')}</Alert>
+            )}
             <FirstBlock electionId={props.electionId} data={queryElection.data?.data} />
             <SecondBlock electionId={props.electionId} data={queryElection.data?.data} />
             <ThirdBlock electionId={props.electionId} data={queryElection.data?.data} />

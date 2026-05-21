@@ -7,6 +7,7 @@
     },
     "basicInfo": {
         "basicInfoTitle": "Basic information",
+        "alertBlockchainRef": "Votes for this election have been recorded on the blockchain",
         "candidatesTitle": "Candidate list",
         "votersTitle": "Voter list",
         "fields": {
@@ -51,6 +52,7 @@
     },
     "voteList": {
         "title": "Vote list",
+        "alert": "{{voteCount}}/{{voterCount}} voters voted",
         "filter": {
             "voterEmail": "Voter email",
             "startDate": "Start date",

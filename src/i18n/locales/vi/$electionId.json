@@ -7,6 +7,7 @@
     },
     "basicInfo": {
         "basicInfoTitle": "Thông tin cơ bản",
+        "alertBlockchainRef": "Phiếu bầu của cuộc bầu cử này đã được ghi lại trên blockchain",
         "candidatesTitle": "Danh sách ứng viên",
         "votersTitle": "Danh sách cử tri",
         "fields": {
@@ -51,6 +52,7 @@
     },
     "voteList": {
         "title": "Danh sách phiếu bầu",
+        "alert": "{{voteCount}}/{{voterCount}} cử tri đã bỏ phiếu",
         "filter": {
             "voterEmail": "Email cử tri",
             "startDate": "Thời gian bắt đầu",

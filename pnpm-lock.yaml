@@ -35,6 +35,12 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.153.2
         version: 1.170.4(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      Gauge:
+        specifier: link:@mui/x-charts/Gauge
+        version: link:@mui/x-charts/Gauge
+      PieChart:
+        specifier: link:@mui/x-charts/PieChart
+        version: link:@mui/x-charts/PieChart
       axios:
         specifier: ^1.13.2
         version: 1.16.1
