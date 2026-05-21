@@ -61,7 +61,7 @@ const BasicInfoElectionDetail: React.FC<Props> = (props) => {
     }
 
     return (
-        <Stack spacing={2} my={2}>
+        <Stack spacing={2} mt={2}>
             <FirstBlock electionId={props.electionId} data={queryElection.data?.data} />
             <SecondBlock electionId={props.electionId} data={queryElection.data?.data} />
             <ThirdBlock electionId={props.electionId} data={queryElection.data?.data} />

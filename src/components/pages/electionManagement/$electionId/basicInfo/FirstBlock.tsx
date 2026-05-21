@@ -67,7 +67,7 @@ const FirstBlock: React.FC<Props> = (props) => {
     return (
         <Paper sx={{ p: 3 }} elevation={3}>
             <Typography variant='h6' fontWeight='semibold' color='text.secondary'>
-                {t('basicInfo.blockTitle')}
+                {t('basicInfo.basicInfoTitle')}
             </Typography>
             <Divider sx={{ my: 1.5 }} />
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>

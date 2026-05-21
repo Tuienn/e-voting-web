@@ -1,10 +1,12 @@
 {
     "title": "Chi tiết cuộc bầu cử",
     "tabs": {
-        "basicInfo": "THÔNG TIN CƠ BẢN"
+        "basicInfo": "THÔNG TIN CƠ BẢN",
+        "voteList": "DANH SÁCH PHIẾU BẦU",
+        "tally": "KIẾM PHIẾU"
     },
     "basicInfo": {
-        "blockTitle": "Thông tin cơ bản",
+        "basicInfoTitle": "Thông tin cơ bản",
         "candidatesTitle": "Danh sách ứng viên",
         "votersTitle": "Danh sách cử tri",
         "fields": {

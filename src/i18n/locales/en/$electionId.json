@@ -1,10 +1,12 @@
 {
     "title": "Election detail",
     "tabs": {
-        "basicInfo": "BASIC INFORMATION"
+        "basicInfo": "BASIC INFORMATION",
+        "voteList": "VOTE LIST",
+        "tally": "TALLY"
     },
     "basicInfo": {
-        "blockTitle": "Basic information",
+        "basicInfoTitle": "Basic information",
         "candidatesTitle": "Candidate list",
         "votersTitle": "Voter list",
         "fields": {
