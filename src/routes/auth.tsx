@@ -24,7 +24,8 @@ export const Route = createFileRoute('/auth')({
             const data = await AuthService.getCurrentUser()
             useAuthStore.getState().setUser({
                 id: data.data.id,
-                email: data.data.email
+                email: data.data.email,
+                role: data.data.role
             })
         } catch {
             //NOTE - Không làm gì cả, chỉ cần không có user là được, nếu có lỗi thì coi như không có user, vẫn ở trang auth

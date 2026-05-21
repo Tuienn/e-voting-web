@@ -69,5 +69,79 @@
         "error": {
             "loadFailed": "Failed to load votes"
         }
+    },
+    "tally": {
+        "title": "Tally",
+        "fields": {
+            "unknownCandidate": "Unknown candidate",
+            "dbRevealTotal": "DB reveal total",
+            "chainRevealTotal": "Chain reveal total",
+            "overallStatus": "Overall status"
+        },
+        "status": {
+            "match": "Match",
+            "mismatch": "Mismatch",
+            "unknown": "Unknown"
+        },
+        "winner": {
+            "title": "Result status",
+            "winner": "Winner: {{name}}",
+            "leading": "Leading: {{name}}",
+            "tie": "Tie: {{names}}",
+            "needsAudit": "Result needs audit review before a conclusion can be shown."
+        },
+        "alerts": {
+            "chainError": "Blockchain data is unavailable: {{error}}",
+            "noVotes": "No revealed votes are available.",
+            "candidateNameNull": "Missing name"
+        },
+        "chart": {
+            "title": "Vote share"
+        },
+        "table": {
+            "candidate": "Candidate",
+            "candidateId": "Candidate ID",
+            "dbReveal": "DB reveal",
+            "chainReveal": "Chain reveal",
+            "status": "Status",
+            "percent": "Percent"
+        },
+        "audit": {
+            "title": "Audit",
+            "db": {
+                "title": "Database counts",
+                "voteCount": "Vote count",
+                "revealCount": "Reveal count",
+                "progress": "Reveal progress"
+            },
+            "chain": {
+                "title": "Blockchain counts",
+                "voteCount": "Vote count",
+                "revealCount": "Reveal count",
+                "rootCommitted": "Root committed",
+                "rootNotCommitted": "Root not committed",
+                "revealVoteMatch": "Reveal count matches vote count",
+                "revealVoteMismatch": "Reveal count differs from vote count",
+                "unavailable": "Blockchain audit data is unavailable."
+            },
+            "reconciliation": {
+                "title": "DB and chain reconciliation",
+                "voteCount": "Vote count",
+                "revealCount": "Reveal count",
+                "revealTotal": "Reveal total",
+                "candidateMismatchCount": "Candidate mismatch count",
+                "dbChainValue": "DB: {{db}} | Chain: {{chain}}",
+                "mismatchCountValue": "{{count}} mismatch(es)",
+                "chainUnavailable": "Blockchain data is unavailable, so only database counts can be shown.",
+                "noComparableData": "No comparable audit data is available."
+            },
+            "alerts": {
+                "rootNotCommitted": "The election is closed but the Merkle root is not committed on chain."
+            }
+        },
+        "error": {
+            "loadFailed": "Failed to load tally",
+            "auditLoadFailed": "Failed to load audit data"
+        }
     }
 }

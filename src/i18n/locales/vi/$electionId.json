@@ -69,5 +69,79 @@
         "error": {
             "loadFailed": "Không thể tải danh sách phiếu bầu"
         }
+    },
+    "tally": {
+        "title": "Kiểm phiếu",
+        "fields": {
+            "unknownCandidate": "Ứng viên không xác định",
+            "dbRevealTotal": "Tổng phiếu reveal trong DB",
+            "chainRevealTotal": "Tổng phiếu reveal trên chain",
+            "overallStatus": "Trạng thái tổng thể"
+        },
+        "status": {
+            "match": "Khớp",
+            "mismatch": "Không khớp",
+            "unknown": "Chưa xác định"
+        },
+        "winner": {
+            "title": "Trạng thái kết quả",
+            "winner": "Người thắng: {{name}}",
+            "leading": "Đang dẫn đầu: {{name}}",
+            "tie": "Hòa phiếu: {{names}}",
+            "needsAudit": "Cần kiểm tra audit trước khi kết luận kết quả."
+        },
+        "alerts": {
+            "chainError": "Không lấy được dữ liệu blockchain: {{error}}",
+            "noVotes": "Chưa có phiếu reveal.",
+            "candidateNameNull": "Thiếu tên"
+        },
+        "chart": {
+            "title": "Tỷ lệ phiếu"
+        },
+        "table": {
+            "candidate": "Ứng viên",
+            "candidateId": "ID ứng viên",
+            "dbReveal": "Reveal trong DB",
+            "chainReveal": "Reveal trên chain",
+            "status": "Trạng thái",
+            "percent": "Tỷ lệ"
+        },
+        "audit": {
+            "title": "Đối soát",
+            "db": {
+                "title": "Số liệu database",
+                "voteCount": "Số phiếu vote",
+                "revealCount": "Số phiếu reveal",
+                "progress": "Tiến độ reveal"
+            },
+            "chain": {
+                "title": "Số liệu blockchain",
+                "voteCount": "Số phiếu vote",
+                "revealCount": "Số phiếu reveal",
+                "rootCommitted": "Root đã commit",
+                "rootNotCommitted": "Root chưa commit",
+                "revealVoteMatch": "Số reveal khớp số vote",
+                "revealVoteMismatch": "Số reveal lệch số vote",
+                "unavailable": "Không có dữ liệu audit từ blockchain."
+            },
+            "reconciliation": {
+                "title": "Đối soát DB và chain",
+                "voteCount": "Số phiếu vote",
+                "revealCount": "Số phiếu reveal",
+                "revealTotal": "Tổng phiếu reveal",
+                "candidateMismatchCount": "Số ứng viên lệch phiếu",
+                "dbChainValue": "DB: {{db}} | Chain: {{chain}}",
+                "mismatchCountValue": "{{count}} dòng lệch",
+                "chainUnavailable": "Không có dữ liệu blockchain, chỉ có thể hiển thị số liệu database.",
+                "noComparableData": "Không có dữ liệu audit có thể đối chiếu."
+            },
+            "alerts": {
+                "rootNotCommitted": "Cuộc bầu cử đã đóng nhưng Merkle root chưa được commit trên chain."
+            }
+        },
+        "error": {
+            "loadFailed": "Không thể tải kết quả kiểm phiếu",
+            "auditLoadFailed": "Không thể tải dữ liệu đối soát"
+        }
     }
 }

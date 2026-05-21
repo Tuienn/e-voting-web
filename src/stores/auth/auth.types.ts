@@ -1,6 +1,9 @@
+import type { UserRole } from '../../types/user'
+
 export interface IUser {
     id: string
     email: string
+    role?: UserRole
 }
 
 export interface IAuthState {

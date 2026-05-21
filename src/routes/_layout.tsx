@@ -10,12 +10,13 @@ export const Route = createFileRoute('/_layout')({
         // nếu không có thì gọi API để lấy thông tin user, nếu có thì set vào auth store, nếu không có thì redirect về trang auth
         const user = useAuthStore.getState().user
 
-        if (!user) {
+        if (!user || !user.role) {
             try {
                 const data = await AuthService.getCurrentUser()
                 useAuthStore.getState().setUser({
                     id: data.data.id,
-                    email: data.data.email
+                    email: data.data.email,
+                    role: data.data.role
                 })
             } catch {
                 throw redirect({

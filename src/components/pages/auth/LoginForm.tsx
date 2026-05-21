@@ -43,7 +43,7 @@ const LoginForm: React.FC = () => {
         onSuccess: (data) => {
             notify(t('login.success.loginSuccess'), 'success')
             tokenFacade.login(data.data.accessToken, data.data.refreshToken)
-            setUser({ id: data.data.id, email: data.data.email })
+            setUser({ id: data.data.id, email: data.data.email, role: data.data.role })
             navigate({ to: '/' })
         },
         onError: (e) => {
