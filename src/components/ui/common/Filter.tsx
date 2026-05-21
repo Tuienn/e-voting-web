@@ -1,7 +1,4 @@
-import ButtonGroup from '@mui/material/ButtonGroup'
 import Paper from '@mui/material/Paper'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import { useTranslation } from 'react-i18next'
 import ResponsiveButton from '../mui/ResponsiveButton'
 import ReplayIcon from '@mui/icons-material/Replay'
@@ -20,6 +17,7 @@ import { useEffect } from 'react'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import CustomHeader from '../layout/PageHeader'
 
 interface ItemFilter {
     type: 'input' | 'select' | 'datetime'
@@ -97,18 +95,17 @@ const Filter: React.FC<Props> = (props) => {
 
     return (
         <Paper elevation={3} sx={{ p: 2 }} component='form' onSubmit={form.handleSubmit(onSubmit)}>
-            <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant='h6'>{t('filter.title')}</Typography>
-
-                <ButtonGroup variant='outlined'>
+            <CustomHeader
+                title={t('filter.title')}
+                actions={[
                     <ResponsiveButton icon={<ReplayIcon />} color='error' type='button' onClick={onReset}>
                         {t('filter.reset')}
-                    </ResponsiveButton>
+                    </ResponsiveButton>,
                     <ResponsiveButton icon={<SearchIcon />} color='primary' type='submit'>
                         {t('filter.search')}
                     </ResponsiveButton>
-                </ButtonGroup>
-            </Stack>
+                ]}
+            />
             <Divider sx={{ my: 1.5 }} />
             <Grid container spacing={2}>
                 {props.items.map((item, index) => (

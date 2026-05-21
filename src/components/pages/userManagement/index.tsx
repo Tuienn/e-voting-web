@@ -1,5 +1,5 @@
 import Container from '@mui/material/Container'
-import PageHeader from '../../ui/layout/PageHeader'
+import CustomHeader from '../../ui/layout/PageHeader'
 import { useTranslation } from 'react-i18next'
 import ResponsiveButton from '../../ui/mui/ResponsiveButton'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
@@ -20,10 +20,11 @@ import AlertTitle from '@mui/material/AlertTitle'
 import AddVoterToElection from './AddVoterToElection'
 import type { User, UserRole } from '../../../types/user'
 import Link from '@mui/material/Link'
+import CustomTablePagination from '../../ui/common/CustomTablePagination'
 
 const ROLE_COLOR_CHIP: Record<UserRole, ChipProps['color']> = {
     ADMIN: 'primary',
-    CANDIDATE: 'info',
+    CANDIDATE: 'default',
     VOTER: 'secondary'
 }
 
@@ -34,12 +35,6 @@ const UserManagementPage: React.FC = () => {
     const [selectedCheckboxIds, setSelectedCheckboxIds] = useState<string[]>([])
     const [userId, setUserId] = useState<string | null | undefined>(undefined)
     const [isAddToElectionDialogOpen, setIsAddToElectionDialogOpen] = useState(false)
-
-    const ROLE_LABEL_CHIP: Record<UserRole, string> = {
-        ADMIN: t('filter.roleOptions.admin'),
-        CANDIDATE: t('filter.roleOptions.candidate'),
-        VOTER: t('filter.roleOptions.voter')
-    }
 
     const queryFilterUsers = useQuery({
         queryKey: ['filterUsers', searchParams],
@@ -90,7 +85,7 @@ const UserManagementPage: React.FC = () => {
                 gap: 1
             }}
         >
-            <PageHeader
+            <CustomHeader
                 title={t('title')}
                 actions={[
                     <Tooltip title={t('headerActions.addUser')}>
@@ -107,6 +102,7 @@ const UserManagementPage: React.FC = () => {
                         <ResponsiveButton icon={<CloudUploadIcon />}>{t('headerActions.importExcel')}</ResponsiveButton>
                     </Tooltip>
                 ]}
+                isPageHeader
             />
 
             <Filter
@@ -130,9 +126,9 @@ const UserManagementPage: React.FC = () => {
                         setting: {
                             select: {
                                 options: [
-                                    { label: t('filter.roleOptions.admin'), value: 'ADMIN' },
-                                    { label: t('filter.roleOptions.voter'), value: 'VOTER' },
-                                    { label: t('filter.roleOptions.candidate'), value: 'CANDIDATE' }
+                                    { label: t('filter.roleOptions.ADMIN'), value: 'ADMIN' },
+                                    { label: t('filter.roleOptions.VOTER'), value: 'VOTER' },
+                                    { label: t('filter.roleOptions.CANDIDATE'), value: 'CANDIDATE' }
                                 ]
                             }
                         }
@@ -173,8 +169,13 @@ const UserManagementPage: React.FC = () => {
                     selectedCheckboxIds,
                     onSetSelectedCheckboxIds: setSelectedCheckboxIds
                 }}
-                searchFullPath={'/_layout/user-management'}
-                navigateFullPath={'/user-management'}
+                pagination={
+                    <CustomTablePagination
+                        count={queryFilterUsers.data?.data.total || 0}
+                        searchFullPath={'/_layout/user-management'}
+                        navigateFullPath={'/user-management'}
+                    />
+                }
                 items={[
                     {
                         header: t('table.email'),
@@ -205,7 +206,7 @@ const UserManagementPage: React.FC = () => {
                         header: t('table.role'),
                         name: 'role',
                         render: (item: User) => (
-                            <Chip label={ROLE_LABEL_CHIP[item.role]} color={ROLE_COLOR_CHIP[item.role]} />
+                            <Chip label={t(`filter.roleOptions.${item.role}`)} color={ROLE_COLOR_CHIP[item.role]} />
                         )
                     },
                     {
@@ -219,6 +220,7 @@ const UserManagementPage: React.FC = () => {
                                         color='success'
                                         clickable
                                         onClick={() => mutateDisableUser.mutate(item.id)}
+                                        disabled={item.role === 'ADMIN'} // Không cho phép disable admin
                                     />
                                 </Tooltip>
                             ) : (
@@ -228,6 +230,7 @@ const UserManagementPage: React.FC = () => {
                                         color='error'
                                         clickable
                                         onClick={() => mutateEnableUser.mutate(item.id)}
+                                        disabled={item.role === 'ADMIN'} // Không cho phép enable admin
                                     />
                                 </Tooltip>
                             )

@@ -12,9 +12,11 @@ import { useNotify } from '../../../stores/notification/notification.selector'
 import type { Election, ElectionStatus } from '../../../types/election'
 import Filter from '../../ui/common/Filter'
 import CustomTable from '../../ui/common/CustomTable'
-import PageHeader from '../../ui/layout/PageHeader'
+import CustomHeader from '../../ui/layout/PageHeader'
 import ResponsiveButton from '../../ui/mui/ResponsiveButton'
 import CreateElectionDrawer from './CreateElectionDrawer'
+import { formatDateTime } from '../../../lib/utils'
+import CustomTablePagination from '../../ui/common/CustomTablePagination'
 
 const STATUS_COLOR_CHIP: Record<ElectionStatus, ChipProps['color']> = {
     PENDING: 'warning',
@@ -24,17 +26,10 @@ const STATUS_COLOR_CHIP: Record<ElectionStatus, ChipProps['color']> = {
 }
 
 const ElectionManagementPage: React.FC = () => {
-    const { t, i18n } = useTranslation('electionManagement')
+    const { t } = useTranslation(['electionManagement', 'common'])
     const searchParams = useSearch({ from: '/_layout/election-management/' })
     const notify = useNotify()
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false)
-
-    const STATUS_LABEL_CHIP: Record<ElectionStatus, string> = {
-        PENDING: t('status.pending'),
-        ACTIVE: t('status.active'),
-        CLOSED: t('status.closed'),
-        COMPLETED: t('status.completed')
-    }
 
     const queryFilterElections = useQuery({
         queryKey: ['filterElections', searchParams],
@@ -49,18 +44,6 @@ const ElectionManagementPage: React.FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [queryFilterElections.isError])
 
-    const formatDateTime = (value?: string | null) => {
-        if (!value) return '-'
-
-        const date = new Date(value)
-        if (Number.isNaN(date.getTime())) return '-'
-
-        return new Intl.DateTimeFormat(i18n.language, {
-            dateStyle: 'medium',
-            timeStyle: 'short'
-        }).format(date)
-    }
-
     return (
         <Container
             sx={{
@@ -69,7 +52,7 @@ const ElectionManagementPage: React.FC = () => {
                 gap: 1
             }}
         >
-            <PageHeader
+            <CustomHeader
                 title={t('title')}
                 actions={[
                     <Tooltip title={t('headerActions.createElection')}>
@@ -78,6 +61,7 @@ const ElectionManagementPage: React.FC = () => {
                         </ResponsiveButton>
                     </Tooltip>
                 ]}
+                isPageHeader
             />
 
             <Filter
@@ -96,10 +80,10 @@ const ElectionManagementPage: React.FC = () => {
                         setting: {
                             select: {
                                 options: [
-                                    { label: t('status.pending'), value: 'PENDING' },
-                                    { label: t('status.active'), value: 'ACTIVE' },
-                                    { label: t('status.closed'), value: 'CLOSED' },
-                                    { label: t('status.completed'), value: 'COMPLETED' }
+                                    { label: t('common:electionStatus.PENDING'), value: 'PENDING' },
+                                    { label: t('common:electionStatus.ACTIVE'), value: 'ACTIVE' },
+                                    { label: t('common:electionStatus.CLOSED'), value: 'CLOSED' },
+                                    { label: t('common:electionStatus.COMPLETED'), value: 'COMPLETED' }
                                 ]
                             }
                         }
@@ -119,8 +103,13 @@ const ElectionManagementPage: React.FC = () => {
 
             <CustomTable
                 isLoading={queryFilterElections.isLoading}
-                searchFullPath={'/_layout/election-management/'}
-                navigateFullPath={'/election-management'}
+                pagination={
+                    <CustomTablePagination
+                        count={queryFilterElections.data?.data.total || 0}
+                        searchFullPath={'/_layout/election-management/'}
+                        navigateFullPath={'/election-management'}
+                    />
+                }
                 items={[
                     {
                         header: t('table.name'),
@@ -133,7 +122,13 @@ const ElectionManagementPage: React.FC = () => {
                         },
                         render: (item: Election) => (
                             <Tooltip title={item.name}>
-                                <Link to={`/election-management/$electionId`} params={{ electionId: item.id }}>
+                                <Link
+                                    to={`/election-management/$electionId`}
+                                    params={{ electionId: item.id }}
+                                    search={{
+                                        tab: 0
+                                    }}
+                                >
                                     {item.name}
                                 </Link>
                             </Tooltip>
@@ -143,7 +138,10 @@ const ElectionManagementPage: React.FC = () => {
                         header: t('table.status'),
                         name: 'status',
                         render: (item: Election) => (
-                            <Chip label={STATUS_LABEL_CHIP[item.status]} color={STATUS_COLOR_CHIP[item.status]} />
+                            <Chip
+                                label={t(`common:electionStatus.${item.status}`)}
+                                color={STATUS_COLOR_CHIP[item.status]}
+                            />
                         )
                     },
                     {

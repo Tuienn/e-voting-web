@@ -9,12 +9,6 @@
         "startDate": "Start date",
         "endDate": "End date"
     },
-    "status": {
-        "pending": "Pending",
-        "active": "Active",
-        "closed": "Closed",
-        "completed": "Completed"
-    },
     "table": {
         "name": "Name",
         "status": "Status",

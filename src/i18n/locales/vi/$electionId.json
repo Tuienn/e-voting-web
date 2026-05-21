@@ -2,5 +2,49 @@
     "title": "Chi tiết cuộc bầu cử",
     "tabs": {
         "basicInfo": "THÔNG TIN CƠ BẢN"
+    },
+    "basicInfo": {
+        "blockTitle": "Thông tin cơ bản",
+        "candidatesTitle": "Danh sách ứng viên",
+        "votersTitle": "Danh sách cử tri",
+        "fields": {
+            "name": "Tên cuộc bầu cử",
+            "status": "Trạng thái",
+            "merkleRoot": "Merkle Root",
+            "blockchainTxId": "Blockchain Tx ID",
+            "publicKey": "Khóa công khai",
+            "startDate": "Ngày bắt đầu",
+            "endDate": "Ngày kết thúc",
+            "createdAt": "Ngày tạo",
+            "updatedAt": "Ngày cập nhật"
+        },
+        "table": {
+            "email": "Email",
+            "name": "Tên",
+            "selectedCandidates": "Đã chọn {{count}} ứng viên",
+            "selectedVoters": "Đã chọn {{count}} cử tri"
+        },
+        "actions": {
+            "addCandidate": "Thêm ứng viên",
+            "addVoter": "Thêm cử tri",
+            "deleteSelected": "Xóa đã chọn",
+            "addCandidateDialogTitle": "Thêm ứng viên vào cuộc bầu cử",
+            "addVoterDialogTitle": "Thêm cử tri vào cuộc bầu cử",
+            "startElection": "Bắt đầu bầu cử",
+            "closeElection": "Kết thúc bầu cử"
+        },
+        "success": {
+            "statusUpdated": "Cập nhật trạng thái thành công",
+            "candidatesAdded": "Thêm ứng viên thành công",
+            "candidatesDeleted": "Xóa ứng viên thành công",
+            "votersAdded": "Thêm cử tri thành công",
+            "votersDeleted": "Xóa cử tri thành công"
+        },
+        "error": {
+            "loadFailed": "Không thể tải thông tin cuộc bầu cử",
+            "statusUpdateFailed": "Không thể cập nhật trạng thái",
+            "candidatesFailed": "Không thể cập nhật ứng viên",
+            "votersFailed": "Không thể cập nhật cử tri"
+        }
     }
 }

@@ -73,6 +73,7 @@ const AddVoterToElection: React.FC<Props> = (props) => {
             okText={t('addToElectionDialog.confirm')}
             loading={mutateAddVotersToElection.isPending}
             okDisabled={!selectedElectionId || props.selectedCheckboxIds.length === 0}
+            minWidth={600}
         >
             <Stack spacing={2}>
                 {props.hasInvalidVisibleSelection && (

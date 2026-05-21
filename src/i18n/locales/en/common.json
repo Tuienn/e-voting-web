@@ -14,5 +14,11 @@
         "rowsPerPage": "Rows per page",
         "selectedItems": "{{count}} items selected"
     },
-    "autocompleteNoOptions": "No options"
+    "autocompleteNoOptions": "No options",
+    "electionStatus": {
+        "PENDING": "Pending",
+        "ACTIVE": "Active",
+        "CLOSED": "Closed",
+        "COMPLETED": "Completed"
+    }
 }

@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -16,6 +17,7 @@ interface Props {
     children?: React.ReactNode
     loading?: boolean
     okDisabled?: boolean
+    minWidth?: number
 }
 
 const AlertDialog: React.FC<Props> = (props) => {
@@ -33,10 +35,19 @@ const AlertDialog: React.FC<Props> = (props) => {
         >
             <DialogTitle id='alert-dialog-title'>{props.title}</DialogTitle>
             {(props.description || props.children) && (
-                <DialogContent sx={{ minWidth: '300px' }}>
+                <DialogContent
+                    sx={{
+                        minWidth: {
+                            xs: 'auto',
+                            sm: props.minWidth || 400
+                        }
+                    }}
+                >
                     {props.description && (
                         <DialogContentText id='alert-dialog-description'>{props.description}</DialogContentText>
                     )}
+                    {/* NOTE - Thêm vào để label của input nếu có không bị tràn ra ngoài */}
+                    <Box sx={{ mt: 0.8 }} />
                     {props.children}
                 </DialogContent>
             )}

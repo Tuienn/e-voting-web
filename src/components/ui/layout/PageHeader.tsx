@@ -10,9 +10,10 @@ interface Props {
     title: string
     actions?: ReactNode[]
     hasBackButton?: boolean
+    isPageHeader?: boolean
 }
 
-const PageHeader: React.FC<Props> = (props) => {
+const CustomHeader: React.FC<Props> = (props) => {
     const router = useRouter()
 
     const handleBack = () => {
@@ -21,23 +22,30 @@ const PageHeader: React.FC<Props> = (props) => {
 
     return (
         //NOTE - Muốn thành header như TopNavbar thì bọc AppBar vào ngoài
-        <Stack direction='row' py={1} alignItems='center' gap={2}>
+        <Stack direction='row' py={props.isPageHeader ? 1 : 0} alignItems='center' gap={2}>
             <Stack direction='row' alignItems='center' gap={1} flexGrow={1}>
                 {props.hasBackButton && (
                     <IconButton onClick={handleBack}>
                         <ArrowBackIcon />
                     </IconButton>
                 )}
-                <Typography variant='h6' component='div' fontWeight='bold' color='text.secondary'>
+                <Typography
+                    variant='h6'
+                    component='div'
+                    fontWeight={props.isPageHeader ? 'bold' : 'semibold'}
+                    color='text.secondary'
+                >
                     {props.title}
                 </Typography>
             </Stack>
 
             {props.actions && props.actions.length > 0 && (
-                <ButtonGroup variant='contained'>{props.actions.map((item) => item)}</ButtonGroup>
+                <ButtonGroup variant={props.isPageHeader ? 'contained' : 'outlined'}>
+                    {props.actions.map((item) => item)}
+                </ButtonGroup>
             )}
         </Stack>
     )
 }
 
-export default PageHeader
+export default CustomHeader

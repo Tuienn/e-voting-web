@@ -1,3 +1,5 @@
+import type { User } from './user'
+
 export type ElectionStatus = 'PENDING' | 'ACTIVE' | 'CLOSED' | 'COMPLETED'
 
 export interface ElectionVoter {
@@ -16,6 +18,14 @@ export interface Election {
     endDate?: string | null
     createdAt?: string
     updatedAt?: string
+}
+
+export interface ElectionAllInfo extends Election {
+    merkleRoot?: string
+    blockchainRef?: string
+    collectivePublicKey?: string
+    candidates: User[]
+    voters: User[]
 }
 
 export interface CreateElectionPayload {

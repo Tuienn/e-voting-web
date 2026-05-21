@@ -10,9 +10,9 @@
         "name": "Name",
         "role": "Role",
         "roleOptions": {
-            "admin": "Admin",
-            "voter": "Voter",
-            "candidate": "Candidate"
+            "ADMIN": "Admin",
+            "VOTER": "Voter",
+            "CANDIDATE": "Candidate"
         },
         "status": "Status",
         "statusOptions": {

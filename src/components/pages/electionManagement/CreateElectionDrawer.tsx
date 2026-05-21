@@ -12,8 +12,7 @@ import { z } from 'zod'
 import CustomDrawer from '../../ui/mui/CustomDrawer'
 import ElectionService from '../../../services/bff/election.service'
 import { useNotify } from '../../../stores/notification/notification.selector'
-import CandidateAutocomplete from './CandidateAutocomplete'
-import VoterAutocomplete from './VoterAutocomplete'
+import UserRoleAutocomplete from './UserRoleAutocomplete'
 
 interface Props {
     open: boolean
@@ -137,9 +136,10 @@ const CreateElectionDrawer: React.FC<Props> = (props) => {
                     name='candidateIds'
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <CandidateAutocomplete
+                        <UserRoleAutocomplete
                             autoFetch={props.open}
                             onChange={field.onChange}
+                            role='CANDIDATE'
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message || ''}
                         />
@@ -150,9 +150,10 @@ const CreateElectionDrawer: React.FC<Props> = (props) => {
                     name='voterIds'
                     control={form.control}
                     render={({ field, fieldState }) => (
-                        <VoterAutocomplete
+                        <UserRoleAutocomplete
                             autoFetch={props.open}
                             onChange={field.onChange}
+                            role='VOTER'
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message || ''}
                         />

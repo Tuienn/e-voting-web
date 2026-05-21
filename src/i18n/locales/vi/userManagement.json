@@ -10,9 +10,9 @@
         "name": "Tên",
         "role": "Vai trò",
         "roleOptions": {
-            "admin": "Quản trị viên",
-            "voter": "Cử tri",
-            "candidate": "Ứng cử viên"
+            "ADMIN": "Quản trị viên",
+            "VOTER": "Cử tri",
+            "CANDIDATE": "Ứng cử viên"
         },
         "status": "Trạng thái",
         "statusOptions": {

@@ -1,7 +1,7 @@
 import { queryString } from '../../lib/utils'
 import { bffApiService } from '.'
 import type { BffResponse, PaginationData, QueryParams } from '../../types/common'
-import type { CreateElectionPayload, Election } from '../../types/election'
+import type { CreateElectionPayload, Election, ElectionAllInfo } from '../../types/election'
 
 export default class ElectionService {
     private static readonly BASE_URL = '/coordinator/election'
@@ -47,5 +47,23 @@ export default class ElectionService {
 
     static getElectionById = async (id: string) => {
         return await bffApiService<BffResponse<Election>>(`${this.BASE_URL}/${id}`)
+    }
+
+    static getElectionAllInfo = async (id: string) => {
+        return await bffApiService<BffResponse<ElectionAllInfo>>(`${this.BASE_URL}/${id}/all`)
+    }
+
+    static addCandidatesToElection = async (id: string, candidateIds: string[]) => {
+        return await bffApiService<BffResponse<Election>>(`${this.BASE_URL}/${id}/add-candidates`, {
+            method: 'POST',
+            body: JSON.stringify({ candidateIds })
+        })
+    }
+
+    static deleteCandidatesFromElection = async (id: string, candidateIds: string[]) => {
+        return await bffApiService<BffResponse<Election>>(`${this.BASE_URL}/${id}/delete-candidates`, {
+            method: 'DELETE',
+            body: JSON.stringify({ candidateIds })
+        })
     }
 }

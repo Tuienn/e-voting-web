@@ -2,5 +2,49 @@
     "title": "Election detail",
     "tabs": {
         "basicInfo": "BASIC INFORMATION"
+    },
+    "basicInfo": {
+        "blockTitle": "Basic information",
+        "candidatesTitle": "Candidate list",
+        "votersTitle": "Voter list",
+        "fields": {
+            "name": "Election name",
+            "status": "Status",
+            "merkleRoot": "Merkle root",
+            "blockchainTxId": "Blockchain TxID",
+            "publicKey": "Public key",
+            "startDate": "Start date",
+            "endDate": "End date",
+            "createdAt": "Created at",
+            "updatedAt": "Updated at"
+        },
+        "table": {
+            "email": "Email",
+            "name": "Name",
+            "selectedCandidates": "{{count}} candidate(s) selected",
+            "selectedVoters": "{{count}} voter(s) selected"
+        },
+        "actions": {
+            "addCandidate": "Add candidate",
+            "addVoter": "Add voter",
+            "deleteSelected": "Delete selected",
+            "addCandidateDialogTitle": "Add candidate to election",
+            "addVoterDialogTitle": "Add voter to election",
+            "startElection": "Start election",
+            "closeElection": "Close election"
+        },
+        "success": {
+            "statusUpdated": "Election status updated",
+            "candidatesAdded": "Candidates added successfully",
+            "candidatesDeleted": "Candidates removed successfully",
+            "votersAdded": "Voters added successfully",
+            "votersDeleted": "Voters removed successfully"
+        },
+        "error": {
+            "loadFailed": "Failed to load election information",
+            "statusUpdateFailed": "Failed to update election status",
+            "candidatesFailed": "Failed to update candidates",
+            "votersFailed": "Failed to update voters"
+        }
     }
 }

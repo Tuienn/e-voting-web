@@ -7,11 +7,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
-import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 interface Props {
     items: {
@@ -22,8 +18,6 @@ interface Props {
         align?: 'left' | 'center' | 'right'
     }[]
     data: any[]
-    searchFullPath: any
-    navigateFullPath: any
     isLoading?: boolean
 
     checkbox?: {
@@ -31,16 +25,10 @@ interface Props {
         selectedCheckboxIds: string[]
         onSetSelectedCheckboxIds: (selectedIds: string[]) => void
     }
+    pagination?: React.ReactNode
 }
 
 const CustomTable: React.FC<Props> = (props) => {
-    const { t } = useTranslation('common')
-    const [tablePage, setTablePage] = useState({
-        page: 0,
-        pageSize: 10
-    })
-    const searchParams = useSearch({ from: props.searchFullPath })
-    const navigate = useNavigate({ from: props.navigateFullPath })
     const selectedCheckboxIds = props.checkbox?.selectedCheckboxIds || []
 
     const getCheckboxValue = (row: any) => {
@@ -58,25 +46,6 @@ const CustomTable: React.FC<Props> = (props) => {
     const selectedRowsCount = selectableCheckboxIds.filter((id) => selectedCheckboxIds.includes(id)).length
     const isAllRowsSelected = selectableCheckboxIds.length > 0 && selectedRowsCount === selectableCheckboxIds.length
     const isSomeRowsSelected = selectedRowsCount > 0 && selectedRowsCount < selectableCheckboxIds.length
-
-    useEffect(() => {
-        navigate({
-            search: {
-                ...searchParams,
-                page: tablePage.page,
-                pageSize: tablePage.pageSize
-            } as any
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tablePage])
-
-    const handleChangePage = (_event: unknown, newPage: number) => {
-        setTablePage({ ...tablePage, page: newPage })
-    }
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTablePage({ ...tablePage, pageSize: Number(event.target.value) })
-    }
 
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!props.checkbox) return
@@ -176,18 +145,8 @@ const CustomTable: React.FC<Props> = (props) => {
                         })}
                     </TableBody>
                 </Table>
+                {props.pagination}
             </TableContainer>
-            <TablePagination
-                component='div'
-                rowsPerPageOptions={[10, 25, 50]}
-                count={props.data.length}
-                page={tablePage.page}
-                rowsPerPage={tablePage.pageSize}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                labelRowsPerPage={t('customTable.rowsPerPage')}
-                align='right'
-            />
         </Paper>
     )
 }

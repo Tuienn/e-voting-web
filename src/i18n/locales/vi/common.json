@@ -14,5 +14,11 @@
         "rowsPerPage": "Số hàng mỗi trang",
         "selectedItems": "Đã chọn {{count}} mục"
     },
-    "autocompleteNoOptions": "Không có lựa chọn"
+    "autocompleteNoOptions": "Không có lựa chọn",
+    "electionStatus": {
+        "PENDING": "Đang chờ",
+        "ACTIVE": "Hoạt động",
+        "CLOSED": "Đã đóng",
+        "COMPLETED": "Hoàn thành"
+    }
 }
