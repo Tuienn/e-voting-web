@@ -19,7 +19,13 @@ import Chip from '@mui/material/Chip'
 import Tooltip from '@mui/material/Tooltip'
 import type { CreateUserRole, UserRole } from '../../../types/user'
 import Divider from '@mui/material/Divider'
-import ElectionList from './ElectionList'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import ListSubheader from '@mui/material/ListSubheader'
+import ListItemButton from '@mui/material/ListItemButton'
+import Paper from '@mui/material/Paper'
+import { Link } from '@tanstack/react-router'
 
 interface Props {
     userId: string | null | undefined
@@ -84,7 +90,7 @@ const UserDetailDrawer: React.FC<Props> = (props) => {
 
     const queryUser = useQuery({
         queryKey: ['userDetail', props.userId],
-        queryFn: () => UserService.getUserById(props.userId as string),
+        queryFn: () => UserService.getAllInfoUserById(props.userId as string),
         enabled: isEdit
     })
 
@@ -313,7 +319,23 @@ const UserDetailDrawer: React.FC<Props> = (props) => {
 
                 {queryUser.isSuccess && ['VOTER', 'CANDIDATE'].includes(queryUser.data.data.role) && (
                     <>
-                        <Divider /> <ElectionList userId={queryUser.data.data.id} role={queryUser.data.data.role} />
+                        <Divider />{' '}
+                        <Paper elevation={3} sx={{ p: 1 }}>
+                            <List subheader={<ListSubheader>{t('drawer.electionList')}</ListSubheader>}>
+                                {queryUser.data.data.elections!.map((election) => (
+                                    <ListItem key={election.id} disablePadding>
+                                        <ListItemButton>
+                                            <Link
+                                                to={`/election-management/$electionId`}
+                                                params={{ electionId: election.id }}
+                                            >
+                                                <ListItemText primary={election.name} />
+                                            </Link>
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Paper>
                     </>
                 )}
             </Stack>

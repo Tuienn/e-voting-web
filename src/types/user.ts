@@ -1,3 +1,5 @@
+import type { Election } from './election'
+
 export type UserRole = 'ADMIN' | 'VOTER' | 'CANDIDATE'
 
 export type CreateUserRole = Extract<UserRole, 'VOTER' | 'CANDIDATE'>
@@ -10,6 +12,10 @@ export interface User {
     isActive: boolean
     createdAt?: string
     updatedAt?: string
+}
+
+export interface UserDetail extends User {
+    elections?: Election[]
 }
 
 export type UserOption = Pick<User, 'id' | 'name' | 'email'>

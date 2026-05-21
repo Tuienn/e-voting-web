@@ -14,7 +14,8 @@ import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as LayoutUserManagementRouteImport } from './routes/_layout/user-management'
 import { Route as LayoutPersonalRouteImport } from './routes/_layout/personal'
-import { Route as LayoutElectionManagementRouteImport } from './routes/_layout/election-management'
+import { Route as LayoutElectionManagementIndexRouteImport } from './routes/_layout/election-management/index'
+import { Route as LayoutElectionManagementElectionIdRouteImport } from './routes/_layout/election-management/$electionId'
 
 const AuthRoute = AuthRouteImport.update({
     id: '/auth',
@@ -40,48 +41,63 @@ const LayoutPersonalRoute = LayoutPersonalRouteImport.update({
     path: '/personal',
     getParentRoute: () => LayoutRoute
 } as any)
-const LayoutElectionManagementRoute = LayoutElectionManagementRouteImport.update({
-    id: '/election-management',
-    path: '/election-management',
+const LayoutElectionManagementIndexRoute = LayoutElectionManagementIndexRouteImport.update({
+    id: '/election-management/',
+    path: '/election-management/',
+    getParentRoute: () => LayoutRoute
+} as any)
+const LayoutElectionManagementElectionIdRoute = LayoutElectionManagementElectionIdRouteImport.update({
+    id: '/election-management/$electionId',
+    path: '/election-management/$electionId',
     getParentRoute: () => LayoutRoute
 } as any)
 
 export interface FileRoutesByFullPath {
     '/': typeof LayoutIndexRoute
     '/auth': typeof AuthRoute
-    '/election-management': typeof LayoutElectionManagementRoute
     '/personal': typeof LayoutPersonalRoute
     '/user-management': typeof LayoutUserManagementRoute
+    '/election-management/$electionId': typeof LayoutElectionManagementElectionIdRoute
+    '/election-management/': typeof LayoutElectionManagementIndexRoute
 }
 export interface FileRoutesByTo {
     '/auth': typeof AuthRoute
-    '/election-management': typeof LayoutElectionManagementRoute
     '/personal': typeof LayoutPersonalRoute
     '/user-management': typeof LayoutUserManagementRoute
     '/': typeof LayoutIndexRoute
+    '/election-management/$electionId': typeof LayoutElectionManagementElectionIdRoute
+    '/election-management': typeof LayoutElectionManagementIndexRoute
 }
 export interface FileRoutesById {
     __root__: typeof rootRouteImport
     '/_layout': typeof LayoutRouteWithChildren
     '/auth': typeof AuthRoute
-    '/_layout/election-management': typeof LayoutElectionManagementRoute
     '/_layout/personal': typeof LayoutPersonalRoute
     '/_layout/user-management': typeof LayoutUserManagementRoute
     '/_layout/': typeof LayoutIndexRoute
+    '/_layout/election-management/$electionId': typeof LayoutElectionManagementElectionIdRoute
+    '/_layout/election-management/': typeof LayoutElectionManagementIndexRoute
 }
 export interface FileRouteTypes {
     fileRoutesByFullPath: FileRoutesByFullPath
-    fullPaths: '/' | '/auth' | '/election-management' | '/personal' | '/user-management'
+    fullPaths:
+        | '/'
+        | '/auth'
+        | '/personal'
+        | '/user-management'
+        | '/election-management/$electionId'
+        | '/election-management/'
     fileRoutesByTo: FileRoutesByTo
-    to: '/auth' | '/election-management' | '/personal' | '/user-management' | '/'
+    to: '/auth' | '/personal' | '/user-management' | '/' | '/election-management/$electionId' | '/election-management'
     id:
         | '__root__'
         | '/_layout'
         | '/auth'
-        | '/_layout/election-management'
         | '/_layout/personal'
         | '/_layout/user-management'
         | '/_layout/'
+        | '/_layout/election-management/$electionId'
+        | '/_layout/election-management/'
     fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -126,28 +142,37 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof LayoutPersonalRouteImport
             parentRoute: typeof LayoutRoute
         }
-        '/_layout/election-management': {
-            id: '/_layout/election-management'
+        '/_layout/election-management/': {
+            id: '/_layout/election-management/'
             path: '/election-management'
-            fullPath: '/election-management'
-            preLoaderRoute: typeof LayoutElectionManagementRouteImport
+            fullPath: '/election-management/'
+            preLoaderRoute: typeof LayoutElectionManagementIndexRouteImport
+            parentRoute: typeof LayoutRoute
+        }
+        '/_layout/election-management/$electionId': {
+            id: '/_layout/election-management/$electionId'
+            path: '/election-management/$electionId'
+            fullPath: '/election-management/$electionId'
+            preLoaderRoute: typeof LayoutElectionManagementElectionIdRouteImport
             parentRoute: typeof LayoutRoute
         }
     }
 }
 
 interface LayoutRouteChildren {
-    LayoutElectionManagementRoute: typeof LayoutElectionManagementRoute
     LayoutPersonalRoute: typeof LayoutPersonalRoute
     LayoutUserManagementRoute: typeof LayoutUserManagementRoute
     LayoutIndexRoute: typeof LayoutIndexRoute
+    LayoutElectionManagementElectionIdRoute: typeof LayoutElectionManagementElectionIdRoute
+    LayoutElectionManagementIndexRoute: typeof LayoutElectionManagementIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-    LayoutElectionManagementRoute: LayoutElectionManagementRoute,
     LayoutPersonalRoute: LayoutPersonalRoute,
     LayoutUserManagementRoute: LayoutUserManagementRoute,
-    LayoutIndexRoute: LayoutIndexRoute
+    LayoutIndexRoute: LayoutIndexRoute,
+    LayoutElectionManagementElectionIdRoute: LayoutElectionManagementElectionIdRoute,
+    LayoutElectionManagementIndexRoute: LayoutElectionManagementIndexRoute
 }
 
 const LayoutRouteWithChildren = LayoutRoute._addFileChildren(LayoutRouteChildren)

@@ -4,7 +4,7 @@ import Container from '@mui/material/Container'
 import Tooltip from '@mui/material/Tooltip'
 import type { ChipProps } from '@mui/material/Chip'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useSearch } from '@tanstack/react-router'
+import { Link, useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ElectionService from '../../../services/bff/election.service'
@@ -25,7 +25,7 @@ const STATUS_COLOR_CHIP: Record<ElectionStatus, ChipProps['color']> = {
 
 const ElectionManagementPage: React.FC = () => {
     const { t, i18n } = useTranslation('electionManagement')
-    const searchParams = useSearch({ from: '/_layout/election-management' })
+    const searchParams = useSearch({ from: '/_layout/election-management/' })
     const notify = useNotify()
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false)
 
@@ -81,7 +81,7 @@ const ElectionManagementPage: React.FC = () => {
             />
 
             <Filter
-                searchFullPath={'/_layout/election-management'}
+                searchFullPath={'/_layout/election-management/'}
                 navigateFullPath={'/election-management'}
                 items={[
                     {
@@ -119,7 +119,7 @@ const ElectionManagementPage: React.FC = () => {
 
             <CustomTable
                 isLoading={queryFilterElections.isLoading}
-                searchFullPath={'/_layout/election-management'}
+                searchFullPath={'/_layout/election-management/'}
                 navigateFullPath={'/election-management'}
                 items={[
                     {
@@ -133,7 +133,9 @@ const ElectionManagementPage: React.FC = () => {
                         },
                         render: (item: Election) => (
                             <Tooltip title={item.name}>
-                                <span>{item.name}</span>
+                                <Link to={`/election-management/$electionId`} params={{ electionId: item.id }}>
+                                    {item.name}
+                                </Link>
                             </Tooltip>
                         )
                     },

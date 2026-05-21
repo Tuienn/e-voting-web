@@ -33,14 +33,6 @@ export default class ElectionService {
         })
     }
 
-    static getElectionsByVoterId = async (voterId: string) => {
-        return await bffApiService<BffResponse<Election[]>>(`${this.BASE_URL}/voter/${voterId}/elections`)
-    }
-
-    static getElectionsByCandidateId = async (candidateId: string) => {
-        return await bffApiService<BffResponse<Election[]>>(`${this.BASE_URL}/candidate/${candidateId}/elections`)
-    }
-
     static startElection = async (id: string) => {
         return await bffApiService<BffResponse<Election>>(`${this.BASE_URL}/${id}/start`, {
             method: 'PATCH'

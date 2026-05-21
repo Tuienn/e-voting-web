@@ -1,7 +1,7 @@
 import { bffApiService } from '.'
 import { queryString } from '../../lib/utils'
 import type { BffEmptyResponse, BffResponse, PaginationData } from '../../types/common'
-import type { CreateUserPayload, FilterUsersParams, UpdateUserPayload, User } from '../../types/user'
+import type { CreateUserPayload, FilterUsersParams, UpdateUserPayload, User, UserDetail } from '../../types/user'
 
 export default class UserService {
     private static readonly BASE_URL = '/identity/user'
@@ -12,8 +12,8 @@ export default class UserService {
         )
     }
 
-    static getUserById = async (id: string) => {
-        return await bffApiService<BffResponse<User>>(`${this.BASE_URL}/${id}`)
+    static getAllInfoUserById = async (id: string) => {
+        return await bffApiService<BffResponse<UserDetail>>(`${this.BASE_URL}/${id}/all`)
     }
 
     static disableUserById = async (id: string) => {
