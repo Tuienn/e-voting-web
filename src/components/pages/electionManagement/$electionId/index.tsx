@@ -9,6 +9,7 @@ import CustomHeader from '../../../ui/layout/PageHeader'
 import AppBar from '@mui/material/AppBar'
 import VoteListPage from './voteList'
 import TallyPage from './tally'
+import { useElectionSocket } from '../../../../hooks/useElectionSocket'
 
 const ElectionDetailPage: React.FC = () => {
     const { electionId } = useParams({ from: '/_layout/election-management/$electionId' })
@@ -16,6 +17,8 @@ const ElectionDetailPage: React.FC = () => {
     const navigate = useNavigate({ from: '/election-management/$electionId' })
 
     const { t } = useTranslation('$electionId')
+
+    useElectionSocket(electionId)
 
     const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         navigate({
