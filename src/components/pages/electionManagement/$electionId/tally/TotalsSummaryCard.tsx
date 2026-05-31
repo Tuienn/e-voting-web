@@ -26,7 +26,10 @@ const TotalsSummaryCard: React.FC<Props> = (props) => {
     let status: StatusKey
     if (data.chainError) {
         status = 'unknown'
-    } else if (data.dbRevealTotal === data.chainRevealTotal) {
+    } else if (
+        data.dbRevealedBallots === data.chainRevealedBallots &&
+        data.dbTotalSelections === data.chainTotalSelections
+    ) {
         status = 'match'
     } else {
         status = 'mismatch'
@@ -34,20 +37,32 @@ const TotalsSummaryCard: React.FC<Props> = (props) => {
 
     return (
         <Paper sx={{ p: 3 }} elevation={3}>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3}>
-                <Box flex={1}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} flexWrap='wrap' useFlexGap>
+                <Box flex={1} minWidth={140}>
                     <Typography variant='body2' color='text.secondary'>
-                        {t('tally.fields.dbRevealTotal')}
+                        {t('tally.fields.dbRevealedBallots')}
                     </Typography>
-                    <Typography variant='h4'>{data.dbRevealTotal}</Typography>
+                    <Typography variant='h4'>{data.dbRevealedBallots}</Typography>
                 </Box>
-                <Box flex={1}>
+                <Box flex={1} minWidth={140}>
                     <Typography variant='body2' color='text.secondary'>
-                        {t('tally.fields.chainRevealTotal')}
+                        {t('tally.fields.chainRevealedBallots')}
                     </Typography>
-                    <Typography variant='h4'>{data.chainError ? '-' : data.chainRevealTotal}</Typography>
+                    <Typography variant='h4'>{data.chainError ? '-' : data.chainRevealedBallots}</Typography>
                 </Box>
-                <Box flex={1}>
+                <Box flex={1} minWidth={140}>
+                    <Typography variant='body2' color='text.secondary'>
+                        {t('tally.fields.dbTotalSelections')}
+                    </Typography>
+                    <Typography variant='h4'>{data.dbTotalSelections}</Typography>
+                </Box>
+                <Box flex={1} minWidth={140}>
+                    <Typography variant='body2' color='text.secondary'>
+                        {t('tally.fields.chainTotalSelections')}
+                    </Typography>
+                    <Typography variant='h4'>{data.chainError ? '-' : data.chainTotalSelections}</Typography>
+                </Box>
+                <Box flex={1} minWidth={140}>
                     <Typography variant='body2' color='text.secondary'>
                         {t('tally.fields.overallStatus')}
                     </Typography>

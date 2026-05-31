@@ -29,6 +29,8 @@
         "title": "Tạo cuộc bầu cử",
         "name": "Tên cuộc bầu cử",
         "candidates": "Ứng cử viên",
+        "maxSelectableCandidates": "Số ứng viên được chọn tối đa",
+        "maxSelectableCandidatesHelper": "Số ứng viên mỗi cử tri được chọn trên một lá phiếu",
         "voters": "Cử tri",
         "reset": "Đặt lại",
         "create": "Tạo mới",
@@ -37,7 +39,9 @@
         "validation": {
             "nameMinLength": "Tên cuộc bầu cử phải có ít nhất 3 ký tự",
             "candidatesRequired": "Chọn ít nhất 2 ứng cử viên",
-            "votersRequired": "Chọn ít nhất 3 cử tri"
+            "votersRequired": "Chọn ít nhất 3 cử tri",
+            "maxSelectableMin": "Phải tối thiểu là 1",
+            "maxSelectableMax": "Không được vượt quá số ứng viên"
         }
     }
 }

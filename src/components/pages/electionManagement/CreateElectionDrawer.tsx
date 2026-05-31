@@ -28,11 +28,25 @@ const CreateElectionDrawer: React.FC<Props> = (props) => {
 
     const formSchema = useMemo(
         () =>
-            z.object({
-                name: z.string().trim().min(3, t('drawer.validation.nameMinLength')).max(100),
-                candidateIds: z.array(z.string()).min(2, t('drawer.validation.candidatesRequired')),
-                voterIds: z.array(z.string()).min(3, t('drawer.validation.votersRequired'))
-            }),
+            z
+                .object({
+                    name: z.string().trim().min(3, t('drawer.validation.nameMinLength')).max(100),
+                    candidateIds: z.array(z.string()).min(2, t('drawer.validation.candidatesRequired')),
+                    voterIds: z.array(z.string()).min(3, t('drawer.validation.votersRequired')),
+                    maxSelectableCandidates: z
+                        .number({ message: t('drawer.validation.maxSelectableMin') })
+                        .int(t('drawer.validation.maxSelectableMin'))
+                        .min(1, t('drawer.validation.maxSelectableMin'))
+                })
+                .superRefine((data, ctx) => {
+                    if (data.maxSelectableCandidates > data.candidateIds.length) {
+                        ctx.addIssue({
+                            code: 'custom',
+                            path: ['maxSelectableCandidates'],
+                            message: t('drawer.validation.maxSelectableMax')
+                        })
+                    }
+                }),
         [t]
     )
 
@@ -43,7 +57,8 @@ const CreateElectionDrawer: React.FC<Props> = (props) => {
         defaultValues: {
             name: '',
             candidateIds: [],
-            voterIds: []
+            voterIds: [],
+            maxSelectableCandidates: 1
         }
     })
 
@@ -68,7 +83,8 @@ const CreateElectionDrawer: React.FC<Props> = (props) => {
         mutationFn: async (data: CreateElectionFormData) =>
             ElectionService.createElection({
                 name: data.name.trim(),
-                candidateIds: data.candidateIds
+                candidateIds: data.candidateIds,
+                maxSelectableCandidates: data.maxSelectableCandidates
             }),
         onSuccess: (data) => {
             notify(t('mutate.createElectionSuccess'), 'success')
@@ -142,6 +158,25 @@ const CreateElectionDrawer: React.FC<Props> = (props) => {
                             role='CANDIDATE'
                             error={!!fieldState.error}
                             helperText={fieldState.error?.message || ''}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name='maxSelectableCandidates'
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <TextField
+                            {...field}
+                            value={field.value ?? ''}
+                            onChange={(e) => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+                            type='number'
+                            label={t('drawer.maxSelectableCandidates')}
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message || t('drawer.maxSelectableCandidatesHelper')}
+                            slotProps={{ htmlInput: { min: 1 } }}
+                            fullWidth
+                            required
                         />
                     )}
                 />

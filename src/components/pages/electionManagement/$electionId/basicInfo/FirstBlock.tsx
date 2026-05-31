@@ -111,6 +111,10 @@ const FirstBlock: React.FC<Props> = (props) => {
                     <DescriptionView
                         items={[
                             {
+                                label: `${t('basicInfo.fields.maxSelectableCandidates')}:`,
+                                value: data.maxSelectableCandidates
+                            },
+                            {
                                 label: `${t('basicInfo.fields.merkleRoot')}:`,
                                 value: (
                                     <Stack direction='row' spacing={1} alignItems='center'>

@@ -19,7 +19,8 @@
             "startDate": "Ngày bắt đầu",
             "endDate": "Ngày kết thúc",
             "createdAt": "Ngày tạo",
-            "updatedAt": "Ngày cập nhật"
+            "updatedAt": "Ngày cập nhật",
+            "maxSelectableCandidates": "Số ứng viên tối đa"
         },
         "table": {
             "email": "Email",
@@ -74,8 +75,10 @@
         "title": "Kiểm phiếu",
         "fields": {
             "unknownCandidate": "Ứng viên không xác định",
-            "dbRevealTotal": "Tổng phiếu reveal trong DB",
-            "chainRevealTotal": "Tổng phiếu reveal trên chain",
+            "dbRevealedBallots": "Số phiếu đã reveal (DB)",
+            "chainRevealedBallots": "Số phiếu đã reveal (chain)",
+            "dbTotalSelections": "Tổng lượt chọn (DB)",
+            "chainTotalSelections": "Tổng lượt chọn (chain)",
             "overallStatus": "Trạng thái tổng thể"
         },
         "status": {
@@ -110,25 +113,25 @@
             "title": "Đối soát",
             "db": {
                 "title": "Số liệu database",
-                "voteCount": "Số phiếu vote",
-                "revealCount": "Số phiếu reveal",
+                "voteCount": "Số phiếu đã bỏ",
+                "revealCount": "Số phiếu đã reveal",
                 "progress": "Tiến độ reveal"
             },
             "chain": {
                 "title": "Số liệu blockchain",
-                "voteCount": "Số phiếu vote",
-                "revealCount": "Số phiếu reveal",
+                "voteCount": "Số phiếu đã bỏ",
+                "revealCount": "Số phiếu đã reveal",
                 "rootCommitted": "Root đã commit",
                 "rootNotCommitted": "Root chưa commit",
-                "revealVoteMatch": "Số reveal khớp số vote",
-                "revealVoteMismatch": "Số reveal lệch số vote",
+                "revealVoteMatch": "Số phiếu đã reveal khớp số phiếu đã bỏ",
+                "revealVoteMismatch": "Số phiếu đã reveal lệch số phiếu đã bỏ",
                 "unavailable": "Không có dữ liệu audit từ blockchain."
             },
             "reconciliation": {
                 "title": "Đối soát DB và chain",
-                "voteCount": "Số phiếu vote",
-                "revealCount": "Số phiếu reveal",
-                "revealTotal": "Tổng phiếu reveal",
+                "voteCount": "Số phiếu đã bỏ",
+                "revealCount": "Số phiếu đã reveal",
+                "totalSelections": "Tổng lượt chọn",
                 "candidateMismatchCount": "Số ứng viên lệch phiếu",
                 "dbChainValue": "DB: {{db}} | Chain: {{chain}}",
                 "mismatchCountValue": "{{count}} dòng lệch",

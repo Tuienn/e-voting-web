@@ -52,11 +52,11 @@ const AuditReconciliationCard: React.FC<Props> = (props) => {
         ).length
 
         rows.push({
-            label: t('tally.audit.reconciliation.revealTotal'),
-            matched: tally.dbRevealTotal === tally.chainRevealTotal,
+            label: t('tally.audit.reconciliation.totalSelections'),
+            matched: tally.dbTotalSelections === tally.chainTotalSelections,
             detail: t('tally.audit.reconciliation.dbChainValue', {
-                db: tally.dbRevealTotal,
-                chain: tally.chainRevealTotal
+                db: tally.dbTotalSelections,
+                chain: tally.chainTotalSelections
             })
         })
         rows.push({

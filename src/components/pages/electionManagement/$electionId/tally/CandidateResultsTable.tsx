@@ -69,9 +69,9 @@ const CandidateResultsTable: React.FC<Props> = (props) => {
                     header: t('tally.table.percent'),
                     name: 'percent',
                     render: (row: ICandidateTally) =>
-                        data.dbRevealTotal === 0
+                        data.dbTotalSelections === 0
                             ? '-'
-                            : `${((row.dbRevealCount / data.dbRevealTotal) * 100).toFixed(1)}%`
+                            : `${((row.dbRevealCount / data.dbTotalSelections) * 100).toFixed(1)}%`
                 }
             ]}
             data={data.tallyResult}

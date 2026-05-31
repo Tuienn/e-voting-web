@@ -21,7 +21,8 @@ const WinnerCard: React.FC<Props> = (props) => {
     const data = props.data
 
     const hasMismatch =
-        data.dbRevealTotal !== data.chainRevealTotal ||
+        data.dbRevealedBallots !== data.chainRevealedBallots ||
+        data.dbTotalSelections !== data.chainTotalSelections ||
         data.tallyResult.some((c) => c.dbRevealCount !== c.chainRevealCount)
 
     const topCandidates = getMaxCandidates(data.tallyResult)
@@ -62,7 +63,7 @@ const WinnerCard: React.FC<Props> = (props) => {
             return <Typography variant='body1'>{t('tally.winner.tie', { names })}</Typography>
         }
 
-        if (data.dbRevealTotal === 0) {
+        if (data.dbTotalSelections === 0) {
             return <Alert severity='info'>{t('tally.alerts.noVotes')}</Alert>
         }
 

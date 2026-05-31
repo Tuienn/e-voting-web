@@ -13,6 +13,7 @@ export interface Election {
     name: string
     status: ElectionStatus
     candidateIds: string[]
+    maxSelectableCandidates: number
     electionVoters?: ElectionVoter[]
     startDate?: string | null
     endDate?: string | null
@@ -41,4 +42,5 @@ export interface Vote {
 export interface CreateElectionPayload {
     name: string
     candidateIds: string[]
+    maxSelectableCandidates: number
 }

@@ -19,7 +19,8 @@
             "startDate": "Start date",
             "endDate": "End date",
             "createdAt": "Created at",
-            "updatedAt": "Updated at"
+            "updatedAt": "Updated at",
+            "maxSelectableCandidates": "Max selectable candidates"
         },
         "table": {
             "email": "Email",
@@ -74,8 +75,10 @@
         "title": "Tally",
         "fields": {
             "unknownCandidate": "Unknown candidate",
-            "dbRevealTotal": "DB reveal total",
-            "chainRevealTotal": "Chain reveal total",
+            "dbRevealedBallots": "Revealed ballots (DB)",
+            "chainRevealedBallots": "Revealed ballots (chain)",
+            "dbTotalSelections": "Total selections (DB)",
+            "chainTotalSelections": "Total selections (chain)",
             "overallStatus": "Overall status"
         },
         "status": {
@@ -110,25 +113,25 @@
             "title": "Audit",
             "db": {
                 "title": "Database counts",
-                "voteCount": "Vote count",
-                "revealCount": "Reveal count",
+                "voteCount": "Votes cast",
+                "revealCount": "Revealed ballots",
                 "progress": "Reveal progress"
             },
             "chain": {
                 "title": "Blockchain counts",
-                "voteCount": "Vote count",
-                "revealCount": "Reveal count",
+                "voteCount": "Votes cast",
+                "revealCount": "Revealed ballots",
                 "rootCommitted": "Root committed",
                 "rootNotCommitted": "Root not committed",
-                "revealVoteMatch": "Reveal count matches vote count",
-                "revealVoteMismatch": "Reveal count differs from vote count",
+                "revealVoteMatch": "Revealed ballots match votes cast",
+                "revealVoteMismatch": "Revealed ballots differ from votes cast",
                 "unavailable": "Blockchain audit data is unavailable."
             },
             "reconciliation": {
                 "title": "DB and chain reconciliation",
-                "voteCount": "Vote count",
-                "revealCount": "Reveal count",
-                "revealTotal": "Reveal total",
+                "voteCount": "Votes cast",
+                "revealCount": "Revealed ballots",
+                "totalSelections": "Total selections",
                 "candidateMismatchCount": "Candidate mismatch count",
                 "dbChainValue": "DB: {{db}} | Chain: {{chain}}",
                 "mismatchCountValue": "{{count}} mismatch(es)",

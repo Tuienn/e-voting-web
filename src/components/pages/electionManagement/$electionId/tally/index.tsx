@@ -66,7 +66,7 @@ const TallyPage: React.FC<Props> = (props) => {
             <ChainErrorAlert error={data.chainError} />
             <WinnerCard data={data} />
             <TotalsSummaryCard data={data} />
-            <VoteShareChart candidates={data.tallyResult} total={data.dbRevealTotal} />
+            <VoteShareChart candidates={data.tallyResult} total={data.dbTotalSelections} />
             <CandidateResultsTable data={data} />
             <AuditSection electionId={props.electionId} />
         </Stack>

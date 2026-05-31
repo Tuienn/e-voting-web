@@ -29,6 +29,8 @@
         "title": "Create election",
         "name": "Election name",
         "candidates": "Candidates",
+        "maxSelectableCandidates": "Max selectable candidates",
+        "maxSelectableCandidatesHelper": "Number of candidates a voter may select per ballot",
         "voters": "Voters",
         "reset": "Reset",
         "create": "Create",
@@ -37,7 +39,9 @@
         "validation": {
             "nameMinLength": "Election name must be at least 3 characters",
             "candidatesRequired": "Select at least 2 candidates",
-            "votersRequired": "Select at least 3 voters"
+            "votersRequired": "Select at least 3 voters",
+            "maxSelectableMin": "Must be at least 1",
+            "maxSelectableMax": "Must not exceed the number of candidates"
         }
     }
 }

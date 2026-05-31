@@ -6,7 +6,7 @@ export interface IVoteCommittedEvent {
 
 export interface IVoteRevealedEvent {
     electionId: string
-    candidateId: string
+    candidateIds: string[]
     revealKey: string
     blockchainRef: string
     createdAt: string
