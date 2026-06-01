@@ -41,4 +41,14 @@ export default class UserService {
             body: JSON.stringify(data)
         })
     }
+
+    static importUsersFromExcel = async (file: File) => {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        return await bffApiService<BffResponse<{ count: number }>>(`${this.BASE_URL}/import-excel`, {
+            method: 'POST',
+            body: formData
+        })
+    }
 }

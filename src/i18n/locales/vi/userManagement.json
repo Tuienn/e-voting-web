@@ -49,7 +49,10 @@
         "updateUserError": "Cập nhật người dùng thất bại",
         "addToElectionSuccess": "Thêm cử tri vào cuộc bầu cử thành công",
         "addToElectionError": "Thêm cử tri vào cuộc bầu cử thất bại",
-        "addToElectionRequired": "Vui lòng chọn cuộc bầu cử"
+        "addToElectionRequired": "Vui lòng chọn cuộc bầu cử",
+        "importExcelSuccess": "Nhập thành công {{count}} người dùng",
+        "importExcelEmpty": "Không có người dùng nào được nhập",
+        "importExcelError": "Nhập người dùng từ Excel thất bại"
     },
     "drawer": {
         "editUserTitle": "Chỉnh sửa người dùng",

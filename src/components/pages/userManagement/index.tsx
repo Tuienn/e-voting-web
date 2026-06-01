@@ -12,7 +12,7 @@ import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query'
 import UserService from '../../../services/bff/user.service'
 import Chip, { type ChipProps } from '@mui/material/Chip'
 import { useNotify } from '../../../stores/notification/notification.selector'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import UserDetailDrawer from './UserDetailDrawer'
@@ -36,6 +36,7 @@ const UserManagementPage: React.FC = () => {
     const [selectedCheckboxIds, setSelectedCheckboxIds] = useState<string[]>([])
     const [userId, setUserId] = useState<string | null | undefined>(undefined)
     const [isAddToElectionDialogOpen, setIsAddToElectionDialogOpen] = useState(false)
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     const queryFilterUsers = useQuery({
         queryKey: ['filterUsers', searchParams],
@@ -78,6 +79,33 @@ const UserManagementPage: React.FC = () => {
         }
     })
 
+    const mutateImportExcel = useMutation({
+        mutationFn: (file: File) => UserService.importUsersFromExcel(file),
+        onSuccess: (response) => {
+            const count = response?.data?.count ?? 0
+            notify(
+                count > 0 ? t('mutate.importExcelSuccess', { count }) : t('mutate.importExcelEmpty'),
+                count > 0 ? 'success' : 'warning'
+            )
+            queryFilterUsers.refetch()
+        },
+        onError: (error: any) => {
+            notify(error.message || t('mutate.importExcelError'), 'error')
+        }
+    })
+
+    const handleImportExcelClick = () => {
+        fileInputRef.current?.click()
+    }
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (file) {
+            mutateImportExcel.mutate(file)
+        }
+        event.target.value = ''
+    }
+
     return (
         <Container
             sx={{
@@ -100,10 +128,23 @@ const UserManagementPage: React.FC = () => {
                         </ResponsiveButton>
                     </Tooltip>,
                     <Tooltip title={t('headerActions.importExcelTooltip')}>
-                        <ResponsiveButton icon={<CloudUploadIcon />}>{t('headerActions.importExcel')}</ResponsiveButton>
+                        <ResponsiveButton
+                            icon={<CloudUploadIcon />}
+                            loading={mutateImportExcel.isPending}
+                            onClick={handleImportExcelClick}
+                        >
+                            {t('headerActions.importExcel')}
+                        </ResponsiveButton>
                     </Tooltip>
                 ]}
                 isPageHeader
+            />
+            <input
+                ref={fileInputRef}
+                type='file'
+                accept='.xlsx,.xls,.csv'
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
             />
 
             <Filter

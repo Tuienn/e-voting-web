@@ -49,7 +49,10 @@
         "updateUserError": "Update user failed",
         "addToElectionSuccess": "Add voters to election successfully",
         "addToElectionError": "Add voters to election failed",
-        "addToElectionRequired": "Please select an election"
+        "addToElectionRequired": "Please select an election",
+        "importExcelSuccess": "{{count}} users imported successfully",
+        "importExcelEmpty": "No users were imported",
+        "importExcelError": "Failed to import users from Excel"
     },
     "drawer": {
         "editUserTitle": "Edit user",
