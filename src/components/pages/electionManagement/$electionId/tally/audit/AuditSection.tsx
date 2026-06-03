@@ -8,7 +8,6 @@ import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import RevealVoteService from '../../../../../../services/revealVote/revealVote.service'
-import { useUser } from '../../../../../../stores/auth/auth.selector'
 import { useNotify } from '../../../../../../stores/notification/notification.selector'
 import ChainErrorAlert from '../ChainErrorAlert'
 import AuditDbCard from './AuditDbCard'
@@ -21,13 +20,11 @@ interface Props {
 
 const AuditSection: React.FC<Props> = (props) => {
     const { t } = useTranslation('$electionId')
-    const user = useUser()
     const notify = useNotify()
 
     const queryAudit = useQuery({
         queryKey: ['tallyAudit', props.electionId],
-        queryFn: () => RevealVoteService.getAudit(props.electionId),
-        enabled: user?.role === 'ADMIN'
+        queryFn: () => RevealVoteService.getAudit(props.electionId)
     })
 
     useEffect(() => {
@@ -37,8 +34,6 @@ const AuditSection: React.FC<Props> = (props) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [queryAudit.isError])
-
-    if (user?.role !== 'ADMIN') return null
 
     if (queryAudit.isPending) {
         return (
