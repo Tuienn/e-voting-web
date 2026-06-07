@@ -73,7 +73,7 @@ const AuditReconciliationCard: React.FC<Props> = (props) => {
             </Typography>
             <Divider sx={{ my: 1.5 }} />
             <Stack spacing={1.5}>
-                {chain && props.data.status === 'CLOSED' && !chain.rootCommitted && (
+                {chain && props.data.election.status === 'CLOSED' && !chain.rootCommitted && (
                     <Alert severity='error'>{t('tally.audit.alerts.rootNotCommitted')}</Alert>
                 )}
                 {!chain && <Alert severity='warning'>{t('tally.audit.reconciliation.chainUnavailable')}</Alert>}

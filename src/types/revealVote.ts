@@ -1,3 +1,5 @@
+import type { ElectionStatus } from './election'
+
 export interface ICandidateTally {
     candidateId: string
     candidateName: string | null
@@ -14,10 +16,16 @@ export interface ITallyResponse {
     dbTotalSelections: number
     chainTotalSelections: number
     chainError: string | null
+    election: {
+        status: ElectionStatus
+    }
 }
 
 export interface IAuditResponse {
     db: { voteCount: number; revealCount: number }
     chain: { voteCount: number; revealCount: number; rootCommitted: boolean } | null
     chainError: string | null
+    election: {
+        status: ElectionStatus
+    }
 }

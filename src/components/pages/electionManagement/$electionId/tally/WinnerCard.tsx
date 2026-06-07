@@ -33,7 +33,7 @@ const WinnerCard: React.FC<Props> = (props) => {
             return <Alert severity='info'>{t('tally.winner.needsAudit')}</Alert>
         }
 
-        if (data.status === 'COMPLETED') {
+        if (data.election.status === 'COMPLETED') {
             if (topCandidates.length === 0) {
                 return <Alert severity='info'>{t('tally.alerts.noVotes')}</Alert>
             }
@@ -48,7 +48,7 @@ const WinnerCard: React.FC<Props> = (props) => {
             return <Typography variant='body1'>{t('tally.winner.tie', { names })}</Typography>
         }
 
-        if (data.status === 'CLOSED') {
+        if (data.election.status === 'CLOSED') {
             if (topCandidates.length === 0) {
                 return <Alert severity='info'>{t('tally.alerts.noVotes')}</Alert>
             }
